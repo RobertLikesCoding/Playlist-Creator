@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import styles from '../styles/SearchBar.module.css';
+import SearchResult from './SearchResult'
 
 export default function SearchBar(props) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [artists, setArtists] = useState([]);
 
   const searchForArtist = async (query) => {
     try {
-      const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=artist&limit=10`, {
+      const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=artist&limit=5`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${props.accessToken}`
@@ -16,10 +18,10 @@ export default function SearchBar(props) {
         throw new Error('Failed to load response');
       }
       const data = await response.json();
-      const artists = data.artists
-      artists.items.forEach((artist) => {
-        console.log(artist.name);
-      })
+      setArtists(data.artists.items)
+      // artists.items.forEach((artist) => {
+      //   console.log(artist.name);
+      // })
     } catch (error) {
       console.error('Error:', error);
     }
@@ -37,6 +39,7 @@ export default function SearchBar(props) {
   return (
     <div className={styles.searchBar}>
       <input type="text" placeholder="Search for artist..." value={searchQuery} onChange={handleSearch} />
+      <SearchResult artists={artists} />
     </div>
   );
 }
