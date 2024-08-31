@@ -19,9 +19,6 @@ export default function SearchBar(props) {
       }
       const data = await response.json();
       setArtists(data.artists.items)
-      // artists.items.forEach((artist) => {
-      //   console.log(artist.name);
-      // })
     } catch (error) {
       console.error('Error:', error);
     }
@@ -39,7 +36,7 @@ export default function SearchBar(props) {
   return (
     <div className={styles.searchBar}>
       <input type="text" placeholder="Search for artist..." value={searchQuery} onChange={handleSearch} />
-      <SearchResult artists={artists} />
+      <SearchResult artists={artists} accessToken={props.accessToken}/>
     </div>
   );
 }
