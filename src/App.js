@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import './styles/App.css';
 import SearchBar from './components/SearchBar';
+import Tracklist from './components/Tracklist';
 
 function App() {
   const [accessToken, setAccessToken] = useState('');
-  // Fetching the access token
+  const [topTracks, setTopTracks] = useState([]);
+
   const fetchAccessToken = async () => {
     try {
       const response = await fetch("https://accounts.spotify.com/api/token", {
@@ -33,12 +35,49 @@ function App() {
     fetchAccessToken();
   }, []);
 
+
+  const searchForArtist = async (query) => {
+    try {
+      const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=artist&limit=5`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Failed to load response');
+      }
+      const data = await response.json();
+      return data.artists.items;
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  const fetchArtistTopTracks = async (uri) => {
+    try {
+      const response = await fetch(`https://api.spotify.com/v1/artists/${uri}/top-tracks`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Failed to get artists top tracks');
+      }
+      const data = await response.json()
+      setTopTracks(data.tracks);
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>Create your Playlist</h1>
       </header>
-      <SearchBar accessToken={accessToken}/>
+      <SearchBar onSearch={searchForArtist} onArtistSelect={fetchArtistTopTracks}/>
+      <Tracklist topTracks={topTracks}/>
     </div>
   );
 }
