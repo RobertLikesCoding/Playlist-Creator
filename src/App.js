@@ -4,7 +4,7 @@ import SearchBar from './components/SearchBar';
 
 function App() {
   const [accessToken, setAccessToken] = useState('');
-  // Fetching the access token
+
   const fetchAccessToken = async () => {
     try {
       const response = await fetch("https://accounts.spotify.com/api/token", {
