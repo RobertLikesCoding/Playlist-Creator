@@ -7,7 +7,6 @@ function App() {
   const [accessToken, setAccessToken] = useState('');
   const [topTracks, setTopTracks] = useState([]);
 
-
   const fetchAccessToken = async () => {
     try {
       const response = await fetch("https://accounts.spotify.com/api/token", {
@@ -54,7 +53,6 @@ function App() {
       console.error('Error:', error);
     }
   };
-
   const fetchArtistTopTracks = async (uri) => {
     try {
       const response = await fetch(`https://api.spotify.com/v1/artists/${uri}/top-tracks`, {

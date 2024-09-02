@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
 // import styles from '../styles/SearchResult.module.css';
 
 export default function SearchResult({onArtistSelect, artists}) {
-
   async function handleArtistSelect(artist) {
     const artistURI = removeUriPrefix(artist.uri);
     await onArtistSelect(artistURI);
