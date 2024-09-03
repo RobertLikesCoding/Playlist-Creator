@@ -9,7 +9,6 @@ function App() {
   const [topTracks, setTopTracks] = useState([]);
   const [playlistTracks, setPlaylistTracks] = useState([]);
 
-
   const fetchAccessToken = async () => {
     try {
       const response = await fetch("https://accounts.spotify.com/api/token", {
@@ -33,11 +32,9 @@ function App() {
       console.error('Error:', error);
       }
   }
-
   useEffect(() => {
     fetchAccessToken();
   }, []);
-
 
   const searchForArtist = async (query) => {
     try {
@@ -74,7 +71,6 @@ function App() {
     }
   }
   const handleAdd = (track) => {
-    console.log('Hello from handleAdd')
     setPlaylistTracks((prevPlaylistTracks) => {
       if (!prevPlaylistTracks.some((t) => t.id === track.id)) {
         return [...prevPlaylistTracks, track];
@@ -85,13 +81,9 @@ function App() {
 
   const handleRemove = (track) => {
     setPlaylistTracks((prevPlaylistTracks) => {
-      prevPlaylistTracks.filter((t) => t.id === track.id)
-      if (prevPlaylistTracks.length === 0 ) {
-        return [];
-      }
+      return prevPlaylistTracks.filter((t) => t.id !== track.id);
     });
   };
-
 
   return (
     <div className="App">

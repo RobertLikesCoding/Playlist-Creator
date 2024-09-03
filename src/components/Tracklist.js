@@ -6,7 +6,7 @@ export default function Tracklist({topTracks, handleAdd}) {
     <div className='tracklist'>
       <h2>Results</h2>
       <ul>
-        { topTracks.map((track) => {
+        {topTracks.map((track) => {
           return <Track track={track} key={track.id} addOrRemove='add' onClick={(e) => handleAdd(track)}/>
         })}
       </ul>
