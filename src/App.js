@@ -2,10 +2,13 @@ import React, {useState, useEffect} from 'react';
 import './styles/App.css';
 import SearchBar from './components/SearchBar';
 import Tracklist from './components/Tracklist';
+import Playlist from './components/Playlist';
 
 function App() {
   const [accessToken, setAccessToken] = useState('');
   const [topTracks, setTopTracks] = useState([]);
+  const [addedTracks, setAddedTracks] = useState([]);
+
 
   const fetchAccessToken = async () => {
     try {
@@ -71,13 +74,17 @@ function App() {
     }
   }
 
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>Create your Playlist</h1>
       </header>
       <SearchBar onSearch={searchForArtist} onArtistSelect={fetchArtistTopTracks}/>
-      <Tracklist topTracks={topTracks}/>
+      <div className='container'>
+        <Tracklist topTracks={topTracks}/>
+        <Playlist addedTracks={addedTracks}/>
+      </div>
     </div>
   );
 }
