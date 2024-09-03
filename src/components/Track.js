@@ -1,23 +1,7 @@
 import React from 'react';
 
-export default function Track({track, addOrRemove}) {
+export default function Track({track, addOrRemove, onClick}) {
   const artists = track.artists.map((artist) => artist.name).join(', ');
-
-  function getAddOrRemove(param) {
-    if (param === 'add') {
-      return <button onClick={handleAddToPlaylist}>Add</button>
-    } else {
-      return <button onClick={handleRemoveFromPlaylist}>Remove</button>
-    }
-  };
-
-  function handleAddToPlaylist(e) {
-    console.log('Added to Playlist');
-  }
-
-  function handleRemoveFromPlaylist(e) {
-    console.log('Removed from Playlist');
-  }
 
   return (
     <div className='trackCard'>
@@ -26,7 +10,7 @@ export default function Track({track, addOrRemove}) {
         <p>Artist: {artists}</p>
         <p>Album: {track.album.name}</p>
       </div>
-      {getAddOrRemove(addOrRemove)}
+      <button onClick={onClick}>{addOrRemove}</button>
     </div>
   )
 };

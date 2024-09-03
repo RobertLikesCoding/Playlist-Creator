@@ -7,7 +7,7 @@ import Playlist from './components/Playlist';
 function App() {
   const [accessToken, setAccessToken] = useState('');
   const [topTracks, setTopTracks] = useState([]);
-  const [addedTracks, setAddedTracks] = useState([]);
+  const [playlistTracks, setPlaylistTracks] = useState([]);
 
 
   const fetchAccessToken = async () => {
@@ -73,6 +73,24 @@ function App() {
       console.log('Error:', error);
     }
   }
+  const handleAdd = (track) => {
+    console.log('Hello from handleAdd')
+    setPlaylistTracks((prevPlaylistTracks) => {
+      if (!prevPlaylistTracks.some((t) => t.id === track.id)) {
+        return [...prevPlaylistTracks, track];
+      }
+      return prevPlaylistTracks;
+    });
+  };
+
+  const handleRemove = (track) => {
+    setPlaylistTracks((prevPlaylistTracks) => {
+      prevPlaylistTracks.filter((t) => t.id === track.id)
+      if (prevPlaylistTracks.length === 0 ) {
+        return [];
+      }
+    });
+  };
 
 
   return (
@@ -82,8 +100,8 @@ function App() {
       </header>
       <SearchBar onSearch={searchForArtist} onArtistSelect={fetchArtistTopTracks}/>
       <div className='container'>
-        <Tracklist topTracks={topTracks}/>
-        <Playlist addedTracks={addedTracks}/>
+        <Tracklist topTracks={topTracks} handleAdd={handleAdd}/>
+        <Playlist playlistTracks={playlistTracks} handleRemove={handleRemove}/>
       </div>
     </div>
   );
