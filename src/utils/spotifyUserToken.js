@@ -1,78 +1,109 @@
-import React from 'react';
-
-export default async function getUserAccessToken() {
+async function getUserAccessToken() {
   const generateRandomString = (length) => {
-    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const possible =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     const values = crypto.getRandomValues(new Uint8Array(length));
     return values.reduce((acc, x) => acc + possible[x % possible.length], "");
-  }
+  };
 
-  const codeVerifier  = generateRandomString(64);
+  const codeVerifier = generateRandomString(64);
 
   const sha256 = async (plain) => {
-    const encoder = new TextEncoder()
-    const data = encoder.encode(plain)
-    return window.crypto.subtle.digest('SHA-256', data)
-  }
+    const encoder = new TextEncoder();
+    const data = encoder.encode(plain);
+    return window.crypto.subtle.digest("SHA-256", data);
+  };
 
   const base64encode = (input) => {
     return btoa(String.fromCharCode(...new Uint8Array(input)))
-      .replace(/=/g, '')
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_');
-  }
+      .replace(/=/g, "")
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_");
+  };
 
   const hashed = await sha256(codeVerifier);
   const codeChallenge = base64encode(hashed);
 
-  const clientId = 'YOUR_CLIENT_ID';
-  const redirectUri = 'http://localhost:3000';
+  const clientId = "9176b7ef419541fea4e1b9e3aef00813";
+  const redirectUri = "http://localhost:3000";
 
-  const scope = 'user-read-private user-read-email';
-  const authUrl = new URL("https://accounts.spotify.com/authorize")
+  const scope = "user-read-private user-read-email";
+  const authUrl = new URL("https://accounts.spotify.com/authorize");
 
   // generated in the previous step
-  window.localStorage.setItem('code_verifier', codeVerifier);
+  window.localStorage.setItem("code_verifier", codeVerifier);
 
-  const params =  {
-    response_type: 'code',
+  const params = {
+    response_type: "code",
     client_id: clientId,
     scope,
-    code_challenge_method: 'S256',
+    code_challenge_method: "S256",
     code_challenge: codeChallenge,
     redirect_uri: redirectUri,
-  }
+  };
 
   authUrl.search = new URLSearchParams(params).toString();
   window.location.href = authUrl.toString();
 
   const urlParams = new URLSearchParams(window.location.search);
-  let code = urlParams.get('code');
+  let code = urlParams.get("code");
 
-  const getToken = async code => {
+  // stored in the previous step
+  let localVerifier = localStorage.getItem("code_verifier");
 
-    // stored in the previous step
-    let codeVerifier = localStorage.getItem('code_verifier');
+  const payload = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      client_id: clientId,
+      grant_type: "authorization_code",
+      code,
+      redirect_uri: redirectUri,
+      code_verifier: localVerifier,
+    }),
+  };
 
-    const payload = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        client_id: clientId,
-        grant_type: 'authorization_code',
-        code,
-        redirect_uri: redirectUri,
-        code_verifier: codeVerifier,
-      }),
+  try {
+    const body = await fetch("https://accounts.spotify.com/api/token", payload);
+    const response = await body.json();
+    localStorage.setItem("access_token", response.access_token);
+    console.log("Access token obtained:", response.access_token);
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+}
+
+export default async function createPlaylist(clientId) {
+  try {
+    let accessToken = localStorage.getItem("access_token");
+    if (!accessToken) {
+      accessToken = await getUserAccessToken();
     }
 
-    const url = 'https://accounts.spotify.com/api/token';
-    const body = await fetch(url, payload);
-    const response = await body.json();
+    const response = await fetch(
+      `https://api.spotify.com/v1/users/${clientId}/playlists`,
+      {
+        method: "POST",
+        headers: {
+          header: "Content-Type: application/json",
+          authorization: "Bearer " + accessToken,
+        },
+        body: {
+          name: "New Playlist",
+          description: "New playlist description",
+          public: false,
+        },
+      }
+    );
 
-    localStorage.setItem('access_token', response.access_token);
+    if (!response.ok) {
+      throw new Error("Failed to process the request");
+    }
+    const playlistData = await response.json();
+    console.log("Playlist created:", playlistData);
+  } catch (error) {
+    console.error("Error:", error);
   }
-};
-
+}
