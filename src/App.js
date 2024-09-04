@@ -2,10 +2,12 @@ import React, {useState, useEffect} from 'react';
 import './styles/App.css';
 import SearchBar from './components/SearchBar';
 import Tracklist from './components/Tracklist';
+import Playlist from './components/Playlist';
 
 function App() {
   const [accessToken, setAccessToken] = useState('');
   const [topTracks, setTopTracks] = useState([]);
+  const [playlistTracks, setPlaylistTracks] = useState([]);
 
   const fetchAccessToken = async () => {
     try {
@@ -30,15 +32,13 @@ function App() {
       console.error('Error:', error);
       }
   }
-
   useEffect(() => {
     fetchAccessToken();
   }, []);
 
-
   const searchForArtist = async (query) => {
     try {
-      const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=artist&limit=4`, {
+      const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=artist&limit=5`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${accessToken}`
@@ -70,6 +70,20 @@ function App() {
       console.log('Error:', error);
     }
   }
+  const handleAdd = (track) => {
+    setPlaylistTracks((prevPlaylistTracks) => {
+      if (!prevPlaylistTracks.some((t) => t.id === track.id)) {
+        return [...prevPlaylistTracks, track];
+      }
+      return prevPlaylistTracks;
+    });
+  };
+
+  const handleRemove = (track) => {
+    setPlaylistTracks((prevPlaylistTracks) => {
+      return prevPlaylistTracks.filter((t) => t.id !== track.id);
+    });
+  };
 
   return (
     <div className="App">
@@ -77,7 +91,10 @@ function App() {
         <h1>Create your Playlist</h1>
       </header>
       <SearchBar onSearch={searchForArtist} onArtistSelect={fetchArtistTopTracks}/>
-      <Tracklist topTracks={topTracks}/>
+      <div className='container'>
+        <Tracklist topTracks={topTracks} handleAdd={handleAdd}/>
+        <Playlist playlistTracks={playlistTracks} handleRemove={handleRemove}/>
+      </div>
     </div>
   );
 }
