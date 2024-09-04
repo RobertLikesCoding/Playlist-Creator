@@ -93,7 +93,7 @@ function App() {
       <SearchBar onSearch={searchForArtist} onArtistSelect={fetchArtistTopTracks}/>
       <div className='container'>
         <Tracklist topTracks={topTracks} handleAdd={handleAdd}/>
-        <Playlist playlistTracks={playlistTracks} handleRemove={handleRemove}/>
+        <Playlist playlistTracks={playlistTracks} setPlaylistTracks={setPlaylistTracks} handleRemove={handleRemove}/>
       </div>
     </div>
   );
