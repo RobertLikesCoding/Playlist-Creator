@@ -1,129 +1,79 @@
-export default async function createPlaylist(playlistName) {
-  try {
-    let accessToken = localStorage.getItem("access_token");
-    if (!accessToken) {
-      accessToken = await authorization();
-    }
-    const userData = await getUserData();
-    const userId = userData.id;
+export async function redirectToAuthCodeFlow(clientId) {
+  const verifier = generateCodeVerifier(128);
+  const challenge = await generateCodeChallenge(verifier);
 
-    const response = await fetch(
-      `https://api.spotify.com/v1/users/${userId}/playlists`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "authorization": "Bearer " + accessToken,
-        },
-        body: {
-          "name": playlistName,
-          "description": "New playlist description",
-          "public": false,
-        },
-      }
-    );
+  localStorage.setItem("verifier", verifier);
 
-    if (!response.ok) {
-      throw new Error("Failed to process the request");
-    }
-    const playlistData = await response.json();
-    console.log("Playlist created:", playlistData);
-  } catch (error) {
-    console.error("Error:", error);
-  }
+  const params = new URLSearchParams();
+  params.append("client_id", clientId);
+  params.append("response_type", "code");
+  params.append("redirect_uri", "http://localhost:3000");
+  params.append("scope", "user-read-private playlist-modify-public");
+  params.append("code_challenge_method", "S256");
+  params.append("code_challenge", challenge);
+
+  document.location = `https://accounts.spotify.com/authorize?${params.toString()}`;
 }
 
-const getUserData = async (accessToken) => {
-  if (!accessToken) {
-    throw new Error('No access token found');
-  }
+export async function getAccessToken(clientId, code) {
+  const verifier = localStorage.getItem("verifier");
+  const params = new URLSearchParams();
+  params.append("client_id", clientId);
+  params.append("grant_type", "authorization_code");
+  params.append("code", code);
+  params.append("redirect_uri", "http://localhost:3000");
+  params.append("code_verifier", verifier);
 
-  const response = await fetch('https://api.spotify.com/v1/me', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + accessToken,
-    },
+  const result = await fetch("https://accounts.spotify.com/api/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params
   });
 
-  if (response.ok) {
-    return await response.json();
-  } else {
-    throw new Error('Failed to fetch user data');
+  const { access_token } = await result.json();
+  return access_token;
+}
+
+function generateCodeVerifier(length) {
+  let text = '';
+  let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  for (let i = 0; i < length; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
-};
+  return text;
+}
 
-async function authorization() {
-  const generateRandomString = (length) => {
-    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const values = crypto.getRandomValues(new Uint8Array(length));
-    return values.reduce((acc, x) => acc + possible[x % possible.length], "");
+async function generateCodeChallenge(codeVerifier) {
+  const data = new TextEncoder().encode(codeVerifier);
+  const digest = await window.crypto.subtle.digest('SHA-256', data);
+  return btoa(String.fromCharCode.apply(null, [...new Uint8Array(digest)]))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+}
+
+const getRefreshToken = async (clientId) => {
+  // refresh token that has been previously stored
+  const refreshToken = localStorage.getItem("refresh_token");
+  const url = "https://accounts.spotify.com/api/token";
+
+  const payload = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      grant_type: "refresh_token",
+      refresh_token: refreshToken,
+      client_id: clientId,
+    }),
+  };
+  const body = await fetch(url, payload);
+  const response = await body.json();
+
+  localStorage.setItem("access_token", response.accessToken);
+  if (response.refreshToken) {
+    localStorage.setItem("refresh_token", response.refreshToken);
   }
-
-  const sha256 = async (plain) => {
-    const encoder = new TextEncoder()
-    const data = encoder.encode(plain)
-    return window.crypto.subtle.digest('SHA-256', data)
-  }
-
-  const base64encode = (input) => {
-    return btoa(String.fromCharCode(...new Uint8Array(input)))
-    .replace(/=/g, '')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_');
-  }
-
-  const codeVerifier  = generateRandomString(64);
-  const hashed = await sha256(codeVerifier)
-  const codeChallenge = base64encode(hashed);
-
-  const clientId = '9176b7ef419541fea4e1b9e3aef00813';
-  const redirectUri = 'http://localhost:3000';
-  const scope = 'user-read-private user-read-email';
-  const authUrl = new URL("https://accounts.spotify.com/authorize")
-
-  window.localStorage.setItem('code_verifier', codeVerifier);
-
-  const params =  {
-    response_type: 'code',
-    client_id: clientId,
-    scope,
-    code_challenge_method: 'S256',
-    code_challenge: codeChallenge,
-    redirect_uri: redirectUri,
-  }
-
-  authUrl.search = new URLSearchParams(params).toString();
-  window.location.href = authUrl.toString();
-
-  const getToken = async code => {
-    let codeVerifier = localStorage.getItem('code_verifier');
-
-    const payload = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        client_id: clientId,
-        grant_type: 'authorization_code',
-        code,
-        redirect_uri: redirectUri,
-        code_verifier: codeVerifier,
-      }),
-    };
-
-    const body = await fetch('https://accounts.spotify.com/api/token', payload);
-    const response = await body.json();
-    console.log(response);
-
-    localStorage.setItem('access_token', response.access_token);
-  }
-
-  const urlParams = new URLSearchParams(window.location.search);
-  let code = urlParams.get('code');
-
-  if (code) {
-    getToken(code);
-  }
-
 }
