@@ -9,8 +9,6 @@ export default async function createPlaylist(playlistName, trackUris) {
 
   try {
     let accessToken = localStorage.getItem('access_token');
-
-    // Check if the access token is expired
     if (!accessToken || isTokenExpired()) {
       await getRefreshToken(clientId);
       if (!code) {
@@ -18,13 +16,11 @@ export default async function createPlaylist(playlistName, trackUris) {
         return;
       }
       accessToken = await getAccessToken(clientId, code);
-
       if (!accessToken) {
         await redirectToAuthCodeFlow(clientId);
         return;
       }
     }
-
 
     const profile = await fetchProfile(accessToken);
     if (!profile.id) {
@@ -32,7 +28,6 @@ export default async function createPlaylist(playlistName, trackUris) {
     }
 
     const userId = profile.id;
-
     const response = await fetch(
       `https://api.spotify.com/v1/users/${userId}/playlists`,
       {
@@ -44,7 +39,7 @@ export default async function createPlaylist(playlistName, trackUris) {
         body: JSON.stringify({
           name: playlistName,
           description: "New playlist description",
-          public: true, // did not notice this was false
+          public: true
         }),
       }
     );
@@ -56,21 +51,19 @@ export default async function createPlaylist(playlistName, trackUris) {
 
     const playlistData = await response.json();
     const playlistId = playlistData.id
-    console.log("Playlist ID:", playlistId);
     addTracksToPlaylist(playlistId, accessToken, trackUris)
 
   } catch (error) {
     console.error("Error:", error);
   }
-
 }
 
 async function fetchProfile(token) {
-  return fetch("https://api.spotify.com/v1/me", {
+  const response = await fetch("https://api.spotify.com/v1/me", {
       method: "GET",
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { "Authorization": "Bearer " + token }
   })
-  .then(response => response.json());
+  return await response.json();
 }
 
 function isTokenExpired() {
@@ -79,7 +72,6 @@ function isTokenExpired() {
 }
 
 async function addTracksToPlaylist(playlistId, accessToken, trackUris) {
-  console.log(trackUris);
   const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
     method: "POST",
     headers: {
@@ -91,7 +83,8 @@ async function addTracksToPlaylist(playlistId, accessToken, trackUris) {
     })
   });
 
-  const data = await response.json();
-  console.log("Playlist Tracks: ", data)
-
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(`Failed to add tracks to playlist: ${errorData.error_description || errorData.error}`);
+  }
 }
