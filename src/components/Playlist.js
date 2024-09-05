@@ -11,11 +11,13 @@ export default function Playlist({playlistTracks, setPlaylistTracks, handleRemov
 
   function handleSubmit(e) {
     e.preventDefault();
-    const playlistArray = playlistTracks.map((track) => {
-      return track.id
+    const trackUris = playlistTracks.map((track) => {
+      return track.uri
     });
+    console.log(trackUris);
+
     // submit playlist to API
-    createPlaylist(playlistName)
+    createPlaylist(playlistName, trackUris);
 
     // Cleanup
     setPlaylistTracks([]);
