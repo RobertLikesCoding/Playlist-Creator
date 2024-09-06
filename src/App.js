@@ -18,8 +18,8 @@ function App() {
         },
         body: new URLSearchParams({
           'grant_type': 'client_credentials',
-          'client_id': '9176b7ef419541fea4e1b9e3aef00813',
-          'client_secret': '4c59a512f5064dbda406daf9d782afdf'
+          'client_id': process.env.REACT_APP_SPOTIFY_CLIENT_ID,
+          'client_secret': process.env.REACT_APP_SPOTIFY_CLIENT_SECRET
         }),
       });
 

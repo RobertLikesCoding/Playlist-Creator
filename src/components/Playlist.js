@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import Track from './Track';
+import createPlaylist from '../utils/spotifyApiCalls.js'
 
 export default function Playlist({playlistTracks, setPlaylistTracks, handleRemove}) {
   const [playlistName, setPlaylistName] = useState('');
@@ -10,14 +11,13 @@ export default function Playlist({playlistTracks, setPlaylistTracks, handleRemov
 
   function handleSubmit(e) {
     e.preventDefault();
-    const playlistArray = playlistTracks.map((track) => {
-      return track.id
+    const trackUris = playlistTracks.map((track) => {
+      return track.uri
     });
+    console.log(trackUris);
+
     // submit playlist to API
-    console.log({
-      tracks: playlistArray,
-      name: playlistName,
-    });
+    createPlaylist(playlistName, trackUris);
 
     // Cleanup
     setPlaylistTracks([]);
