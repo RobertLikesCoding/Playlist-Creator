@@ -14,12 +14,16 @@ export default function Playlist({playlistTracks, setPlaylistTracks, handleRemov
     const trackUris = playlistTracks.map((track) => {
       return track.uri
     });
-    console.log(trackUris);
+    if (trackUris.length === 0) {
+      alert("You forgot to add tracks to your playlist!");
+      return;
+    } else if (!playlistName) {
+      alert("Give your playlist a name!");
+      return;
+    }
 
-    // submit playlist to API
     createPlaylist(playlistName, trackUris);
 
-    // Cleanup
     setPlaylistTracks([]);
     setPlaylistName('');
   }

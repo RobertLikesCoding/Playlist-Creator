@@ -1,7 +1,6 @@
 import { redirectToAuthCodeFlow, getAccessToken, getRefreshToken } from "./spotifyAuthorization";
 
 const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
-console.log(localStorage)
 
 export default async function createPlaylist(playlistName, trackUris) {
   const params = new URLSearchParams(window.location.search);
