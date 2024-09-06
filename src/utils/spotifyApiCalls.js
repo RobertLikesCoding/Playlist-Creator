@@ -1,16 +1,16 @@
 import { redirectToAuthCodeFlow, getAccessToken, getRefreshToken } from "./spotifyAuthorization";
 
-const clientId = "9176b7ef419541fea4e1b9e3aef00813";
-const params = new URLSearchParams(window.location.search);
-const code = params.get("code");
+const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
 
 export default async function createPlaylist(playlistName, trackUris) {
-  console.log(trackUris);
-
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
   try {
     let accessToken = localStorage.getItem('access_token');
-    if (!accessToken || isTokenExpired()) {
+    if (isTokenExpired()) {
       await getRefreshToken(clientId);
+    }
+    if (!accessToken) {
       if (!code) {
         await redirectToAuthCodeFlow(clientId);
         return;
@@ -21,14 +21,8 @@ export default async function createPlaylist(playlistName, trackUris) {
         return;
       }
     }
-
-    const profile = await fetchProfile(accessToken);
-    if (!profile.id) {
-      throw new Error("Failed to fetch user profile.");
-    }
-
-    const userId = profile.id;
-    const response = await fetch(
+    const userId = await fetchUserId(accessToken);
+    const playlistResponse = await fetch(
       `https://api.spotify.com/v1/users/${userId}/playlists`,
       {
         method: "POST",
@@ -44,26 +38,29 @@ export default async function createPlaylist(playlistName, trackUris) {
       }
     );
 
-    if (!response.ok) {
-      const errorData = await response.json();
+    if (!playlistResponse.ok) {
+      const errorData = await playlistResponse.json();
       throw new Error(`Failed to create playlist: ${errorData.error_description || errorData.error}`);
     }
 
-    const playlistData = await response.json();
+    const playlistData = await playlistResponse.json();
     const playlistId = playlistData.id
-    addTracksToPlaylist(playlistId, accessToken, trackUris)
-
+    await addTracksToPlaylist(playlistId, accessToken, trackUris)
   } catch (error) {
     console.error("Error:", error);
   }
 }
 
-async function fetchProfile(token) {
+async function fetchUserId(token) {
   const response = await fetch("https://api.spotify.com/v1/me", {
       method: "GET",
       headers: { "Authorization": "Bearer " + token }
   })
-  return await response.json();
+  const data = await response.json();
+  if (!data.id) {
+    throw new Error("Failed to fetch user profile.");
+  }
+  return data.id
 }
 
 function isTokenExpired() {

@@ -40,10 +40,9 @@ async function generateCodeChallenge(codeVerifier) {
 export async function getAccessToken(clientId, code) {
   const verifier = localStorage.getItem("verifier");
 
-  // Check if the verifier is available
   if (!verifier) {
     console.error("Verifier is missing. Redirecting to authorization flow again.");
-    redirectToAuthCodeFlow(clientId); // Redirect to authenticate again
+    redirectToAuthCodeFlow(clientId);
     return null;
   }
 
@@ -68,12 +67,12 @@ export async function getAccessToken(clientId, code) {
 
     const expiresIn = data.expires_in;
     const expirationTime = Date.now() + expiresIn * 1000;
+    localStorage.setItem("token_expires_at", expirationTime.toString());
+
     localStorage.setItem("access_token", data.access_token);
     if (data.refresh_token) {
       localStorage.setItem("refresh_token", data.refresh_token);
     }
-    localStorage.setItem("token_expires_at", expirationTime.toString());
-
     return data.accessToken;
   } catch (error) {
     console.error("Error fetching access token:", error);
