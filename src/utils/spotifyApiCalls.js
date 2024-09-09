@@ -8,14 +8,19 @@ export default async function createPlaylist(playlistName, trackUris) {
   try {
     let accessToken = localStorage.getItem('access_token');
     if (isTokenExpired()) {
+      console.log("refreshing expired token");
       await getRefreshToken(clientId);
     }
     if (!accessToken) {
+      console.log("no token found");
       if (!code) {
+      console.log("no code found");
         await redirectToAuthCodeFlow(clientId);
         return;
       }
       accessToken = await getAccessToken(clientId, code);
+      console.log("token retrieved");
+
       if (!accessToken) {
         await redirectToAuthCodeFlow(clientId);
         return;
