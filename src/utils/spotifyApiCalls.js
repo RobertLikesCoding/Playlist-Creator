@@ -3,26 +3,12 @@ import { redirectToAuthCodeFlow, getAccessToken, getRefreshToken } from "./spoti
 const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
 
 export default async function createPlaylist(playlistName, trackUris) {
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get("code");
   try {
     let accessToken = localStorage.getItem('access_token');
-    if (isTokenExpired()) {
-      await getRefreshToken(clientId);
-    }
-    if (!accessToken) {
-      if (!code) {
-        await redirectToAuthCodeFlow(clientId);
-        return;
-      }
-      accessToken = await getAccessToken(clientId, code);
-      if (!accessToken) {
-        await redirectToAuthCodeFlow(clientId);
-        return;
-      }
-    }
+    await validateAccessToken(accessToken);
+
     const userId = await fetchUserId(accessToken);
-    const playlistResponse = await fetch(
+    const response = await fetch(
       `https://api.spotify.com/v1/users/${userId}/playlists`,
       {
         method: "POST",
@@ -38,13 +24,13 @@ export default async function createPlaylist(playlistName, trackUris) {
       }
     );
 
-    if (!playlistResponse.ok) {
-      const errorData = await playlistResponse.json();
+    if (!response.ok) {
+      const errorData = await response.json();
       throw new Error(`Failed to create playlist: ${errorData.error_description || errorData.error}`);
     }
 
-    const playlistData = await playlistResponse.json();
-    const playlistId = playlistData.id
+    const data = await response.json();
+    const playlistId = data.id
     await addTracksToPlaylist(playlistId, accessToken, trackUris)
   } catch (error) {
     console.error("Error:", error);
@@ -63,10 +49,32 @@ async function fetchUserId(token) {
   return data.id
 }
 
+async function validateAccessToken(accessToken) {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+
+  if (isTokenExpired()) {
+    await getRefreshToken(clientId);
+  }
+  if (!accessToken) {
+    if (!code) {
+      await redirectToAuthCodeFlow(clientId);
+      return;
+    }
+    accessToken = await getAccessToken(clientId, code);
+
+    if (!accessToken) {
+      await redirectToAuthCodeFlow(clientId);
+      return;
+    }
+  }
+}
+
 function isTokenExpired() {
   const expirationTime = parseInt(localStorage.getItem("token_expires_at"), 10);
   return Date.now() > expirationTime;
 }
+
 
 async function addTracksToPlaylist(playlistId, accessToken, trackUris) {
   const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {

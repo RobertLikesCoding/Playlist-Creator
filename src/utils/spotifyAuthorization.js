@@ -65,12 +65,7 @@ export async function getAccessToken(clientId, code) {
       return null;
     }
 
-    const expiresIn = data.expires_in;
-    const expirationTime = Date.now() + expiresIn * 1000;
-    localStorage.setItem("token_expires_at", expirationTime.toString());
-
-    localStorage.setItem("access_token", data.access_token);
-    localStorage.setItem("refresh_token", data.refresh_token);
+    setValuesToLocalStorage(data);
     return data.access_token;
   } catch (error) {
     console.error("Error fetching access token:", error);
@@ -94,8 +89,13 @@ export async function getRefreshToken(clientId) {
   const response = await fetch("https://accounts.spotify.com/api/token", payload);
   const data = await response.json();
 
+  setValuesToLocalStorage(data);
+}
+
+function setValuesToLocalStorage(data) {
+  const expiresIn = data.expires_in;
+  const expirationTime = Date.now() + expiresIn * 1000;
+  localStorage.setItem("token_expires_at", expirationTime.toString());
   localStorage.setItem("access_token", data.access_token);
-  if (data.refresh_token) {
-    localStorage.setItem("refresh_token", data.refresh_token);
-  }
+  localStorage.setItem("refresh_token", data.refresh_token);
 }
