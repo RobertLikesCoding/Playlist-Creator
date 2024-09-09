@@ -23,7 +23,6 @@ export default function Playlist({playlistTracks, setPlaylistTracks, handleRemov
     }
 
     createPlaylist(playlistName, trackUris);
-
     setPlaylistTracks([]);
     setPlaylistName('');
   }
