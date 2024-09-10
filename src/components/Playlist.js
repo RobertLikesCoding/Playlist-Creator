@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import Track from './Track';
 import createPlaylist from '../utils/spotifyApiCalls.js'
 
-export default function Playlist({playlistTracks, setPlaylistTracks, handleRemove, saveDataToSessionStorage}) {
+export default function Playlist({playlistTracks, setPlaylistTracks, handleRemove, saveSession, restoreSession}) {
   const [playlistName, setPlaylistName] = useState('');
 
   function handleChange({target}) {
@@ -11,6 +11,9 @@ export default function Playlist({playlistTracks, setPlaylistTracks, handleRemov
 
   function handleSubmit(event) {
     event.preventDefault();
+    const verifier = localStorage.getItem('verifier');
+    console.log(verifier);
+
     const trackUris = playlistTracks.map((track) => {
       return track.uri
     });
@@ -21,8 +24,13 @@ export default function Playlist({playlistTracks, setPlaylistTracks, handleRemov
       alert("Give your playlist a name!");
       return;
     }
+    if (!verifier) {
+    console.log('no verifier found')
+      saveSession();
+      createPlaylist(playlistName, trackUris);
+      restoreSession();
+    }
 
-    saveDataToSessionStorage(playlistTracks);
     createPlaylist(playlistName, trackUris);
     setPlaylistTracks([]);
     setPlaylistName('');

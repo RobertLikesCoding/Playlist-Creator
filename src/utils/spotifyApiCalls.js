@@ -59,7 +59,6 @@ async function validateAccessToken(accessToken) {
   if (!accessToken) {
     if (!code) {
       await redirectToAuthCodeFlow(clientId);
-      restoreSession();
       return;
     }
     accessToken = await getAccessToken(clientId, code);
@@ -75,18 +74,6 @@ function isTokenExpired() {
   const expirationTime = parseInt(localStorage.getItem("token_expires_at"), 10);
   return Date.now() > expirationTime;
 }
-
-function restoreSession() {
-  const searchBar = document.getElementById('searchBar');
-  searchBar.value = sessionStorage.getItem("searchQuery");
-  const playlistName = document.getElementById('playlistName');
-  playlistName.value = sessionStorage.getItem("playlistName");
-
-  const playlistTracks = sessionStorage.getItem("playlistTracks");
-  const artistUri = sessionStorage.getItem("artistUri");
-  
-
-};
 
 async function addTracksToPlaylist(playlistId, accessToken, trackUris) {
   const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {

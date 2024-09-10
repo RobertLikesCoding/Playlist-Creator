@@ -3,6 +3,8 @@ import './styles/App.css';
 import SearchBar from './components/SearchBar';
 import Tracklist from './components/Tracklist';
 import Playlist from './components/Playlist';
+import { saveSession } from './utils/spotifyApiCalls.js'
+import { restoreSession } from './utils/spotifyApiCalls.js'
 
 function App() {
   const [accessToken, setAccessToken] = useState('');
@@ -87,15 +89,31 @@ function App() {
     });
   };
 
-  function saveDataToSessionStorage(playlistTracks) {
-    console.log(playlistTracks);
+  function saveSession(playlistTracks, topTracks) {
     const searchQuery = document.getElementById('searchBar').value;
     const playlistName = document.getElementById('playlistName').value;
     sessionStorage.setItem("searchQuery", searchQuery);
-    sessionStorage.setItem("playlistTracks", JSON.stringify(playlistTracks));
-    sessionStorage.setItem("artistUri", artistUri);
     sessionStorage.setItem("playlistName", playlistName);
+    sessionStorage.setItem("playlistTracks", JSON.stringify(playlistTracks));
+    sessionStorage.setItem("topTracks", JSON.stringify(topTracks));
+    console.log('session saved')
   }
+
+  function restoreSession() {
+    console.log('restoring session')
+    const searchBar = document.getElementById('searchBar');
+    searchBar.value = sessionStorage.getItem("searchQuery");
+    const playlistName = document.getElementById('playlistName');
+    playlistName.value = sessionStorage.getItem("playlistName");
+    const playlistTracks = sessionStorage.getItem("playlistTracks");
+    setPlaylistTracks(JSON.parse(playlistTracks));
+    const topTracks = sessionStorage.getItem("topTracks");
+    setTopTracks(JSON.parse(topTracks));
+    // const artistUri = sessionStorage.getItem("artistUri");
+
+    sessionStorage.clear()
+    console.log('sessionStorage cleared')
+  };
 
   return (
     <div className="App">
@@ -109,7 +127,8 @@ function App() {
         playlistTracks={playlistTracks}
         setPlaylistTracks={setPlaylistTracks}
         handleRemove={handleRemove}
-        saveDataToSessionStorage={saveDataToSessionStorage}/>
+        saveSession={() => saveSession(playlistTracks, topTracks)}
+        restoreSession={() => restoreSession()}/>
       </div>
     </div>
   );
