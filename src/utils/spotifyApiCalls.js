@@ -75,7 +75,6 @@ function isTokenExpired() {
   return Date.now() > expirationTime;
 }
 
-
 async function addTracksToPlaylist(playlistId, accessToken, trackUris) {
   const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
     method: "POST",

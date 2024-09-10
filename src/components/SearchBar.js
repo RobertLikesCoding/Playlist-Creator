@@ -20,7 +20,7 @@ export default function SearchBar({onSearch, onArtistSelect}) {
 
   return (
     <div className={styles.searchBar}>
-      <input type="text" placeholder="Search for artist..." value={searchQuery} onChange={handleSearch} />
+      <input id="searchBar" type="text" placeholder="Search for artist..." value={searchQuery} onChange={handleSearch} />
       <SearchResult artists={artists} onArtistSelect={onArtistSelect}/>
     </div>
   );

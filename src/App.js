@@ -8,6 +8,7 @@ function App() {
   const [accessToken, setAccessToken] = useState('');
   const [topTracks, setTopTracks] = useState([]);
   const [playlistTracks, setPlaylistTracks] = useState([]);
+  const [artistUri, setArtistUri] = useState([]);
 
   const fetchAccessToken = async () => {
     try {
@@ -55,6 +56,7 @@ function App() {
   };
   const fetchArtistTopTracks = async (uri) => {
     try {
+      setArtistUri(uri);
       const response = await fetch(`https://api.spotify.com/v1/artists/${uri}/top-tracks`, {
         method: 'GET',
         headers: {
@@ -85,6 +87,15 @@ function App() {
     });
   };
 
+  function saveDataToSessionStorage(playlistTracks) {
+    const searchQuery = document.getElementById('searchBar').value;
+    const playlistName = document.getElementById('playlistName').value;
+    sessionStorage.setItem("searchQuery", searchQuery);
+    sessionStorage.setItem("playlistTracks", playlistTracks);
+    sessionStorage.setItem("artistUri", artistUri);
+    sessionStorage.setItem("playlistName", playlistName);
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -93,7 +104,11 @@ function App() {
       <SearchBar onSearch={searchForArtist} onArtistSelect={fetchArtistTopTracks}/>
       <div className='container'>
         <Tracklist topTracks={topTracks} handleAdd={handleAdd}/>
-        <Playlist playlistTracks={playlistTracks} setPlaylistTracks={setPlaylistTracks} handleRemove={handleRemove}/>
+        <Playlist
+        playlistTracks={playlistTracks}
+        setPlaylistTracks={setPlaylistTracks}
+        handleRemove={handleRemove}
+        saveDataToSessionStorage={saveDataToSessionStorage}/>
       </div>
     </div>
   );
