@@ -88,10 +88,11 @@ function App() {
   };
 
   function saveDataToSessionStorage(playlistTracks) {
+    console.log(playlistTracks);
     const searchQuery = document.getElementById('searchBar').value;
     const playlistName = document.getElementById('playlistName').value;
     sessionStorage.setItem("searchQuery", searchQuery);
-    sessionStorage.setItem("playlistTracks", playlistTracks);
+    sessionStorage.setItem("playlistTracks", JSON.stringify(playlistTracks));
     sessionStorage.setItem("artistUri", artistUri);
     sessionStorage.setItem("playlistName", playlistName);
   }

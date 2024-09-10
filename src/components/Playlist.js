@@ -11,7 +11,6 @@ export default function Playlist({playlistTracks, setPlaylistTracks, handleRemov
 
   function handleSubmit(event) {
     event.preventDefault();
-    saveDataToSessionStorage();
     const trackUris = playlistTracks.map((track) => {
       return track.uri
     });
@@ -23,6 +22,7 @@ export default function Playlist({playlistTracks, setPlaylistTracks, handleRemov
       return;
     }
 
+    saveDataToSessionStorage(playlistTracks);
     createPlaylist(playlistName, trackUris);
     setPlaylistTracks([]);
     setPlaylistName('');
