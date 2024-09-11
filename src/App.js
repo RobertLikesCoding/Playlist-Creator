@@ -92,26 +92,28 @@ function App() {
   function saveSession(playlistTracks, topTracks) {
     const searchQuery = document.getElementById('searchBar').value;
     const playlistName = document.getElementById('playlistName').value;
-    sessionStorage.setItem("searchQuery", searchQuery);
-    sessionStorage.setItem("playlistName", playlistName);
-    sessionStorage.setItem("playlistTracks", JSON.stringify(playlistTracks));
-    sessionStorage.setItem("topTracks", JSON.stringify(topTracks));
+    localStorage.setItem("searchQuery", searchQuery);
+    localStorage.setItem("playlistName", playlistName);
+    localStorage.setItem("playlistTracks", JSON.stringify(playlistTracks));
+    localStorage.setItem("topTracks", JSON.stringify(topTracks));
     console.log('session saved')
   }
 
   function restoreSession() {
     console.log('restoring session')
     const searchBar = document.getElementById('searchBar');
-    searchBar.value = sessionStorage.getItem("searchQuery");
-    const playlistName = document.getElementById('playlistName');
-    playlistName.value = sessionStorage.getItem("playlistName");
-    const playlistTracks = sessionStorage.getItem("playlistTracks");
-    setPlaylistTracks(JSON.parse(playlistTracks));
-    const topTracks = sessionStorage.getItem("topTracks");
+    searchBar.value = localStorage.getItem("searchQuery");
+    const topTracks = localStorage.getItem("topTracks");
     setTopTracks(JSON.parse(topTracks));
-    // const artistUri = sessionStorage.getItem("artistUri");
+    const playlistTracks = localStorage.getItem("playlistTracks");
+    setPlaylistTracks(JSON.parse(playlistTracks));
+    const playlistName = document.getElementById('playlistName');
+    playlistName.value = localStorage.getItem("playlistName");
 
-    sessionStorage.clear()
+    localStorage.removeItem('searchQuery')
+    localStorage.removeItem('playlistName')
+    localStorage.removeItem('playlistTracks')
+    localStorage.removeItem('topTracks')
     console.log('sessionStorage cleared')
   };
 
