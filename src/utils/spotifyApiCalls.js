@@ -5,6 +5,7 @@ const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
 export default async function createPlaylist(playlistName, trackUris) {
   try {
     let accessToken = localStorage.getItem('access_token');
+    console.log("Checking localStorage AT: ",accessToken)
     await validateAccessToken(accessToken);
 
     const userId = await fetchUserId(accessToken);
@@ -37,6 +38,32 @@ export default async function createPlaylist(playlistName, trackUris) {
   }
 }
 
+async function validateAccessToken(accessToken) {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+  console.log("Code: ", code);
+  console.log("Access Token to validate: ", accessToken);
+
+  if (!accessToken) {
+    console.log("No AT found!");
+    if (!code) {
+    console.log("No Code found!, redirecting...");
+      await redirectToAuthCodeFlow(clientId);
+      // I think after this we need to getAccessToken
+      return;
+    }
+    accessToken = await getAccessToken(clientId, code);
+
+    if (!accessToken) {
+      await redirectToAuthCodeFlow(clientId);
+      return;
+    }
+  }
+  if (isTokenExpired()) {
+    await getRefreshToken(clientId);
+  }
+}
+
 async function fetchUserId(token) {
   const response = await fetch("https://api.spotify.com/v1/me", {
       method: "GET",
@@ -49,29 +76,8 @@ async function fetchUserId(token) {
   return data.id
 }
 
-async function validateAccessToken(accessToken) {
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get("code");
-
-  if (isTokenExpired()) {
-    await getRefreshToken(clientId);
-  }
-  if (!accessToken) {
-    if (!code) {
-      await redirectToAuthCodeFlow(clientId);
-      return;
-    }
-    accessToken = await getAccessToken(clientId, code);
-
-    if (!accessToken) {
-      await redirectToAuthCodeFlow(clientId);
-      return;
-    }
-  }
-}
-
 function isTokenExpired() {
-  const expirationTime = parseInt(localStorage.getItem("token_expires_at"), 10);
+  const expirationTime = parseInt(localStorage.getItem("expires_in"), 10);
   return Date.now() > expirationTime;
 }
 

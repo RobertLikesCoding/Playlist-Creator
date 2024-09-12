@@ -1,4 +1,5 @@
 // Authorization
+const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
 
 export async function redirectToAuthCodeFlow(clientId) {
   const verifier = generateCodeVerifier(128);
@@ -26,8 +27,8 @@ function generateCodeVerifier(length) {
   return text;
 }
 
-async function generateCodeChallenge(codeVerifier) {
-  const data = new TextEncoder().encode(codeVerifier);
+async function generateCodeChallenge(verifier) {
+  const data = new TextEncoder().encode(verifier);
   const digest = await window.crypto.subtle.digest('SHA-256', data);
   return btoa(String.fromCharCode.apply(null, [...new Uint8Array(digest)]))
       .replace(/\+/g, '-')
@@ -37,7 +38,7 @@ async function generateCodeChallenge(codeVerifier) {
 
 // Getting Access Tokens
 
-export async function getAccessToken(clientId, code) {
+export async function getAccessToken(code) {
   const verifier = localStorage.getItem("verifier");
 
   if (!verifier) {
@@ -59,11 +60,11 @@ export async function getAccessToken(clientId, code) {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: params.toString()
     });
-    const data = await response.json();
     if (!response.ok) {
-      console.error("Failed to get access token:", data);
+      console.error("Failed to get access token:", response);
       return null;
     }
+    const data = await response.json();
 
     setValuesToLocalStorage(data);
     return data.access_token;
@@ -95,7 +96,7 @@ export async function getRefreshToken(clientId) {
 function setValuesToLocalStorage(data) {
   const expiresIn = data.expires_in;
   const expirationTime = Date.now() + expiresIn * 1000;
-  localStorage.setItem("token_expires_at", expirationTime.toString());
+  localStorage.setItem("expires_in", expirationTime.toString());
   localStorage.setItem("access_token", data.access_token);
   localStorage.setItem("refresh_token", data.refresh_token);
 }

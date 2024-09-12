@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import Track from './Track';
+import { getAccessToken } from '../utils/spotifyAuthorization.js'
 import createPlaylist from '../utils/spotifyApiCalls.js'
 
 export default function Playlist({playlistTracks, setPlaylistTracks, handleRemove, saveSession, restoreSession}) {
@@ -11,8 +12,9 @@ export default function Playlist({playlistTracks, setPlaylistTracks, handleRemov
 
   function handleSubmit(event) {
     event.preventDefault();
-    const verifier = localStorage.getItem('verifier');
-    console.log(verifier);
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    console.log("Code?", code);
 
     const trackUris = playlistTracks.map((track) => {
       return track.uri
@@ -24,11 +26,20 @@ export default function Playlist({playlistTracks, setPlaylistTracks, handleRemov
       alert("Give your playlist a name!");
       return;
     }
-    if (!verifier) {
+    if (code) {
+      console.log("Code found. Getting access token.")
+      const accessToken = getAccessToken(code)
+      console.log(accessToken)
+      createPlaylist(playlistName, trackUris)
+    }
+
+    if (!code) {
     console.log('no verifier found')
       saveSession();
-      createPlaylist(playlistName, trackUris);
-      restoreSession();
+      setTimeout(() => {
+        createPlaylist(playlistName, trackUris);
+        restoreSession();
+      },3000);
     }
 
     createPlaylist(playlistName, trackUris);

@@ -92,29 +92,37 @@ function App() {
   function saveSession(playlistTracks, topTracks) {
     const searchQuery = document.getElementById('searchBar').value;
     const playlistName = document.getElementById('playlistName').value;
-    localStorage.setItem("searchQuery", searchQuery);
-    localStorage.setItem("playlistName", playlistName);
-    localStorage.setItem("playlistTracks", JSON.stringify(playlistTracks));
-    localStorage.setItem("topTracks", JSON.stringify(topTracks));
+    // localStorage.setItem("searchQuery", searchQuery);
+    // localStorage.setItem("playlistName", playlistName);
+    // localStorage.setItem("playlistTracks", JSON.stringify(playlistTracks));
+    // localStorage.setItem("topTracks", JSON.stringify(topTracks));
+
+    const session = {
+      "searchQuery": searchQuery,
+      "playlistName": playlistName,
+      "playlistTracks": JSON.stringify(playlistTracks),
+      "topTracks": JSON.stringify(topTracks)
+    }
+
+    localStorage.setItem("session", JSON.stringify(session))
     console.log('session saved')
   }
 
   function restoreSession() {
     console.log('restoring session')
-    const searchBar = document.getElementById('searchBar');
-    searchBar.value = localStorage.getItem("searchQuery");
-    const topTracks = localStorage.getItem("topTracks");
-    setTopTracks(JSON.parse(topTracks));
-    const playlistTracks = localStorage.getItem("playlistTracks");
-    setPlaylistTracks(JSON.parse(playlistTracks));
-    const playlistName = document.getElementById('playlistName');
-    playlistName.value = localStorage.getItem("playlistName");
+    const session = JSON.parse(localStorage.getItem("session"));
 
-    localStorage.removeItem('searchQuery')
-    localStorage.removeItem('playlistName')
-    localStorage.removeItem('playlistTracks')
-    localStorage.removeItem('topTracks')
-    console.log('sessionStorage cleared')
+    const searchBar = document.getElementById("searchBar");
+    searchBar.value = session.searchQuery;
+    const topTracks = session.topTracks;
+    setTopTracks(JSON.parse(topTracks));
+    const playlistTracks = session.playlistTracks;
+    setPlaylistTracks(JSON.parse(playlistTracks));
+    const playlistName = document.getElementById("playlistName");
+    playlistName.value = session.playlistName;
+
+    localStorage.removeItem('session')
+    console.log('removed session from localStorage')
   };
 
   return (
