@@ -67,6 +67,7 @@ export async function getAccessToken(code) {
     const data = await response.json();
 
     setValuesToLocalStorage(data);
+    console.log("successfully created AT")
     return data.access_token;
   } catch (error) {
     console.error("Error fetching access token:", error);
@@ -75,6 +76,7 @@ export async function getAccessToken(code) {
 }
 
 export async function getRefreshToken(clientId) {
+  console.log("refreshing Token")
   const refreshToken = localStorage.getItem("refresh_token");
   const payload = {
     method: "POST",
@@ -91,6 +93,7 @@ export async function getRefreshToken(clientId) {
   const data = await response.json();
 
   setValuesToLocalStorage(data);
+  return data.access_token;
 }
 
 function setValuesToLocalStorage(data) {

@@ -17,7 +17,7 @@ export default function Playlist({playlistTracks, setPlaylistTracks, handleRemov
     const code = params.get("code");
     console.log("Code?", code);
 
-    const playlistName = event.target.playlistName.value;
+    let playlistName = event.target.playlistName.value;
     const trackUris = playlistTracks.map((track) => {
       return track.uri
     });
@@ -36,17 +36,13 @@ export default function Playlist({playlistTracks, setPlaylistTracks, handleRemov
       console.log('no code found');
       saveSession();
       console.log('session saved');
-      setTimeout(async () => {
-        await redirectToAuthCodeFlow()
-        const newCode = params.get("code");
-        const accessToken = await getAccessToken(code);
-        console.log("AT recieved: ", accessToken);
-      },3000);
+      await redirectToAuthCodeFlow();
     }
 
+    console.log("local storage after AT: ", localStorage)
     createPlaylist(playlistName, trackUris);
-    // setPlaylistTracks([]);
-    // setPlaylistName('');
+    setPlaylistTracks([]);
+    playlistName = '';
   }
 
   return (

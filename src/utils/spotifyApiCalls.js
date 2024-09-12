@@ -5,20 +5,20 @@ const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
 export default async function createPlaylist(playlistName, trackUris) {
   try {
     let accessToken = localStorage.getItem('access_token');
-    const validation = await validateAccessToken(accessToken)
-    if (!validation) {
+    const validatedToken = await validateAccessToken(accessToken)
+    if (!validatedToken) {
       console.log("Validation failed");
       return; // to stop executing if validation failed
     };
 
-    const userId = await fetchUserId(accessToken);
+    const userId = await fetchUserId(validatedToken);
     const response = await fetch(
       `https://api.spotify.com/v1/users/${userId}/playlists`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "authorization": "Bearer " + accessToken,
+          "authorization": "Bearer " + validatedToken,
         },
         body: JSON.stringify({
           name: playlistName,
@@ -35,7 +35,7 @@ export default async function createPlaylist(playlistName, trackUris) {
 
     const data = await response.json();
     const playlistId = data.id
-    await addTracksToPlaylist(playlistId, accessToken, trackUris)
+    await addTracksToPlaylist(playlistId, validatedToken, trackUris)
   } catch (error) {
     console.error("Error:", error);
   }
@@ -57,15 +57,16 @@ async function validateAccessToken(accessToken) {
       return false;
     }
     accessToken = await getAccessToken(clientId, code);
-
     if (!accessToken) {
       await redirectToAuthCodeFlow(clientId);
-      return;
+      return false;
     }
   }
+
   if (isTokenExpired()) {
-    await getRefreshToken(clientId);
+    accessToken = await getRefreshToken(clientId);
   }
+  return accessToken;
 }
 
 async function fetchUserId(token) {
