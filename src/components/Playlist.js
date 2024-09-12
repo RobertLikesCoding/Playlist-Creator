@@ -4,12 +4,21 @@ import { getAccessToken } from '../utils/spotifyAuthorization.js'
 import { redirectToAuthCodeFlow } from '../utils/spotifyAuthorization.js'
 import createPlaylist from '../utils/spotifyApiCalls.js'
 
-export default function Playlist({playlistTracks, setPlaylistTracks, handleRemove, saveSession, restoreSession}) {
-  // const [playlistName, setPlaylistName] = useState('');
+export default function Playlist({playlistTracks,
+  setPlaylistTracks,
+  handleRemove,
+  saveSession,
+  restoreSession,
+  setSearchQuery,
+  setTopTracks,
+  setPlaylistName,
+  playlistName
+}) {
 
-  // function handleChange({target}) {
-  //   setPlaylistName(target.value)
-  // }
+
+  function handleChange({target}) {
+    setPlaylistName(target.value)
+  }
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -17,7 +26,7 @@ export default function Playlist({playlistTracks, setPlaylistTracks, handleRemov
     const code = params.get("code");
     console.log("Code?", code);
 
-    let playlistName = event.target.playlistName.value;
+    setPlaylistName(event.target.playlistName.value);
     const trackUris = playlistTracks.map((track) => {
       return track.uri
     });
@@ -36,13 +45,16 @@ export default function Playlist({playlistTracks, setPlaylistTracks, handleRemov
       console.log('no code found');
       saveSession();
       console.log('session saved');
-      await redirectToAuthCodeFlow();
+      await redirectToAuthCodeFlow()
     }
 
     console.log("local storage after AT: ", localStorage)
     createPlaylist(playlistName, trackUris);
+    // Reset everything
     setPlaylistTracks([]);
-    playlistName = '';
+    setTopTracks([]);
+    setSearchQuery('');
+    setPlaylistName('');
   }
 
   return (
@@ -50,7 +62,7 @@ export default function Playlist({playlistTracks, setPlaylistTracks, handleRemov
       <h2>Playlist</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor='playlistName'>Name your playlist: </label>
-        <input id="playlistName" name='playlistName' type='text'/>
+        <input id="playlistName" name='playlistName' type='text' value={playlistName} onChange={handleChange}/>
         <ul>
           {playlistTracks.map((track) => {
             return <Track track={track} key={track.id} addOrRemove='remove' onClick={(e) => handleRemove(track)}/>

@@ -136,6 +136,10 @@ function App() {
     restoreSession();
   },[])
 
+  function resetSession() {
+
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -149,7 +153,11 @@ function App() {
         setPlaylistTracks={setPlaylistTracks}
         handleRemove={handleRemove}
         saveSession={() => saveSession(playlistTracks, topTracks)}
-        restoreSession={() => restoreSession()}/>
+        restoreSession={() => restoreSession()}
+        setTopTracks={setTopTracks}
+        setSearchQuery={setSearchQuery}
+        playlistName={playlistName}
+        setPlaylistName={setPlaylistName}/>
       </div>
     </div>
   );
