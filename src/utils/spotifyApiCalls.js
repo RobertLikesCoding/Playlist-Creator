@@ -5,8 +5,11 @@ const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
 export default async function createPlaylist(playlistName, trackUris) {
   try {
     let accessToken = localStorage.getItem('access_token');
-    console.log("Checking localStorage AT: ",accessToken)
-    await validateAccessToken(accessToken);
+    const validation = await validateAccessToken(accessToken)
+    if (!validation) {
+      console.log("Validation failed");
+      return; // to stop executing if validation failed
+    };
 
     const userId = await fetchUserId(accessToken);
     const response = await fetch(
@@ -39,6 +42,7 @@ export default async function createPlaylist(playlistName, trackUris) {
 }
 
 async function validateAccessToken(accessToken) {
+  console.log("Validating");
   const params = new URLSearchParams(window.location.search);
   const code = params.get("code");
   console.log("Code: ", code);
@@ -50,7 +54,7 @@ async function validateAccessToken(accessToken) {
     console.log("No Code found!, redirecting...");
       await redirectToAuthCodeFlow(clientId);
       // I think after this we need to getAccessToken
-      return;
+      return false;
     }
     accessToken = await getAccessToken(clientId, code);
 

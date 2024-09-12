@@ -11,6 +11,8 @@ function App() {
   const [topTracks, setTopTracks] = useState([]);
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [artistUri, setArtistUri] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [playlistName, setPlaylistName] = useState('');
 
   const fetchAccessToken = async () => {
     try {
@@ -92,45 +94,54 @@ function App() {
   function saveSession(playlistTracks, topTracks) {
     const searchQuery = document.getElementById('searchBar').value;
     const playlistName = document.getElementById('playlistName').value;
-    // localStorage.setItem("searchQuery", searchQuery);
-    // localStorage.setItem("playlistName", playlistName);
-    // localStorage.setItem("playlistTracks", JSON.stringify(playlistTracks));
-    // localStorage.setItem("topTracks", JSON.stringify(topTracks));
-
     const session = {
       "searchQuery": searchQuery,
       "playlistName": playlistName,
       "playlistTracks": JSON.stringify(playlistTracks),
       "topTracks": JSON.stringify(topTracks)
     }
+    console.log("Session: ", session);
 
-    localStorage.setItem("session", JSON.stringify(session))
-    console.log('session saved')
+    localStorage.setItem("session", JSON.stringify(session));
   }
 
   function restoreSession() {
-    console.log('restoring session')
+    console.log('looking for session');
     const session = JSON.parse(localStorage.getItem("session"));
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
 
-    const searchBar = document.getElementById("searchBar");
-    searchBar.value = session.searchQuery;
+    if (!session) {
+      console.log("Currently no session saved");
+      return;
+    }
+    if (code) {
+      console.log("Code found now during restore: ", code);
+    }
+
+    console.log('restoring session');
+
+    setSearchQuery(session.searchQuery);
     const topTracks = session.topTracks;
     setTopTracks(JSON.parse(topTracks));
     const playlistTracks = session.playlistTracks;
     setPlaylistTracks(JSON.parse(playlistTracks));
-    const playlistName = document.getElementById("playlistName");
-    playlistName.value = session.playlistName;
+    const playlistNameInput = document.getElementById("playlistName");
+    playlistNameInput.value = session.playlistName;
 
     localStorage.removeItem('session')
     console.log('removed session from localStorage')
   };
+  useEffect(() => {
+    restoreSession();
+  },[])
 
   return (
     <div className="App">
       <header className="App-header">
         <h1>Create your Playlist</h1>
       </header>
-      <SearchBar onSearch={searchForArtist} onArtistSelect={fetchArtistTopTracks}/>
+      <SearchBar onSearch={searchForArtist} onArtistSelect={fetchArtistTopTracks} searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
       <div className='container'>
         <Tracklist topTracks={topTracks} handleAdd={handleAdd}/>
         <Playlist
