@@ -8,6 +8,8 @@ function App() {
   const [accessToken, setAccessToken] = useState('');
   const [topTracks, setTopTracks] = useState([]);
   const [playlistTracks, setPlaylistTracks] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [playlistName, setPlaylistName] = useState('');
 
   const fetchAccessToken = async () => {
     try {
@@ -32,6 +34,7 @@ function App() {
       console.error('Error:', error);
       }
   }
+
   useEffect(() => {
     fetchAccessToken();
   }, []);
@@ -53,6 +56,7 @@ function App() {
       console.error('Error:', error);
     }
   };
+
   const fetchArtistTopTracks = async (uri) => {
     try {
       const response = await fetch(`https://api.spotify.com/v1/artists/${uri}/top-tracks`, {
@@ -67,9 +71,10 @@ function App() {
       const data = await response.json()
       setTopTracks(data.tracks);
     } catch (error) {
-      console.log('Error:', error);
+      console.error('Error:', error);
     }
   }
+
   const handleAdd = (track) => {
     setPlaylistTracks((prevPlaylistTracks) => {
       if (!prevPlaylistTracks.some((t) => t.id === track.id)) {
@@ -85,15 +90,52 @@ function App() {
     });
   };
 
+  function saveSession(playlistTracks, topTracks) {
+    const session = {
+      "searchQuery": searchQuery,
+      "playlistName": playlistName,
+      "playlistTracks": JSON.stringify(playlistTracks),
+      "topTracks": JSON.stringify(topTracks)
+    }
+
+    localStorage.setItem("session", JSON.stringify(session));
+  }
+
+  function restoreSession() {
+    const session = JSON.parse(localStorage.getItem("session"));
+    if (!session) {
+      return null;
+    }
+
+    setTopTracks(JSON.parse(session.topTracks));
+    setPlaylistTracks(JSON.parse(session.playlistTracks));
+    setSearchQuery(session.searchQuery);
+    setPlaylistName(session.playlistName);
+    localStorage.removeItem('session')
+  };
+
+  useEffect(() => {
+    restoreSession();
+  },[])
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>Create your Playlist</h1>
       </header>
-      <SearchBar onSearch={searchForArtist} onArtistSelect={fetchArtistTopTracks}/>
+      <SearchBar onSearch={searchForArtist} onArtistSelect={fetchArtistTopTracks} searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
       <div className='container'>
         <Tracklist topTracks={topTracks} handleAdd={handleAdd}/>
-        <Playlist playlistTracks={playlistTracks} setPlaylistTracks={setPlaylistTracks} handleRemove={handleRemove}/>
+        <Playlist
+        playlistTracks={playlistTracks}
+        setPlaylistTracks={setPlaylistTracks}
+        handleRemove={handleRemove}
+        saveSession={() => saveSession(playlistTracks, topTracks)}
+        restoreSession={() => restoreSession()}
+        setTopTracks={setTopTracks}
+        setSearchQuery={setSearchQuery}
+        playlistName={playlistName}
+        setPlaylistName={setPlaylistName}/>
       </div>
     </div>
   );

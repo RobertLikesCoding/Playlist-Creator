@@ -1,20 +1,22 @@
 import { redirectToAuthCodeFlow, getAccessToken, getRefreshToken } from "./spotifyAuthorization";
 
-const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
-
 export default async function createPlaylist(playlistName, trackUris) {
   try {
     let accessToken = localStorage.getItem('access_token');
-    await validateAccessToken(accessToken);
+    const validatedToken = await validateAccessToken(accessToken)
+    if (!validatedToken) {
+      console.error('Token validation failed.');
+      return; // to stop executing if validation failed
+    };
 
-    const userId = await fetchUserId(accessToken);
+    const userId = await fetchUserId(validatedToken);
     const response = await fetch(
       `https://api.spotify.com/v1/users/${userId}/playlists`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "authorization": "Bearer " + accessToken,
+          "authorization": "Bearer " + validatedToken,
         },
         body: JSON.stringify({
           name: playlistName,
@@ -31,10 +33,33 @@ export default async function createPlaylist(playlistName, trackUris) {
 
     const data = await response.json();
     const playlistId = data.id
-    await addTracksToPlaylist(playlistId, accessToken, trackUris)
+    await addTracksToPlaylist(playlistId, validatedToken, trackUris)
+    return true;
   } catch (error) {
     console.error("Error:", error);
   }
+}
+
+async function validateAccessToken(accessToken) {
+  const code = new URLSearchParams(window.location.search).get("code");
+
+  if (!accessToken) {
+    if (!code) {
+      await redirectToAuthCodeFlow();
+      return false;
+    }
+    accessToken = await getAccessToken(code);
+    if (!accessToken) {
+
+      await redirectToAuthCodeFlow();
+      return false;
+    }
+  }
+
+  if (isTokenExpired()) {
+    accessToken = await getRefreshToken();
+  }
+  return accessToken;
 }
 
 async function fetchUserId(token) {
@@ -49,32 +74,10 @@ async function fetchUserId(token) {
   return data.id
 }
 
-async function validateAccessToken(accessToken) {
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get("code");
-
-  if (isTokenExpired()) {
-    await getRefreshToken(clientId);
-  }
-  if (!accessToken) {
-    if (!code) {
-      await redirectToAuthCodeFlow(clientId);
-      return;
-    }
-    accessToken = await getAccessToken(clientId, code);
-
-    if (!accessToken) {
-      await redirectToAuthCodeFlow(clientId);
-      return;
-    }
-  }
-}
-
 function isTokenExpired() {
-  const expirationTime = parseInt(localStorage.getItem("token_expires_at"), 10);
+  const expirationTime = parseInt(localStorage.getItem("expires_in"), 10);
   return Date.now() > expirationTime;
 }
-
 
 async function addTracksToPlaylist(playlistId, accessToken, trackUris) {
   const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {

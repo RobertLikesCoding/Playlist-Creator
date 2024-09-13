@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import styles from '../styles/SearchBar.module.css';
 import SearchResult from './SearchResult'
 
-export default function SearchBar({onSearch, onArtistSelect}) {
-  const [searchQuery, setSearchQuery] = useState('');
+export default function SearchBar({onSearch, onArtistSelect, setSearchQuery, searchQuery}) {
   const [artists, setArtists] = useState([]);
 
 
@@ -20,7 +19,7 @@ export default function SearchBar({onSearch, onArtistSelect}) {
 
   return (
     <div className={styles.searchBar}>
-      <input type="text" placeholder="Search for artist..." value={searchQuery} onChange={handleSearch} />
+      <input id="searchBar" type="text" placeholder="Search for artist..." value={searchQuery} onChange={handleSearch} />
       <SearchResult artists={artists} onArtistSelect={onArtistSelect}/>
     </div>
   );
