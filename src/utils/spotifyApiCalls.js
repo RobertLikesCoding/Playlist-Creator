@@ -1,7 +1,5 @@
 import { redirectToAuthCodeFlow, getAccessToken, getRefreshToken } from "./spotifyAuthorization";
 
-const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
-
 export default async function createPlaylist(playlistName, trackUris) {
   try {
     let accessToken = localStorage.getItem('access_token');
@@ -42,23 +40,23 @@ export default async function createPlaylist(playlistName, trackUris) {
 }
 
 async function validateAccessToken(accessToken) {
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get("code");
+  const code = new URLSearchParams(window.location.search).get("code");
 
   if (!accessToken) {
     if (!code) {
-      await redirectToAuthCodeFlow(clientId);
+      await redirectToAuthCodeFlow();
       return false;
     }
-    accessToken = await getAccessToken(clientId, code);
+    accessToken = await getAccessToken(code);
     if (!accessToken) {
-      await redirectToAuthCodeFlow(clientId);
+
+      await redirectToAuthCodeFlow();
       return false;
     }
   }
 
   if (isTokenExpired()) {
-    accessToken = await getRefreshToken(clientId);
+    accessToken = await getRefreshToken();
   }
   return accessToken;
 }

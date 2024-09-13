@@ -20,9 +20,7 @@ export default function Playlist({
 
   async function handleSubmit(event) {
     event.preventDefault();
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get("code");
-    console.log("Code?", code);
+    const code = new URLSearchParams(window.location.search).get("code");
 
     setPlaylistName(event.target.playlistName.value);
     const trackUris = playlistTracks.map((track) => {
@@ -36,17 +34,12 @@ export default function Playlist({
       return;
     }
     if (code) {
-      console.log("Code found. Getting access token.");
-      const accessToken = await getAccessToken(code);
-      console.log("AT recieved: ", accessToken);
+      await getAccessToken(code);
     } else {
-      console.log('no code found');
       saveSession();
-      console.log('session saved');
-      await redirectToAuthCodeFlow()
+      await redirectToAuthCodeFlow();
     }
 
-    console.log("local storage after AT: ", localStorage)
     createPlaylist(playlistName, trackUris);
     // Reset everything
     setPlaylistTracks([]);

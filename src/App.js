@@ -36,6 +36,7 @@ function App() {
       console.error('Error:', error);
       }
   }
+  
   useEffect(() => {
     fetchAccessToken();
   }, []);
@@ -71,7 +72,7 @@ function App() {
       const data = await response.json()
       setTopTracks(data.tracks);
     } catch (error) {
-      console.log('Error:', error);
+      console.error('Error:', error);
     }
   }
   const handleAdd = (track) => {
@@ -98,37 +99,24 @@ function App() {
       "playlistTracks": JSON.stringify(playlistTracks),
       "topTracks": JSON.stringify(topTracks)
     }
-    console.log("Session: ", session);
 
     localStorage.setItem("session", JSON.stringify(session));
   }
 
   function restoreSession() {
-    console.log('looking for session');
     const session = JSON.parse(localStorage.getItem("session"));
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get("code");
-
     if (!session) {
-      console.log("Currently no session saved");
-      return;
-    }
-    if (code) {
-      console.log("Code found now during restore: ", code);
+      return null;
     }
 
-    console.log('restoring session');
-
+    setTopTracks(JSON.parse(session.topTracks));
+    setPlaylistTracks(JSON.parse(session.playlistTracks));
     setSearchQuery(session.searchQuery);
-    const topTracks = session.topTracks;
-    setTopTracks(JSON.parse(topTracks));
-    const playlistTracks = session.playlistTracks;
-    setPlaylistTracks(JSON.parse(playlistTracks));
     setPlaylistName(session.playlistName);
 
     localStorage.removeItem('session')
-    console.log('removed session from localStorage')
   };
+
   useEffect(() => {
     restoreSession();
   },[])
