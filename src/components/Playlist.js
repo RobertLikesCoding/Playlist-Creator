@@ -27,25 +27,28 @@ export default function Playlist({
       return track.uri
     });
     if (trackUris.length === 0) {
-      alert("You forgot to add tracks to your playlist!");
+      alert("You forgot to add tracks to your playlist. 🤔");
       return;
     } else if (!playlistName) {
       alert("Give your playlist a name!");
       return;
     }
-    if (code) {
-      await getAccessToken(code);
-    } else {
+    if (!code) {
       saveSession();
       await redirectToAuthCodeFlow();
     }
 
-    createPlaylist(playlistName, trackUris);
+    const isPlaylistCreated  = await createPlaylist(playlistName, trackUris);
+    if (!isPlaylistCreated) {
+      alert("Something went wrong");
+    };
     // Reset everything
     setPlaylistTracks([]);
     setTopTracks([]);
     setSearchQuery('');
     setPlaylistName('');
+    alert("Playlist successfully created 🥳");
+
   }
 
   return (

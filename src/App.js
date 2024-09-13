@@ -3,8 +3,6 @@ import './styles/App.css';
 import SearchBar from './components/SearchBar';
 import Tracklist from './components/Tracklist';
 import Playlist from './components/Playlist';
-import { saveSession } from './utils/spotifyApiCalls.js'
-import { restoreSession } from './utils/spotifyApiCalls.js'
 
 function App() {
   const [accessToken, setAccessToken] = useState('');
@@ -36,7 +34,7 @@ function App() {
       console.error('Error:', error);
       }
   }
-  
+
   useEffect(() => {
     fetchAccessToken();
   }, []);
@@ -58,6 +56,7 @@ function App() {
       console.error('Error:', error);
     }
   };
+
   const fetchArtistTopTracks = async (uri) => {
     try {
       const response = await fetch(`https://api.spotify.com/v1/artists/${uri}/top-tracks`, {
@@ -75,6 +74,7 @@ function App() {
       console.error('Error:', error);
     }
   }
+
   const handleAdd = (track) => {
     setPlaylistTracks((prevPlaylistTracks) => {
       if (!prevPlaylistTracks.some((t) => t.id === track.id)) {
@@ -113,7 +113,6 @@ function App() {
     setPlaylistTracks(JSON.parse(session.playlistTracks));
     setSearchQuery(session.searchQuery);
     setPlaylistName(session.playlistName);
-
     localStorage.removeItem('session')
   };
 

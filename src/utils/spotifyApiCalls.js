@@ -34,6 +34,7 @@ export default async function createPlaylist(playlistName, trackUris) {
     const data = await response.json();
     const playlistId = data.id
     await addTracksToPlaylist(playlistId, validatedToken, trackUris)
+    return true;
   } catch (error) {
     console.error("Error:", error);
   }

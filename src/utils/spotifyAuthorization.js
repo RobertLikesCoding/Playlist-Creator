@@ -1,6 +1,6 @@
-// Authorization
 const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
 
+// Authorization
 
 export async function redirectToAuthCodeFlow() {
   const verifier = generateCodeVerifier(128);
@@ -40,6 +40,7 @@ async function generateCodeChallenge(verifier) {
 // Getting Access Tokens
 
 export async function getAccessToken(code) {
+  console.log(code);
   const verifier = localStorage.getItem("verifier");
   if (!verifier) {
     console.error("Verifier is missing. Redirecting to authorization flow.");
@@ -65,6 +66,7 @@ export async function getAccessToken(code) {
       return null;
     }
     const data = await response.json();
+    console.log(data);
 
     setValuesToLocalStorage(data);
     return data.access_token;
@@ -74,7 +76,7 @@ export async function getAccessToken(code) {
   }
 }
 
-export async function getRefreshToken(clientId) {
+export async function getRefreshToken() {
   try {
     const refreshToken = localStorage.getItem("refresh_token");
     const payload = {
