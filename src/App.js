@@ -10,7 +10,6 @@ function App() {
   const [accessToken, setAccessToken] = useState('');
   const [topTracks, setTopTracks] = useState([]);
   const [playlistTracks, setPlaylistTracks] = useState([]);
-  const [artistUri, setArtistUri] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [playlistName, setPlaylistName] = useState('');
 
@@ -60,7 +59,6 @@ function App() {
   };
   const fetchArtistTopTracks = async (uri) => {
     try {
-      setArtistUri(uri);
       const response = await fetch(`https://api.spotify.com/v1/artists/${uri}/top-tracks`, {
         method: 'GET',
         headers: {
@@ -126,8 +124,7 @@ function App() {
     setTopTracks(JSON.parse(topTracks));
     const playlistTracks = session.playlistTracks;
     setPlaylistTracks(JSON.parse(playlistTracks));
-    const playlistNameInput = document.getElementById("playlistName");
-    playlistNameInput.value = session.playlistName;
+    setPlaylistName(session.playlistName);
 
     localStorage.removeItem('session')
     console.log('removed session from localStorage')
@@ -135,10 +132,6 @@ function App() {
   useEffect(() => {
     restoreSession();
   },[])
-
-  function resetSession() {
-
-  }
 
   return (
     <div className="App">

@@ -7,7 +7,7 @@ export default async function createPlaylist(playlistName, trackUris) {
     let accessToken = localStorage.getItem('access_token');
     const validatedToken = await validateAccessToken(accessToken)
     if (!validatedToken) {
-      console.log("Validation failed");
+      console.error('Token validation failed.');
       return; // to stop executing if validation failed
     };
 
@@ -42,18 +42,12 @@ export default async function createPlaylist(playlistName, trackUris) {
 }
 
 async function validateAccessToken(accessToken) {
-  console.log("Validating");
   const params = new URLSearchParams(window.location.search);
   const code = params.get("code");
-  console.log("Code: ", code);
-  console.log("Access Token to validate: ", accessToken);
 
   if (!accessToken) {
-    console.log("No AT found!");
     if (!code) {
-    console.log("No Code found!, redirecting...");
       await redirectToAuthCodeFlow(clientId);
-      // I think after this we need to getAccessToken
       return false;
     }
     accessToken = await getAccessToken(clientId, code);

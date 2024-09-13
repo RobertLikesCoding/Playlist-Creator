@@ -4,18 +4,16 @@ import { getAccessToken } from '../utils/spotifyAuthorization.js'
 import { redirectToAuthCodeFlow } from '../utils/spotifyAuthorization.js'
 import createPlaylist from '../utils/spotifyApiCalls.js'
 
-export default function Playlist({playlistTracks,
+export default function Playlist({
+  playlistTracks,
   setPlaylistTracks,
   handleRemove,
   saveSession,
-  restoreSession,
   setSearchQuery,
   setTopTracks,
   setPlaylistName,
   playlistName
 }) {
-
-
   function handleChange({target}) {
     setPlaylistName(target.value)
   }
