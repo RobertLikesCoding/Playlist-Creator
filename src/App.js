@@ -91,8 +91,6 @@ function App() {
   };
 
   function saveSession(playlistTracks, topTracks) {
-    const searchQuery = document.getElementById('searchBar').value;
-    const playlistName = document.getElementById('playlistName').value;
     const session = {
       "searchQuery": searchQuery,
       "playlistName": playlistName,

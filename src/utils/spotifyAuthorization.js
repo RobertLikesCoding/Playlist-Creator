@@ -40,7 +40,6 @@ async function generateCodeChallenge(verifier) {
 // Getting Access Tokens
 
 export async function getAccessToken(code) {
-  console.log(code);
   const verifier = localStorage.getItem("verifier");
   if (!verifier) {
     console.error("Verifier is missing. Redirecting to authorization flow.");
@@ -66,7 +65,11 @@ export async function getAccessToken(code) {
       return null;
     }
     const data = await response.json();
-    console.log(data);
+    // removing the auth code from the URL
+    const url = new URL(window.location.href);
+    url.searchParams.delete("code");
+    const updatedUrl = url.search ? url.href : url.href.replace('?', '');
+    window.history.replaceState({}, document.title, updatedUrl);
 
     setValuesToLocalStorage(data);
     return data.access_token;

@@ -21,6 +21,7 @@ export default function Playlist({
   async function handleSubmit(event) {
     event.preventDefault();
     const code = new URLSearchParams(window.location.search).get("code");
+    const verifier = localStorage.getItem("verifier");
 
     setPlaylistName(event.target.playlistName.value);
     const trackUris = playlistTracks.map((track) => {
@@ -33,9 +34,10 @@ export default function Playlist({
       alert("Give your playlist a name!");
       return;
     }
-    if (!code) {
+    if (!code || !verifier) {
       saveSession();
       await redirectToAuthCodeFlow();
+      return;
     }
 
     const isPlaylistCreated  = await createPlaylist(playlistName, trackUris);
