@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import './styles/App.css';
 import SearchBar from './components/SearchBar';
 import Tracklist from './components/Tracklist';
@@ -10,6 +10,8 @@ function App() {
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [playlistName, setPlaylistName] = useState('');
+  const [currentTrackPlaying, setCurrentTrackPlaying] = useState(null);
+  const audio = useRef(null);
 
   const fetchAccessToken = async () => {
     try {
@@ -90,6 +92,36 @@ function App() {
     });
   };
 
+  const handlePlayPreview = (trackPreviewUrl) => {
+    if (audio.current) {
+      audio.current.pause();
+      audio.current = null;
+      setCurrentTrackPlaying(null)
+    }
+
+    if (trackPreviewUrl !== currentTrackPlaying) {
+      setCurrentTrackPlaying(trackPreviewUrl)
+    }
+  }
+
+  function stopAllAudio() {
+    const audioElements = document.querySelectorAll('audio');
+
+    audioElements.forEach((preview) => {
+      preview.pause();
+      preview.currentTime = 0;
+    })
+  }
+
+  useEffect(() => {
+    if (currentTrackPlaying === null) {
+      audio.current = null;
+    } else {
+      audio.current = new Audio(currentTrackPlaying);
+      audio.current.play();
+    }
+  }, [currentTrackPlaying]);
+
   function saveSession(playlistTracks, topTracks) {
     const session = {
       "searchQuery": searchQuery,
@@ -125,7 +157,12 @@ function App() {
       </header>
       <SearchBar onSearch={searchForArtist} onArtistSelect={fetchArtistTopTracks} searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
       <div className='container'>
-        <Tracklist topTracks={topTracks} handleAdd={handleAdd}/>
+        <Tracklist
+          topTracks={topTracks}
+          handleAdd={handleAdd}
+          currentTrackPlaying={currentTrackPlaying}
+          handlePlayPreview={handlePlayPreview}
+          />
         <Playlist
         playlistTracks={playlistTracks}
         setPlaylistTracks={setPlaylistTracks}

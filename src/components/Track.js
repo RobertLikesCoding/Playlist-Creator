@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Track({track, addOrRemove, onClick}) {
+export default function Track({track, addOrRemove, onClick, currentTrackPlaying, handlePlayPreview}) {
   const artists = track.artists.map((artist) => artist.name).join(', ');
 
   return (
@@ -10,6 +10,15 @@ export default function Track({track, addOrRemove, onClick}) {
         <p>Artist: {artists}</p>
         <p>Album: {track.album.name}</p>
       </div>
+      {console.log(track, track.preview_url)}
+      { !track.preview_url ? (
+          <button className="btnNoPreview">No Preview</button>
+        ) : currentTrackPlaying === track.preview_url ? (
+          <button onClick={() => handlePlayPreview(track.preview_url)} className="btnStop">Stop</button>
+        ) : (
+          <button onClick={() => handlePlayPreview(track.preview_url)} className="btnPlay">Play</button>
+        )
+      }
       <button onClick={onClick}>{addOrRemove}</button>
     </div>
   )
