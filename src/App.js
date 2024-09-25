@@ -78,9 +78,12 @@ function App() {
   }
 
   const handleAdd = (track) => {
+    if (playlistTracks.some(t => t.id === track.id)) {
+      alert('Track already added');
+    }
     setPlaylistTracks((prevPlaylistTracks) => {
       if (!prevPlaylistTracks.some((t) => t.id === track.id)) {
-        return [...prevPlaylistTracks, track];
+        return [track, ...prevPlaylistTracks];
       }
       return prevPlaylistTracks;
     });
