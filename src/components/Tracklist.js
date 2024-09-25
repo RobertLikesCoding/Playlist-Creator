@@ -13,6 +13,7 @@ export default function Tracklist({topTracks, handleAdd, currentTrackPlaying, ha
           addOrRemove='add'
           onClick={() => handleAdd(track)}
           handlePlayPreview={handlePlayPreview}
+          currentTrackPlaying={currentTrackPlaying}
           />
         })}
       </ul>

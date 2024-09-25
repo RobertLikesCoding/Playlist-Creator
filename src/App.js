@@ -96,7 +96,7 @@ function App() {
     if (audio.current) {
       audio.current.pause();
       audio.current = null;
-      setCurrentTrackPlaying(null)
+      setCurrentTrackPlaying(null);
     }
 
     if (trackPreviewUrl !== currentTrackPlaying) {
@@ -104,14 +104,14 @@ function App() {
     }
   }
 
-  function stopAllAudio() {
-    const audioElements = document.querySelectorAll('audio');
+  // function stopAllAudio() {
+  //   const audioElements = document.querySelectorAll('audio');
 
-    audioElements.forEach((preview) => {
-      preview.pause();
-      preview.currentTime = 0;
-    })
-  }
+  //   audioElements.forEach((preview) => {
+  //     preview.pause();
+  //     preview.currentTime = 0;
+  //   })
+  // }
 
   useEffect(() => {
     if (currentTrackPlaying === null) {
@@ -172,7 +172,10 @@ function App() {
         setTopTracks={setTopTracks}
         setSearchQuery={setSearchQuery}
         playlistName={playlistName}
-        setPlaylistName={setPlaylistName}/>
+        setPlaylistName={setPlaylistName}
+        handlePlayPreview={handlePlayPreview}
+        currentTrackPlaying={currentTrackPlaying}
+        />
       </div>
     </div>
   );

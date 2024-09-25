@@ -12,7 +12,9 @@ export default function Playlist({
   setSearchQuery,
   setTopTracks,
   setPlaylistName,
-  playlistName
+  playlistName,
+  handlePlayPreview,
+  currentTrackPlaying
 }) {
   function handleChange({target}) {
     setPlaylistName(target.value)
@@ -50,7 +52,6 @@ export default function Playlist({
     setSearchQuery('');
     setPlaylistName('');
     alert("Playlist successfully created 🥳");
-
   }
 
   return (
@@ -61,7 +62,14 @@ export default function Playlist({
         <input id="playlistName" name='playlistName' type='text' value={playlistName} onChange={handleChange}/>
         <ul>
           {playlistTracks.map((track) => {
-            return <Track track={track} key={track.id} addOrRemove='remove' onClick={(e) => handleRemove(track)}/>
+            return <Track
+            track={track}
+            key={track.id}
+            addOrRemove='remove'
+            onClick={(e) => handleRemove(track)}
+            handlePlayPreview={handlePlayPreview}
+            currentTrackPlaying={currentTrackPlaying}
+            />
           })}
         </ul>
         <button type='submit'>Save to Spotify</button>

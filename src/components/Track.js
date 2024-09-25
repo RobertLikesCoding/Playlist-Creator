@@ -10,7 +10,6 @@ export default function Track({track, addOrRemove, onClick, currentTrackPlaying,
         <p>Artist: {artists}</p>
         <p>Album: {track.album.name}</p>
       </div>
-      {console.log(track, track.preview_url)}
       { !track.preview_url ? (
           <button className="btnNoPreview">No Preview</button>
         ) : currentTrackPlaying === track.preview_url ? (
