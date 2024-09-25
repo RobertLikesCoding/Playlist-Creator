@@ -50,7 +50,6 @@ async function validateAccessToken(accessToken) {
     }
     accessToken = await getAccessToken(code);
     if (!accessToken) {
-
       await redirectToAuthCodeFlow();
       return false;
     }
@@ -59,6 +58,7 @@ async function validateAccessToken(accessToken) {
   if (isTokenExpired()) {
     accessToken = await getRefreshToken();
   }
+  
   return accessToken;
 }
 
