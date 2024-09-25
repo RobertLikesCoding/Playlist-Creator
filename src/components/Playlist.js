@@ -60,20 +60,20 @@ export default function Playlist({
       <form onSubmit={handleSubmit}>
         <label htmlFor='playlistName'>Name your playlist: </label>
         <input id="playlistName" name='playlistName' type='text' value={playlistName} onChange={handleChange}/>
-        <ul>
-          {playlistTracks.map((track) => {
-            return <Track
-            track={track}
-            key={track.id}
-            addOrRemove='remove'
-            onClick={(e) => handleRemove(track)}
-            handlePlayPreview={handlePlayPreview}
-            currentTrackPlaying={currentTrackPlaying}
-            />
-          })}
-        </ul>
-        <button type='submit'>Save to Spotify</button>
       </form>
+      <ul>
+        {playlistTracks.map((track) => {
+          return <Track
+          track={track}
+          key={track.id}
+          addOrRemove='remove'
+          onClick={(e) => handleRemove(track)}
+          handlePlayPreview={handlePlayPreview}
+          currentTrackPlaying={currentTrackPlaying}
+          />
+        })}
+      </ul>
+      <button type='submit'>Save to Spotify</button>
     </div>
   )
 }
