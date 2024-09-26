@@ -2,9 +2,14 @@ import React from 'react';
 
 export default function Track({track, addOrRemove, onClick, currentTrackPlaying, handlePlayPreview}) {
   const artists = track.artists.map((artist) => artist.name).join(', ');
+  const coverImage = track.album.images[2]['url'];
+  console.log(`Alt text: cover art of ${track.name}.`);
 
   return (
     <div className='trackCard'>
+      <div className="coverImg">
+        <img src={coverImage} alt={`cover art of the song ${track.name}.`}/>
+      </div>
       <div className="trackInfo">
         <h3>{track.name}</h3>
         <p>Artist: {artists}</p>
