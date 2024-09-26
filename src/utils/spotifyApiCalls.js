@@ -9,9 +9,9 @@ export default async function createPlaylist(playlistName, trackUris) {
       return; // to stop executing if validation failed
     };
 
-    const userId = await fetchUserId(validatedToken);
+    const user = await fetchUser(validatedToken);
     const response = await fetch(
-      `https://api.spotify.com/v1/users/${userId}/playlists`,
+      `https://api.spotify.com/v1/users/${user.id}/playlists`,
       {
         method: "POST",
         headers: {
@@ -58,11 +58,11 @@ async function validateAccessToken(accessToken) {
   if (isTokenExpired()) {
     accessToken = await getRefreshToken();
   }
-  
+
   return accessToken;
 }
 
-async function fetchUserId(token) {
+export async function fetchUser(token) {
   const response = await fetch("https://api.spotify.com/v1/me", {
       method: "GET",
       headers: { "Authorization": "Bearer " + token }
@@ -71,7 +71,7 @@ async function fetchUserId(token) {
   if (!data.id) {
     throw new Error("Failed to fetch user profile.");
   }
-  return data.id
+  return data;
 }
 
 function isTokenExpired() {

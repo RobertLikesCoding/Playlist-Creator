@@ -1,6 +1,5 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Track from './Track';
-import { getAccessToken } from '../utils/spotifyAuthorization.js'
 import { redirectToAuthCodeFlow } from '../utils/spotifyAuthorization.js'
 import createPlaylist from '../utils/spotifyApiCalls.js'
 
@@ -60,6 +59,7 @@ export default function Playlist({
       <form onSubmit={handleSubmit}>
         <label htmlFor='playlistName'>Name your playlist: </label>
         <input id="playlistName" name='playlistName' type='text' value={playlistName} onChange={handleChange}/>
+        <button type='submit'>Save to Spotify</button>
       </form>
       <ul>
         {playlistTracks.map((track) => {
@@ -73,7 +73,6 @@ export default function Playlist({
           />
         })}
       </ul>
-      <button type='submit'>Save to Spotify</button>
     </div>
   )
 }
