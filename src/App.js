@@ -3,6 +3,9 @@ import './styles/App.css';
 import SearchBar from './components/SearchBar';
 import Tracklist from './components/Tracklist';
 import Playlist from './components/Playlist';
+import NavBar from './components/NavBar';
+import { fetchUser, validateAccessToken } from './utils/spotifyApiCalls';
+import { getAccessToken } from './utils/spotifyAuthorization';
 
 function App() {
   const [accessToken, setAccessToken] = useState('');
@@ -11,9 +14,11 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [playlistName, setPlaylistName] = useState('');
   const [currentTrackPlaying, setCurrentTrackPlaying] = useState(null);
+  const [userAvatar, setUserAvatar] = useState('');
   const audio = useRef(null);
+  const [verifier, setVerifier] = useState('');
 
-  const fetchAccessToken = async () => {
+  const fetchAccessTokenForSearching = async () => {
     try {
       const response = await fetch("https://accounts.spotify.com/api/token", {
         method: 'POST',
@@ -37,8 +42,28 @@ function App() {
       }
   }
 
+  async function loginAfterAuthorization() {
+    const code = new URLSearchParams(window.location.search).get("code");
+      if (code) {
+        await getAccessToken(code);
+      }
+      const localAccessToken = localStorage.getItem('access_token');
+      if (!localAccessToken) {
+        return;
+      }
+
+    const validatedToken = await validateAccessToken(localAccessToken);
+    await getUserAvatar(validatedToken);
+  }
+
+  async function getUserAvatar(validatedAccessToken) {
+    const user = await fetchUser(validatedAccessToken);
+    setUserAvatar(user.images[0].url);
+  }
+
   useEffect(() => {
-    fetchAccessToken();
+    fetchAccessTokenForSearching();
+    loginAfterAuthorization()
   }, []);
 
   const searchForArtist = async (query) => {
@@ -155,31 +180,35 @@ function App() {
 
   return (
     <div className="App">
+      <NavBar userAvatar={userAvatar}/>
       <header className="App-header">
-        <h1>Create your Playlist</h1>
+        <h1>Search for an Artist or Track name
+        to start creating a playlist</h1>
+        <SearchBar onSearch={searchForArtist} onArtistSelect={fetchArtistTopTracks} searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
       </header>
-      <SearchBar onSearch={searchForArtist} onArtistSelect={fetchArtistTopTracks} searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
-      <div className='container'>
-        <Tracklist
-          topTracks={topTracks}
-          handleAdd={handleAdd}
-          currentTrackPlaying={currentTrackPlaying}
+      <main>
+        <div className='container'>
+          <Tracklist
+            topTracks={topTracks}
+            handleAdd={handleAdd}
+            currentTrackPlaying={currentTrackPlaying}
+            handlePlayPreview={handlePlayPreview}
+            />
+          <Playlist
+          playlistTracks={playlistTracks}
+          setPlaylistTracks={setPlaylistTracks}
+          handleRemove={handleRemove}
+          saveSession={() => saveSession(playlistTracks, topTracks)}
+          restoreSession={() => restoreSession()}
+          setTopTracks={setTopTracks}
+          setSearchQuery={setSearchQuery}
+          playlistName={playlistName}
+          setPlaylistName={setPlaylistName}
           handlePlayPreview={handlePlayPreview}
+          currentTrackPlaying={currentTrackPlaying}
           />
-        <Playlist
-        playlistTracks={playlistTracks}
-        setPlaylistTracks={setPlaylistTracks}
-        handleRemove={handleRemove}
-        saveSession={() => saveSession(playlistTracks, topTracks)}
-        restoreSession={() => restoreSession()}
-        setTopTracks={setTopTracks}
-        setSearchQuery={setSearchQuery}
-        playlistName={playlistName}
-        setPlaylistName={setPlaylistName}
-        handlePlayPreview={handlePlayPreview}
-        currentTrackPlaying={currentTrackPlaying}
-        />
-      </div>
+        </div>
+      </main>
     </div>
   );
 }

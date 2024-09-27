@@ -1,5 +1,9 @@
+.App {
+  background-color: #0D2D26;
+}
+
+
 .App-header {
-  background-color: #282c34;
   display: flex;
   flex-direction: column;
   align-items: center;

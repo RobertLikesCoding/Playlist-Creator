@@ -3,15 +3,17 @@ import { redirectToAuthCodeFlow, getAccessToken, getRefreshToken } from "./spoti
 export default async function createPlaylist(playlistName, trackUris) {
   try {
     let accessToken = localStorage.getItem('access_token');
+    console.log('check expiry')
     const validatedToken = await validateAccessToken(accessToken)
     if (!validatedToken) {
       console.error('Token validation failed.');
       return; // to stop executing if validation failed
     };
 
-    const userId = await fetchUserId(validatedToken);
+    const user = await fetchUser(validatedToken);
+
     const response = await fetch(
-      `https://api.spotify.com/v1/users/${userId}/playlists`,
+      `https://api.spotify.com/v1/users/${user.id}/playlists`,
       {
         method: "POST",
         headers: {
@@ -40,7 +42,7 @@ export default async function createPlaylist(playlistName, trackUris) {
   }
 }
 
-async function validateAccessToken(accessToken) {
+export async function validateAccessToken(accessToken) {
   const code = new URLSearchParams(window.location.search).get("code");
 
   if (!accessToken) {
@@ -56,22 +58,24 @@ async function validateAccessToken(accessToken) {
   }
 
   if (isTokenExpired()) {
+    console.log('check expiry')
     accessToken = await getRefreshToken();
   }
-  
+
   return accessToken;
 }
 
-async function fetchUserId(token) {
+export async function fetchUser(token) {
   const response = await fetch("https://api.spotify.com/v1/me", {
       method: "GET",
       headers: { "Authorization": "Bearer " + token }
   })
   const data = await response.json();
   if (!data.id) {
+    // await redirectToAuthCodeFlow();
     throw new Error("Failed to fetch user profile.");
   }
-  return data.id
+  return data;
 }
 
 function isTokenExpired() {

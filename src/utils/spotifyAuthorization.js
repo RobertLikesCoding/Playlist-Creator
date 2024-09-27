@@ -81,7 +81,14 @@ export async function getAccessToken(code) {
 
 export async function getRefreshToken() {
   try {
+    console.log("refreshing")
     const refreshToken = localStorage.getItem("refresh_token");
+    console.log(refreshToken)
+
+    if (!refreshToken) {
+      await redirectToAuthCodeFlow();
+      return;
+    }
     const payload = {
       method: "POST",
       headers: {

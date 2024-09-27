@@ -1,0 +1,40 @@
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  color: #FFF1BA;
+}
+
+#logo {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.btnLogin {
+  padding: 0.25rem 0.25rem;
+  border: none;
+  border-radius: 40px;
+  background-color: #FFED61;
+  color: #0D2D26;
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  img {
+    border-radius: 50%;
+    border: 2px solid #0D2D26;
+  }
+
+  span {
+    padding-left: 1rem;
+  }
+
+  &:hover {
+    span {
+      text-decoration: underline;
+    }
+  }
+}
