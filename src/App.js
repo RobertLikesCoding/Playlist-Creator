@@ -14,7 +14,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [playlistName, setPlaylistName] = useState('');
   const [currentTrackPlaying, setCurrentTrackPlaying] = useState(null);
-  const [userAvatar, setUserAvatar] = useState('');
+  const [userData, setUserData] = useState('');
   const audio = useRef(null);
 
   async function initializeApp() {
@@ -26,7 +26,7 @@ function App() {
       }
 
     const validatedToken = await validateAccessToken(localAccessToken);
-    await getUserAvatar(validatedToken);
+    await getUserData(validatedToken);
   };
 
   async function loginAfterAuthorization() {
@@ -36,14 +36,15 @@ function App() {
       }
   }
 
-  async function getUserAvatar(validatedAccessToken) {
+  async function getUserData(validatedAccessToken) {
     const user = await fetchUser(validatedAccessToken);
-    setUserAvatar(user.images[0].url);
+    console.log("getting user data", user)
+    setUserData(user);
   }
 
   useEffect(() => {
-    initializeApp();
     loginAfterAuthorization()
+    initializeApp();
   }, []);
 
 
@@ -144,7 +145,7 @@ function App() {
 
   return (
     <div className="App">
-      <NavBar userAvatar={userAvatar}/>
+      <NavBar userData={userData}/>
       <header className="App-header">
         <h1>Search for an Artist or Track name
         to start creating a playlist</h1>
