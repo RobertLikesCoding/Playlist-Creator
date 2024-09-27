@@ -17,6 +17,12 @@ function App() {
   const [userData, setUserData] = useState('');
   const audio = useRef(null);
 
+  useEffect(() => {
+    restoreSession();
+    loginAfterAuthorization()
+    initializeApp();
+  }, []);
+
   async function initializeApp() {
     const token = await fetchAccessTokenForSearching();
     setAccessToken(token);
@@ -40,11 +46,6 @@ function App() {
     const user = await fetchUser(validatedAccessToken);
     setUserData(user);
   }
-
-  useEffect(() => {
-    loginAfterAuthorization()
-    initializeApp();
-  }, []);
 
   const handleAdd = (track) => {
     if (playlistTracks.some(t => t.id === track.id)) {
@@ -117,10 +118,6 @@ function App() {
     setPlaylistName(session.playlistName);
     localStorage.removeItem('session')
   };
-
-  useEffect(() => {
-    restoreSession();
-  },[])
 
   return (
     <div className="App">

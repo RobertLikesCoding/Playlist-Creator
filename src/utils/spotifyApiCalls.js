@@ -1,6 +1,6 @@
 import { redirectToAuthCodeFlow, getAccessToken, getRefreshToken } from "./spotifyAuthorization";
 
-export const fetchAccessTokenForSearching = async () => {
+export async function fetchAccessTokenForSearching() {
   try {
     const response = await fetch("https://accounts.spotify.com/api/token", {
       method: 'POST',
@@ -24,7 +24,7 @@ export const fetchAccessTokenForSearching = async () => {
     }
 }
 
-export const searchForArtist = async (query) => {
+export async function searchForArtist(query) {
   try {
     const accessToken = localStorage.getItem('access_token');
     const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=artist&limit=5`, {
@@ -43,7 +43,7 @@ export const searchForArtist = async (query) => {
   }
 };
 
-export const fetchArtistTopTracks = async (uri) => {
+export async function fetchArtistTopTracks(uri) {
   try {
     const accessToken = localStorage.getItem('access_token');
     const response = await fetch(`https://api.spotify.com/v1/artists/${uri}/top-tracks`, {
