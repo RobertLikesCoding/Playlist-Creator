@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import styles from '../styles/SearchBar.module.css';
 import SearchResult from './SearchResult'
+import { searchForArtist } from '../utils/spotifyApiCalls';
 
-export default function SearchBar({onSearch, onArtistSelect, setSearchQuery, searchQuery}) {
+export default function SearchBar({onArtistSelect, setSearchQuery, searchQuery, accessToken}) {
   const [artists, setArtists] = useState([]);
-
 
   async function handleSearch({target}) {
     const query = target.value;
     setSearchQuery(query);
-    if (query) {
-      const results = await onSearch(query);
+    if (searchQuery) {
+      const results = await searchForArtist(accessToken, searchQuery);
       setArtists(results);
     } else {
       setArtists([]);
     }
+
   };
 
   return (
