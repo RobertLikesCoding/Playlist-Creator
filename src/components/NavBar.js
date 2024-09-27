@@ -5,9 +5,8 @@ import styles from '../styles/NavBar.module.css';
 export default function NavBar({ userAvatar }) {
 
   async function handleLogin() {
-    // const verifier = await redirectToAuthCodeFlow();
-    // await getAccessToken();
-    // return;
+    await redirectToAuthCodeFlow();
+    return;
   }
 
   return (
