@@ -1,7 +1,7 @@
 import React from 'react';
 import Track from './Track';
 import { redirectToAuthCodeFlow } from '../utils/spotifyAuthorization.js'
-import createPlaylist from '../utils/spotifyApiCalls.js'
+import { createPlaylist } from '../utils/spotifyApiCalls.js'
 
 export default function Playlist({
   playlistTracks,

@@ -4,7 +4,7 @@ import SearchBar from './components/SearchBar';
 import Tracklist from './components/Tracklist';
 import Playlist from './components/Playlist';
 import NavBar from './components/NavBar';
-import { fetchUser, validateAccessToken } from './utils/spotifyApiCalls';
+import { fetchAccessTokenForSearching, fetchUser, validateAccessToken } from './utils/spotifyApiCalls';
 import { getAccessToken } from './utils/spotifyAuthorization';
 
 function App() {
@@ -14,92 +14,37 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [playlistName, setPlaylistName] = useState('');
   const [currentTrackPlaying, setCurrentTrackPlaying] = useState(null);
-  const [userAvatar, setUserAvatar] = useState('');
+  const [userData, setUserData] = useState('');
   const audio = useRef(null);
-  const [verifier, setVerifier] = useState('');
 
-  const fetchAccessTokenForSearching = async () => {
-    try {
-      const response = await fetch("https://accounts.spotify.com/api/token", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          'grant_type': 'client_credentials',
-          'client_id': process.env.REACT_APP_SPOTIFY_CLIENT_ID,
-          'client_secret': process.env.REACT_APP_SPOTIFY_CLIENT_SECRET
-        }),
-      });
+  useEffect(() => {
+    restoreSession();
+    loginAfterAuthorization()
+    initializeApp();
+  }, []);
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch token');
+  async function initializeApp() {
+    const token = await fetchAccessTokenForSearching();
+    setAccessToken(token);
+    const localAccessToken = localStorage.getItem('access_token');
+      if (!localAccessToken) {
+        return;
       }
-      const data = await response.json();
-      setAccessToken(data.access_token);
-    } catch (error) {
-      console.error('Error:', error);
-      }
-  }
+
+    const validatedToken = await validateAccessToken(localAccessToken);
+    await getUserData(validatedToken);
+  };
 
   async function loginAfterAuthorization() {
     const code = new URLSearchParams(window.location.search).get("code");
       if (code) {
         await getAccessToken(code);
       }
-      const localAccessToken = localStorage.getItem('access_token');
-      if (!localAccessToken) {
-        return;
-      }
-
-    const validatedToken = await validateAccessToken(localAccessToken);
-    await getUserAvatar(validatedToken);
   }
 
-  async function getUserAvatar(validatedAccessToken) {
+  async function getUserData(validatedAccessToken) {
     const user = await fetchUser(validatedAccessToken);
-    setUserAvatar(user.images[0].url);
-  }
-
-  useEffect(() => {
-    fetchAccessTokenForSearching();
-    loginAfterAuthorization()
-  }, []);
-
-  const searchForArtist = async (query) => {
-    try {
-      const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=artist&limit=5`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      });
-      if (!response.ok) {
-        throw new Error('Failed to load response');
-      }
-      const data = await response.json();
-      return data.artists.items;
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-
-  const fetchArtistTopTracks = async (uri) => {
-    try {
-      const response = await fetch(`https://api.spotify.com/v1/artists/${uri}/top-tracks`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      });
-      if (!response.ok) {
-        throw new Error('Failed to get artists top tracks');
-      }
-      const data = await response.json()
-      setTopTracks(data.tracks);
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    setUserData(user);
   }
 
   const handleAdd = (track) => {
@@ -174,17 +119,18 @@ function App() {
     localStorage.removeItem('session')
   };
 
-  useEffect(() => {
-    restoreSession();
-  },[])
-
   return (
     <div className="App">
-      <NavBar userAvatar={userAvatar}/>
+      <NavBar userData={userData}/>
       <header className="App-header">
         <h1>Search for an Artist or Track name
         to start creating a playlist</h1>
-        <SearchBar onSearch={searchForArtist} onArtistSelect={fetchArtistTopTracks} searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
+        <SearchBar
+        accessToken={accessToken}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        setTopTracks={setTopTracks}
+        />
       </header>
       <main>
         <div className='container'>

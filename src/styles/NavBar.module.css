@@ -21,20 +21,24 @@ nav {
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  min-height: 3rem;
+  max-height: 3rem;
 
   img {
     border-radius: 50%;
     border: 2px solid #0D2D26;
+    object-fit: contain;
+    height: 3rem;
   }
 
   span {
-    padding-left: 1rem;
+    padding: 0 1rem 0 1rem;
   }
 
-  &:hover {
-    span {
+  #login {
+    &:hover {
       text-decoration: underline;
     }
   }
+
 }

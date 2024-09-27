@@ -1,6 +1,68 @@
 import { redirectToAuthCodeFlow, getAccessToken, getRefreshToken } from "./spotifyAuthorization";
 
-export default async function createPlaylist(playlistName, trackUris) {
+export async function fetchAccessTokenForSearching() {
+  try {
+    const response = await fetch("https://accounts.spotify.com/api/token", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        'grant_type': 'client_credentials',
+        'client_id': process.env.REACT_APP_SPOTIFY_CLIENT_ID,
+        'client_secret': process.env.REACT_APP_SPOTIFY_CLIENT_SECRET
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch token');
+    }
+    const data = await response.json();
+    return data.access_token;
+  } catch (error) {
+    console.error('Error:', error);
+    }
+}
+
+export async function searchForArtist(query) {
+  try {
+    const accessToken = localStorage.getItem('access_token');
+    const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=artist&limit=5`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+    if (!response.ok) {
+      throw new Error('Failed to load response');
+    }
+    const data = await response.json();
+    return data.artists.items;
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
+export async function fetchArtistTopTracks(uri) {
+  try {
+    const accessToken = localStorage.getItem('access_token');
+    const response = await fetch(`https://api.spotify.com/v1/artists/${uri}/top-tracks`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+    if (!response.ok) {
+      throw new Error('Failed to get artists top tracks');
+    }
+    const data = await response.json()
+    return data.tracks
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+export async function createPlaylist(playlistName, trackUris) {
   try {
     let accessToken = localStorage.getItem('access_token');
     console.log('check expiry')
