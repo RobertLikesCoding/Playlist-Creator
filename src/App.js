@@ -121,7 +121,7 @@ function App() {
     <div className="App">
       <NavBar userData={userData}/>
       <header className="App-header">
-        <h1>Search for an Artist or Track name
+        <h1>Search for an Artist 
         to start creating a playlist</h1>
         <SearchBar
         searchQuery={searchQuery}
