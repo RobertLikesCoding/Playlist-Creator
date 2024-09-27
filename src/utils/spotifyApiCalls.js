@@ -24,8 +24,9 @@ export const fetchAccessTokenForSearching = async () => {
     }
 }
 
-export const searchForArtist = async (accessToken, query) => {
+export const searchForArtist = async (query) => {
   try {
+    const accessToken = localStorage.getItem('access_token');
     const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=artist&limit=5`, {
       method: 'GET',
       headers: {
@@ -41,6 +42,25 @@ export const searchForArtist = async (accessToken, query) => {
     console.error('Error:', error);
   }
 };
+
+export const fetchArtistTopTracks = async (uri) => {
+  try {
+    const accessToken = localStorage.getItem('access_token');
+    const response = await fetch(`https://api.spotify.com/v1/artists/${uri}/top-tracks`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+    if (!response.ok) {
+      throw new Error('Failed to get artists top tracks');
+    }
+    const data = await response.json()
+    return data.tracks
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
 
 export async function createPlaylist(playlistName, trackUris) {
   try {

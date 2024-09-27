@@ -38,7 +38,6 @@ function App() {
 
   async function getUserData(validatedAccessToken) {
     const user = await fetchUser(validatedAccessToken);
-    console.log("getting user data", user)
     setUserData(user);
   }
 
@@ -46,26 +45,6 @@ function App() {
     loginAfterAuthorization()
     initializeApp();
   }, []);
-
-
-
-  const fetchArtistTopTracks = async (uri) => {
-    try {
-      const response = await fetch(`https://api.spotify.com/v1/artists/${uri}/top-tracks`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      });
-      if (!response.ok) {
-        throw new Error('Failed to get artists top tracks');
-      }
-      const data = await response.json()
-      setTopTracks(data.tracks);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  }
 
   const handleAdd = (track) => {
     if (playlistTracks.some(t => t.id === track.id)) {
@@ -149,7 +128,12 @@ function App() {
       <header className="App-header">
         <h1>Search for an Artist or Track name
         to start creating a playlist</h1>
-        <SearchBar onArtistSelect={fetchArtistTopTracks} accessToken={accessToken} searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
+        <SearchBar
+        accessToken={accessToken}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        setTopTracks={setTopTracks}
+        />
       </header>
       <main>
         <div className='container'>

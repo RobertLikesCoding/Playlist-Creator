@@ -3,8 +3,6 @@ import { redirectToAuthCodeFlow } from '../utils/spotifyAuthorization';
 import styles from '../styles/NavBar.module.css';
 
 export default function NavBar({ userData }) {
-  console.log(userData)
-
   async function handleLogin() {
     await redirectToAuthCodeFlow();
     return;

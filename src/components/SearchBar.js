@@ -3,14 +3,14 @@ import styles from '../styles/SearchBar.module.css';
 import SearchResult from './SearchResult'
 import { searchForArtist } from '../utils/spotifyApiCalls';
 
-export default function SearchBar({onArtistSelect, setSearchQuery, searchQuery, accessToken}) {
+export default function SearchBar({onArtistSelect, setSearchQuery, searchQuery, setTopTracks}) {
   const [artists, setArtists] = useState([]);
 
   async function handleSearch({target}) {
     const query = target.value;
     setSearchQuery(query);
     if (searchQuery) {
-      const results = await searchForArtist(accessToken, searchQuery);
+      const results = await searchForArtist(searchQuery);
       setArtists(results);
     } else {
       setArtists([]);
@@ -21,7 +21,7 @@ export default function SearchBar({onArtistSelect, setSearchQuery, searchQuery, 
   return (
     <div className={styles.searchBar}>
       <input id="searchBar" type="text" placeholder="Search for artist..." value={searchQuery} onChange={handleSearch} />
-      <SearchResult artists={artists} onArtistSelect={onArtistSelect}/>
+      <SearchResult artists={artists} onArtistSelect={onArtistSelect} setTopTracks={setTopTracks}/>
     </div>
   );
 }
