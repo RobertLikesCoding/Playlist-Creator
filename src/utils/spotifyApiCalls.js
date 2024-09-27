@@ -18,7 +18,7 @@ export async function fetchAccessTokenForSearching() {
       throw new Error('Failed to fetch token');
     }
     const data = await response.json();
-    return data.access_token;
+    localStorage.setItem("search_token",data.access_token)
   } catch (error) {
     console.error('Error:', error);
     }
@@ -26,7 +26,7 @@ export async function fetchAccessTokenForSearching() {
 
 export async function searchForArtist(query) {
   try {
-    const accessToken = localStorage.getItem('access_token');
+    const accessToken = localStorage.getItem('search_token');
     const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=artist&limit=5`, {
       method: 'GET',
       headers: {
@@ -43,10 +43,10 @@ export async function searchForArtist(query) {
   }
 };
 
-export async function fetchArtistTopTracks(uri) {
+export async function fetchArtistTopTracks(name) {
   try {
     const accessToken = localStorage.getItem('access_token');
-    const response = await fetch(`https://api.spotify.com/v1/artists/${uri}/top-tracks`, {
+    const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(name)}&type=track&limit=30`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`
@@ -56,7 +56,7 @@ export async function fetchArtistTopTracks(uri) {
       throw new Error('Failed to get artists top tracks');
     }
     const data = await response.json()
-    return data.tracks
+    return data.tracks.items
   } catch (error) {
     console.error('Error:', error);
   }

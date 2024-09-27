@@ -8,7 +8,6 @@ import { fetchAccessTokenForSearching, fetchUser, validateAccessToken } from './
 import { getAccessToken } from './utils/spotifyAuthorization';
 
 function App() {
-  const [accessToken, setAccessToken] = useState('');
   const [topTracks, setTopTracks] = useState([]);
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -24,8 +23,7 @@ function App() {
   }, []);
 
   async function initializeApp() {
-    const token = await fetchAccessTokenForSearching();
-    setAccessToken(token);
+    await fetchAccessTokenForSearching();
     const localAccessToken = localStorage.getItem('access_token');
       if (!localAccessToken) {
         return;
@@ -123,10 +121,9 @@ function App() {
     <div className="App">
       <NavBar userData={userData}/>
       <header className="App-header">
-        <h1>Search for an Artist or Track name
+        <h1>Search for an Artist 
         to start creating a playlist</h1>
         <SearchBar
-        accessToken={accessToken}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         setTopTracks={setTopTracks}

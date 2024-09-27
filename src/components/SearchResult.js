@@ -2,11 +2,12 @@ import React from 'react';
 import styles from '../styles/SearchResult.module.css';
 import { fetchArtistTopTracks } from '../utils/spotifyApiCalls';
 
-export default function SearchResult({onArtistSelect, artists, setTopTracks}) {
+export default function SearchResult({artists, setTopTracks}) {
 
   async function handleArtistSelect(artist) {
-    const artistURI = removeUriPrefix(artist.uri);
-    const topTracks = await fetchArtistTopTracks(artistURI);
+    const artistName = removeUriPrefix(artist.name);
+    const topTracks = await fetchArtistTopTracks(artistName);
+    console.log(topTracks)
     setTopTracks(topTracks);
   }
 
