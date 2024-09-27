@@ -3,6 +3,7 @@ import { redirectToAuthCodeFlow, getAccessToken, getRefreshToken } from "./spoti
 export default async function createPlaylist(playlistName, trackUris) {
   try {
     let accessToken = localStorage.getItem('access_token');
+    console.log('check expiry')
     const validatedToken = await validateAccessToken(accessToken)
     if (!validatedToken) {
       console.error('Token validation failed.');
@@ -10,6 +11,7 @@ export default async function createPlaylist(playlistName, trackUris) {
     };
 
     const user = await fetchUser(validatedToken);
+
     const response = await fetch(
       `https://api.spotify.com/v1/users/${user.id}/playlists`,
       {
@@ -40,7 +42,7 @@ export default async function createPlaylist(playlistName, trackUris) {
   }
 }
 
-async function validateAccessToken(accessToken) {
+export async function validateAccessToken(accessToken) {
   const code = new URLSearchParams(window.location.search).get("code");
 
   if (!accessToken) {
@@ -56,6 +58,7 @@ async function validateAccessToken(accessToken) {
   }
 
   if (isTokenExpired()) {
+    console.log('check expiry')
     accessToken = await getRefreshToken();
   }
 
@@ -69,6 +72,7 @@ export async function fetchUser(token) {
   })
   const data = await response.json();
   if (!data.id) {
+    // await redirectToAuthCodeFlow();
     throw new Error("Failed to fetch user profile.");
   }
   return data;

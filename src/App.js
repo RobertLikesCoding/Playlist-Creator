@@ -4,7 +4,7 @@ import SearchBar from './components/SearchBar';
 import Tracklist from './components/Tracklist';
 import Playlist from './components/Playlist';
 import NavBar from './components/NavBar';
-import { fetchUser } from './utils/spotifyApiCalls';
+import { fetchUser, validateAccessToken } from './utils/spotifyApiCalls';
 import { getAccessToken } from './utils/spotifyAuthorization';
 
 function App() {
@@ -42,20 +42,23 @@ function App() {
       }
   }
 
-  async function getUserAvatar(accessToken) {
-    const user = await fetchUser(accessToken);
-    setUserAvatar(user.images[0].url);
-  }
-
   async function loginAfterAuthorization() {
     const code = new URLSearchParams(window.location.search).get("code");
-    if (code) {
-      await getAccessToken(code);
-    }
-    const localAccessToken = localStorage.getItem('access_token')
-    if (localAccessToken) {
-      await getUserAvatar(localAccessToken);
-    }
+      if (code) {
+        await getAccessToken(code);
+      }
+      const localAccessToken = localStorage.getItem('access_token');
+      if (!localAccessToken) {
+        return;
+      }
+
+    const validatedToken = await validateAccessToken(localAccessToken);
+    await getUserAvatar(validatedToken);
+  }
+
+  async function getUserAvatar(validatedAccessToken) {
+    const user = await fetchUser(validatedAccessToken);
+    setUserAvatar(user.images[0].url);
   }
 
   useEffect(() => {
