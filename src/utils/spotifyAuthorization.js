@@ -39,7 +39,7 @@ async function generateCodeChallenge(verifier) {
 
 // Getting Access Token
 
-export async function getAccessToken() {
+export async function getAccessToken(code) {
   //if there already is a AT refresh it
   let localAccessToken = localStorage.getItem('access_token');
   if (localAccessToken) {
@@ -49,11 +49,11 @@ export async function getAccessToken() {
     return localAccessToken;
   }
 
-  const code = new URLSearchParams(window.location.search).get("code");
-    if (!code) {
-      await redirectToAuthCodeFlow();
-      return false;
-    }
+  // const code = new URLSearchParams(window.location.search).get("code");
+  //   if (!code) {
+  //     await redirectToAuthCodeFlow();
+  //     return false;
+  //   }
 
   const verifier = localStorage.getItem("verifier");
 
@@ -117,12 +117,23 @@ async function getRefreshToken() {
     };
     const response = await fetch("https://accounts.spotify.com/api/token", payload);
     const data = await response.json();
+    console.log("refresh response: ",data)
 
-    setValuesToLocalStorage(data);
+    localStorage.setItem('access_token', data.access_token);
+    if (data.refresh_token) {
+      localStorage.setItem('refresh_token', data.refresh_token);
+    }
     return data.access_token;
   } catch (error) {
     console.error("Error refreshing access token:", error);
     return null;
+  }
+}
+
+export async function checkTokenExpiry() {
+  if (isTokenExpired()) {
+    let accessToken = await getRefreshToken();
+    return accessToken
   }
 }
 

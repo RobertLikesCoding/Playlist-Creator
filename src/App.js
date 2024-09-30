@@ -6,7 +6,7 @@ import Tracklist from './components/Tracklist';
 import Playlist from './components/Playlist';
 import NavBar from './components/NavBar';
 import { fetchAccessTokenForSearching, fetchUser } from './utils/spotifyApiCalls';
-import { getAccessToken } from './utils/spotifyAuthorization';
+import { getAccessToken, checkTokenExpiry } from './utils/spotifyAuthorization';
 
 function App() {
   const [topTracks, setTopTracks] = useState([]);
@@ -18,26 +18,46 @@ function App() {
   const audio = useRef(null);
 
   useEffect(() => {
-    restoreSession();
-    loginAfterAuthorization()
-    initializeApp();
-  }, []);
-
-  async function initializeApp() {
-    await fetchAccessTokenForSearching();
-    const accessToken = localStorage.getItem('access_token');
-    if (accessToken) {
-      await fetchUser(accessToken);
+    if (currentTrackPlaying === null) {
+      audio.current = null;
+    } else {
+      audio.current = new Audio(currentTrackPlaying);
+      audio.current.play();
     }
-    const currentUser = JSON.parse(localStorage.getItem('current_user'));
-    setUserData(currentUser)
-  };
+  }, [currentTrackPlaying]);
+
+  useEffect(() => {
+    const initialize = async () => {
+      restoreSession();
+      await loginAfterAuthorization();
+      await initializeApp();
+    };
+
+    initialize();
+  }, []);
 
   async function loginAfterAuthorization() {
     const code = new URLSearchParams(window.location.search).get("code");
       if (code) {
         await getAccessToken(code);
       }
+  }
+
+  async function initializeApp() {
+    try {
+      await fetchAccessTokenForSearching();
+      let accessToken = localStorage.getItem('access_token');
+
+      if (accessToken) {
+        const newAT = await checkTokenExpiry();
+        console.log("newAT:",newAT);
+        await fetchUser(accessToken);
+      }
+      const currentUser = JSON.parse(localStorage.getItem('current_user'));
+      setUserData(currentUser);
+    } catch (error) {
+      console.error("Error initializing app:", error);
+    }
   }
 
   const handleAdd = (track) => {
@@ -78,15 +98,6 @@ function App() {
   //     preview.currentTime = 0;
   //   })
   // }
-
-  useEffect(() => {
-    if (currentTrackPlaying === null) {
-      audio.current = null;
-    } else {
-      audio.current = new Audio(currentTrackPlaying);
-      audio.current.play();
-    }
-  }, [currentTrackPlaying]);
 
   function saveSession(playlistTracks, topTracks) {
     const session = {
