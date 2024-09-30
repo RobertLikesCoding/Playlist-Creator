@@ -1,5 +1,4 @@
 .App {
-  background-color: var(--primary-clr);
   height: 100vh;
   color: var(--secondary-clr);
 }
@@ -18,4 +17,17 @@
   display: flex;
   justify-content: center;
   gap: 3rem;
+}
+
+.container {
+  display: flex;
+  gap: 3rem;
+  flex-wrap: wrap;
+  width: 100%;
+  margin: 0 2rem;
+
+  h2 {
+    font-family: PaytoneOne;
+    font-size: 2rem;
+  }
 }

@@ -13,5 +13,10 @@
     padding: 0.5rem 1rem;
     width: 100%;
     max-width: 600px;
+    border: 1px solid var(--primary-clr);
+
+    &:focus {
+      outline: 2px solid var(--highlight-clr);
+    }
   }
 }

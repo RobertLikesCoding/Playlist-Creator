@@ -90,15 +90,6 @@ function App() {
     }
   }
 
-  // function stopAllAudio() {
-  //   const audioElements = document.querySelectorAll('audio');
-
-  //   audioElements.forEach((preview) => {
-  //     preview.pause();
-  //     preview.currentTime = 0;
-  //   })
-  // }
-
   function saveSession(playlistTracks, topTracks) {
     const session = {
       "searchQuery": searchQuery,
