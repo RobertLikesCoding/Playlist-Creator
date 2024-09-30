@@ -4,7 +4,7 @@ import SearchBar from './components/SearchBar';
 import Tracklist from './components/Tracklist';
 import Playlist from './components/Playlist';
 import NavBar from './components/NavBar';
-import { fetchAccessTokenForSearching, fetchUser } from './utils/spotifyApiCalls';
+import { fetchAccessTokenForSearching } from './utils/spotifyApiCalls';
 import { getAccessToken } from './utils/spotifyAuthorization';
 
 function App() {
@@ -24,11 +24,8 @@ function App() {
 
   async function initializeApp() {
     await fetchAccessTokenForSearching();
-    // const currentUser = JSON.parse(localStorage.getItem('current_user'));
-    // console.log('Setting userData:', userData); // Add this line
-    // if (currentUser) {
-    //   setUserData(currentUser);
-    // }
+    const currentUser = JSON.parse(localStorage.getItem('current_user'));
+    setUserData(currentUser)
   };
 
   async function loginAfterAuthorization() {

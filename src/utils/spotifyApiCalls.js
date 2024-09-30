@@ -1,4 +1,4 @@
-import { redirectToAuthCodeFlow, getAccessToken } from "./spotifyAuthorization";
+import { getAccessToken } from "./spotifyAuthorization";
 
 export async function fetchAccessTokenForSearching() {
   try {
@@ -64,10 +64,6 @@ export async function fetchArtistTopTracks(name) {
 
 export async function createPlaylist(playlistName, trackUris) {
   try {
-    // let accessToken = localStorage.getItem('access_token');
-    // if (!accessToken) {
-    //   accessToken = getAccessToken();
-    // }
     const accessToken = await getAccessToken();
     const user = await fetchUser(accessToken);
 
@@ -101,7 +97,7 @@ export async function createPlaylist(playlistName, trackUris) {
   }
 }
 
-export async function fetchUser(token) {
+async function fetchUser(token) {
   const response = await fetch("https://api.spotify.com/v1/me", {
       method: "GET",
       headers: { "Authorization": "Bearer " + token }

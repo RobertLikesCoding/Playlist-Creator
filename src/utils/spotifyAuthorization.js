@@ -37,14 +37,13 @@ async function generateCodeChallenge(verifier) {
       .replace(/=+$/, '');
 }
 
-// Getting Access Tokens
+// Getting Access Token
 
 export async function getAccessToken() {
   //if there already is a AT refresh it
   let localAccessToken = localStorage.getItem('access_token');
   if (localAccessToken) {
     if (isTokenExpired()) {
-      console.log('check expiry')
       localAccessToken = await getRefreshToken();
     }
     return localAccessToken;
@@ -57,11 +56,6 @@ export async function getAccessToken() {
     }
 
   const verifier = localStorage.getItem("verifier");
-  if (!verifier) {
-    console.error("Verifier is missing. Redirecting to authorization flow.");
-    redirectToAuthCodeFlow();
-    return null;
-  }
 
   const params = new URLSearchParams();
   params.append("client_id", clientId);
