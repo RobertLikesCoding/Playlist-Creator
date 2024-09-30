@@ -49,8 +49,10 @@ function App() {
       let accessToken = localStorage.getItem('access_token');
 
       if (accessToken) {
-        const newAT = await checkTokenExpiry();
-        console.log("newAT:",newAT);
+        const newAccessToken = await checkTokenExpiry();
+        if (newAccessToken) {
+          await fetchUser(newAccessToken);
+        }
         await fetchUser(accessToken);
       }
       const currentUser = JSON.parse(localStorage.getItem('current_user'));
@@ -97,7 +99,7 @@ function App() {
       "playlistTracks": JSON.stringify(playlistTracks),
       "topTracks": JSON.stringify(topTracks)
     }
-
+    
     localStorage.setItem("session", JSON.stringify(session));
   }
 

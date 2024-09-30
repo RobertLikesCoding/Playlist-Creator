@@ -49,12 +49,6 @@ export async function getAccessToken(code) {
     return localAccessToken;
   }
 
-  // const code = new URLSearchParams(window.location.search).get("code");
-  //   if (!code) {
-  //     await redirectToAuthCodeFlow();
-  //     return false;
-  //   }
-
   const verifier = localStorage.getItem("verifier");
 
   const params = new URLSearchParams();
@@ -75,6 +69,7 @@ export async function getAccessToken(code) {
       return null;
     }
     const data = await response.json();
+
     // removing the auth code from the URL
     const url = new URL(window.location.href);
     url.searchParams.delete("code");
@@ -94,11 +89,16 @@ function isTokenExpired() {
   return Date.now() > expirationTime;
 }
 
+export async function checkTokenExpiry() {
+  if (isTokenExpired()) {
+    let accessToken = await getRefreshToken();
+    return accessToken
+  }
+}
+
 async function getRefreshToken() {
   try {
-    console.log("refreshing")
     const refreshToken = localStorage.getItem("refresh_token");
-    console.log(refreshToken)
 
     if (!refreshToken) {
       await redirectToAuthCodeFlow();
@@ -117,7 +117,6 @@ async function getRefreshToken() {
     };
     const response = await fetch("https://accounts.spotify.com/api/token", payload);
     const data = await response.json();
-    console.log("refresh response: ",data)
 
     localStorage.setItem('access_token', data.access_token);
     if (data.refresh_token) {
@@ -127,13 +126,6 @@ async function getRefreshToken() {
   } catch (error) {
     console.error("Error refreshing access token:", error);
     return null;
-  }
-}
-
-export async function checkTokenExpiry() {
-  if (isTokenExpired()) {
-    let accessToken = await getRefreshToken();
-    return accessToken
   }
 }
 
