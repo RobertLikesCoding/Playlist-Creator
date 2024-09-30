@@ -15,8 +15,8 @@ export default function SearchResult({artists, setTopTracks}) {
   }
 
   return (
-    <div className="dropdown">
-      <ul>
+    <div className={styles.dropDown}>
+      <ul className="dropDown">
         {artists.map((artist) => {
           return <li key={artist.id} onClick={() => handleArtistSelect(artist)}>{artist.name}</li>
         })}

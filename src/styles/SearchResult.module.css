@@ -1,0 +1,15 @@
+.dropDown {
+  ul {
+    margin: 1rem 0;
+    padding: 0 1rem;
+    li {
+      list-style-type: none;
+      color: var(--secondary-clr);
+      cursor: pointer;
+      &:hover {
+        background-color: var(--secondary-clr);
+        color: var(--primary-clr);
+      }
+    }
+  }
+}

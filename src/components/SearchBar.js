@@ -8,14 +8,16 @@ export default function SearchBar({setSearchQuery, searchQuery, setTopTracks}) {
 
   async function handleSearch({target}) {
     const query = target.value;
-    setSearchQuery(query);
-    if (searchQuery) {
-      const results = await searchForArtist(searchQuery);
-      setArtists(results);
+    if (query) {
+      setSearchQuery(query);
+      if (searchQuery) {
+        const results = await searchForArtist(searchQuery);
+        setArtists(results);
+      }
     } else {
+      setSearchQuery("")
       setArtists([]);
     }
-
   };
 
   return (
