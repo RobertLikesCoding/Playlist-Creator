@@ -97,7 +97,7 @@ export async function createPlaylist(playlistName, trackUris) {
   }
 }
 
-async function fetchUser(token) {
+export async function fetchUser(token) {
   const response = await fetch("https://api.spotify.com/v1/me", {
       method: "GET",
       headers: { "Authorization": "Bearer " + token }
