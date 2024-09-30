@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { redirectToAuthCodeFlow } from '../utils/spotifyAuthorization';
 import styles from '../styles/NavBar.module.css';
 
 export default function NavBar({ userData }) {
+  useEffect(() => {
+  }, [userData]);
+  
   async function handleLogin() {
     await redirectToAuthCodeFlow();
     return;
   }
+
 
   return (
     <nav>

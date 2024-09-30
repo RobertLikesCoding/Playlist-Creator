@@ -43,6 +43,7 @@ export default function Playlist({
     const isPlaylistCreated  = await createPlaylist(playlistName, trackUris);
     if (!isPlaylistCreated) {
       alert("Something went wrong");
+      return;
     };
     // Reset everything
     setPlaylistTracks([]);

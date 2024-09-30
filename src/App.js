@@ -13,24 +13,28 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [playlistName, setPlaylistName] = useState('');
   const [currentTrackPlaying, setCurrentTrackPlaying] = useState(null);
-  const [userData, setUserData] = useState('');
+  const [userData, setUserData] = useState(null);
   const audio = useRef(null);
 
   useEffect(() => {
     restoreSession();
     loginAfterAuthorization()
     initializeApp();
+    const currentUser = localStorage.getItem('current_user');
+    if (currentUser) {
+      setUserData(JSON.parse(currentUser));
+    }
   }, []);
 
   async function initializeApp() {
     await fetchAccessTokenForSearching();
-    const localAccessToken = localStorage.getItem('access_token');
-      if (!localAccessToken) {
+    const validatedToken = await validateAccessToken();
+    if (!validatedToken) {
         return;
       }
 
-    const validatedToken = await validateAccessToken(localAccessToken);
-    await getUserData(validatedToken);
+    // await getUserData(validatedToken);
+
   };
 
   async function loginAfterAuthorization() {
@@ -121,7 +125,7 @@ function App() {
     <div className="App">
       <NavBar userData={userData}/>
       <header className="App-header">
-        <h1>Search for an Artist 
+        <h1>Search for an Artist
         to start creating a playlist</h1>
         <SearchBar
         searchQuery={searchQuery}

@@ -45,7 +45,7 @@ export async function searchForArtist(query) {
 
 export async function fetchArtistTopTracks(name) {
   try {
-    const accessToken = localStorage.getItem('access_token');
+    const accessToken = localStorage.getItem('search_token');
     const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(name)}&type=track&limit=30`, {
       method: 'GET',
       headers: {
@@ -64,12 +64,20 @@ export async function fetchArtistTopTracks(name) {
 
 export async function createPlaylist(playlistName, trackUris) {
   try {
-    let accessToken = localStorage.getItem('access_token');
-    console.log('check expiry')
-    const validatedToken = await validateAccessToken(accessToken)
+    const code = new URLSearchParams(window.location.search).get("code");
+    let validatedToken = await validateAccessToken()
     if (!validatedToken) {
-      console.error('Token validation failed.');
-      return; // to stop executing if validation failed
+      if (!code) {
+        await redirectToAuthCodeFlow();
+        return false;
+      }
+      validatedToken = await getAccessToken(code);
+      if (!validatedToken) {
+        await redirectToAuthCodeFlow();
+        return false;
+      }
+      // console.error('Token validation failed.');
+      // return; // to stop executing if validation failed
     };
 
     const user = await fetchUser(validatedToken);
@@ -104,20 +112,8 @@ export async function createPlaylist(playlistName, trackUris) {
   }
 }
 
-export async function validateAccessToken(accessToken) {
-  const code = new URLSearchParams(window.location.search).get("code");
-
-  if (!accessToken) {
-    if (!code) {
-      await redirectToAuthCodeFlow();
-      return false;
-    }
-    accessToken = await getAccessToken(code);
-    if (!accessToken) {
-      await redirectToAuthCodeFlow();
-      return false;
-    }
-  }
+export async function validateAccessToken() {
+  let accessToken = localStorage.getItem('access_token');
 
   if (isTokenExpired()) {
     console.log('check expiry')
@@ -134,9 +130,10 @@ export async function fetchUser(token) {
   })
   const data = await response.json();
   if (!data.id) {
-    // await redirectToAuthCodeFlow();
     throw new Error("Failed to fetch user profile.");
   }
+  // saving current user for setting user state object after playlist creation
+  localStorage.setItem('current_user', JSON.stringify(data));
   return data;
 }
 
