@@ -27,10 +27,21 @@ function App() {
   }, [currentTrackPlaying]);
 
   useEffect(() => {
-    restoreSession();
-    loginAfterAuthorization()
-    initializeApp();
+    const initialize = async () => {
+      restoreSession();
+      await loginAfterAuthorization();
+      await initializeApp();
+    };
+
+    initialize();
   }, []);
+
+  async function loginAfterAuthorization() {
+    const code = new URLSearchParams(window.location.search).get("code");
+      if (code) {
+        await getAccessToken(code);
+      }
+  }
 
   async function initializeApp() {
     try {
@@ -47,13 +58,6 @@ function App() {
     } catch (error) {
       console.error("Error initializing app:", error);
     }
-  }
-
-  async function loginAfterAuthorization() {
-    const code = new URLSearchParams(window.location.search).get("code");
-      if (code) {
-        await getAccessToken(code);
-      }
   }
 
   const handleAdd = (track) => {

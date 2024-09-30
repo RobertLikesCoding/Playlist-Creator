@@ -39,7 +39,7 @@ async function generateCodeChallenge(verifier) {
 
 // Getting Access Token
 
-export async function getAccessToken() {
+export async function getAccessToken(code) {
   //if there already is a AT refresh it
   let localAccessToken = localStorage.getItem('access_token');
   if (localAccessToken) {
@@ -49,11 +49,11 @@ export async function getAccessToken() {
     return localAccessToken;
   }
 
-  const code = new URLSearchParams(window.location.search).get("code");
-    if (!code) {
-      await redirectToAuthCodeFlow();
-      return false;
-    }
+  // const code = new URLSearchParams(window.location.search).get("code");
+  //   if (!code) {
+  //     await redirectToAuthCodeFlow();
+  //     return false;
+  //   }
 
   const verifier = localStorage.getItem("verifier");
 
