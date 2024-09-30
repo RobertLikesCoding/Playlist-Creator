@@ -3,3 +3,17 @@
   --secondary-clr: #FFF1BA;
   --highlight-clr: #FFED61;
 }
+
+@font-face {
+  font-family: 'PaytoneOne';
+  src: url('../assets/fonts/PaytoneOne-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'BebasNeue';
+  src: url('../assets/fonts/BebasNeue-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
