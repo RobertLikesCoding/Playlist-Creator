@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
+import './styles/variables.css';
 import './styles/App.css';
 import SearchBar from './components/SearchBar';
 import Tracklist from './components/Tracklist';
@@ -121,7 +122,7 @@ function App() {
     <div className="App">
       <NavBar userData={userData}/>
       <header className="App-header">
-        <h1>Search for an Artist 
+        <h1>Search for an Artist
         to start creating a playlist</h1>
         <SearchBar
         searchQuery={searchQuery}

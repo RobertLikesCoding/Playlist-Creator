@@ -1,7 +1,8 @@
 .App {
-  background-color: #0D2D26;
+  background-color: var(--primary-clr);
+  height: 100vh;
+  color: var(--secondary-clr);
 }
-
 
 .App-header {
   display: flex;
@@ -15,5 +16,5 @@
 .container {
   display: flex;
   justify-content: center;
-  gap: 3rem
+  gap: 3rem;
 }
