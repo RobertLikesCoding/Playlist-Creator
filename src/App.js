@@ -25,11 +25,9 @@ function App() {
   async function initializeApp() {
     await fetchAccessTokenForSearching();
     const accessToken = localStorage.getItem('access_token');
-    console.log(accessToken);
     if (accessToken) {
       await fetchUser(accessToken);
     }
-    console.log(localStorage.getItem('current_user'));
     const currentUser = JSON.parse(localStorage.getItem('current_user'));
     setUserData(currentUser)
   };

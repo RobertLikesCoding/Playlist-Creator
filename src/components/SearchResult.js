@@ -7,7 +7,6 @@ export default function SearchResult({artists, setTopTracks}) {
   async function handleArtistSelect(artist) {
     const artistName = removeUriPrefix(artist.name);
     const topTracks = await fetchArtistTopTracks(artistName);
-    console.log(topTracks)
     setTopTracks(topTracks);
   }
 

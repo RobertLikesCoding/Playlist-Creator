@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import { isTokenExpired, getRefreshToken, restoreSession } from '../utils/spotifyAuthorization';
 // import renderer from 'react-test-renderer';
 import App from '../App';
 import React from 'react';
@@ -23,5 +24,6 @@ describe('When App loads', () => {
     expect(searchBarElement.value).toBe('test');
   });
 });
+
 
 
