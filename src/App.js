@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
+import './styles/variables.css';
 import './styles/App.css';
 import SearchBar from './components/SearchBar';
 import Tracklist from './components/Tracklist';
