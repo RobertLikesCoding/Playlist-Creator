@@ -40,16 +40,21 @@ async function generateCodeChallenge(verifier) {
 // Getting Access Tokens
 
 export async function getAccessToken() {
+  //if there already is a AT refresh it
+  let localAccessToken = localStorage.getItem('access_token');
+  if (localAccessToken) {
+    if (isTokenExpired()) {
+      console.log('check expiry')
+      localAccessToken = await getRefreshToken();
+    }
+    return localAccessToken;
+  }
+
   const code = new URLSearchParams(window.location.search).get("code");
     if (!code) {
       await redirectToAuthCodeFlow();
       return false;
     }
-  //if there already is a AT refresh it
-  const localAccessToken = await validateAccessToken();
-  if (localAccessToken) {
-    return localAccessToken;
-  }
 
   const verifier = localStorage.getItem("verifier");
   if (!verifier) {
@@ -90,23 +95,12 @@ export async function getAccessToken() {
   }
 }
 
-async function validateAccessToken() {
-  let accessToken = localStorage.getItem('access_token');
-
-  if (isTokenExpired()) {
-    console.log('check expiry')
-    accessToken = await getRefreshToken();
-  }
-
-  return accessToken;
-}
-
 function isTokenExpired() {
   const expirationTime = parseInt(localStorage.getItem("expires_in"), 10);
   return Date.now() > expirationTime;
 }
 
-export async function getRefreshToken() {
+async function getRefreshToken() {
   try {
     console.log("refreshing")
     const refreshToken = localStorage.getItem("refresh_token");

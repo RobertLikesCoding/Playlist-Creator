@@ -4,8 +4,10 @@ import styles from '../styles/NavBar.module.css';
 
 export default function NavBar({ userData }) {
   useEffect(() => {
+    console.log('UserData updated:', userData); // Add this line for debugging
+    // You can add any side effects here if needed
   }, [userData]);
-  
+
   async function handleLogin() {
     await redirectToAuthCodeFlow();
     return;

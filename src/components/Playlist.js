@@ -13,7 +13,8 @@ export default function Playlist({
   setPlaylistName,
   playlistName,
   handlePlayPreview,
-  currentTrackPlaying
+  currentTrackPlaying,
+  setUserData
 }) {
   function handleChange({target}) {
     setPlaylistName(target.value)
@@ -41,6 +42,8 @@ export default function Playlist({
     }
 
     const isPlaylistCreated  = await createPlaylist(playlistName, trackUris);
+    const currentUser = JSON.parse(localStorage.getItem('current_user'));
+    setUserData(currentUser)
     if (!isPlaylistCreated) {
       alert("Something went wrong");
       return;

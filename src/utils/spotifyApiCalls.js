@@ -64,10 +64,11 @@ export async function fetchArtistTopTracks(name) {
 
 export async function createPlaylist(playlistName, trackUris) {
   try {
-    let accessToken = localStorage.getItem('access_token');
-    if (!accessToken) {
-      accessToken = getAccessToken();
-    }
+    // let accessToken = localStorage.getItem('access_token');
+    // if (!accessToken) {
+    //   accessToken = getAccessToken();
+    // }
+    const accessToken = await getAccessToken();
     const user = await fetchUser(accessToken);
 
     const response = await fetch(

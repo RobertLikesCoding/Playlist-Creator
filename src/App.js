@@ -20,18 +20,15 @@ function App() {
     restoreSession();
     loginAfterAuthorization()
     initializeApp();
-    const currentUser = localStorage.getItem('current_user');
-    if (currentUser) {
-      setUserData(JSON.parse(currentUser));
-    }
   }, []);
 
   async function initializeApp() {
     await fetchAccessTokenForSearching();
-    // const validatedToken = await getAccessToken();
-    // if (!validatedToken) {
-    //     return;
-    //   }
+    // const currentUser = JSON.parse(localStorage.getItem('current_user'));
+    // console.log('Setting userData:', userData); // Add this line
+    // if (currentUser) {
+    //   setUserData(currentUser);
+    // }
   };
 
   async function loginAfterAuthorization() {
@@ -39,11 +36,6 @@ function App() {
       if (code) {
         await getAccessToken(code);
       }
-  }
-
-  async function getUserData(validatedAccessToken) {
-    const user = await fetchUser(validatedAccessToken);
-    setUserData(user);
   }
 
   const handleAdd = (track) => {
@@ -150,6 +142,7 @@ function App() {
           setPlaylistName={setPlaylistName}
           handlePlayPreview={handlePlayPreview}
           currentTrackPlaying={currentTrackPlaying}
+          setUserData={setUserData}
           />
         </div>
       </main>
