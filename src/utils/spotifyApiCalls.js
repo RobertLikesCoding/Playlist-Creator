@@ -1,4 +1,4 @@
-import { redirectToAuthCodeFlow, getAccessToken, getRefreshToken } from "./spotifyAuthorization";
+import { getAccessToken } from "./spotifyAuthorization";
 
 export async function fetchAccessTokenForSearching() {
   try {
@@ -45,7 +45,7 @@ export async function searchForArtist(query) {
 
 export async function fetchArtistTopTracks(name) {
   try {
-    const accessToken = localStorage.getItem('access_token');
+    const accessToken = localStorage.getItem('search_token');
     const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(name)}&type=track&limit=30`, {
       method: 'GET',
       headers: {
@@ -64,15 +64,8 @@ export async function fetchArtistTopTracks(name) {
 
 export async function createPlaylist(playlistName, trackUris) {
   try {
-    let accessToken = localStorage.getItem('access_token');
-    console.log('check expiry')
-    const validatedToken = await validateAccessToken(accessToken)
-    if (!validatedToken) {
-      console.error('Token validation failed.');
-      return; // to stop executing if validation failed
-    };
-
-    const user = await fetchUser(validatedToken);
+    const accessToken = await getAccessToken();
+    const user = await fetchUser(accessToken);
 
     const response = await fetch(
       `https://api.spotify.com/v1/users/${user.id}/playlists`,
@@ -80,7 +73,7 @@ export async function createPlaylist(playlistName, trackUris) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "authorization": "Bearer " + validatedToken,
+          "authorization": "Bearer " + accessToken,
         },
         body: JSON.stringify({
           name: playlistName,
@@ -97,34 +90,11 @@ export async function createPlaylist(playlistName, trackUris) {
 
     const data = await response.json();
     const playlistId = data.id
-    await addTracksToPlaylist(playlistId, validatedToken, trackUris)
+    await addTracksToPlaylist(playlistId, accessToken, trackUris)
     return true;
   } catch (error) {
     console.error("Error:", error);
   }
-}
-
-export async function validateAccessToken(accessToken) {
-  const code = new URLSearchParams(window.location.search).get("code");
-
-  if (!accessToken) {
-    if (!code) {
-      await redirectToAuthCodeFlow();
-      return false;
-    }
-    accessToken = await getAccessToken(code);
-    if (!accessToken) {
-      await redirectToAuthCodeFlow();
-      return false;
-    }
-  }
-
-  if (isTokenExpired()) {
-    console.log('check expiry')
-    accessToken = await getRefreshToken();
-  }
-
-  return accessToken;
 }
 
 export async function fetchUser(token) {
@@ -134,15 +104,11 @@ export async function fetchUser(token) {
   })
   const data = await response.json();
   if (!data.id) {
-    // await redirectToAuthCodeFlow();
     throw new Error("Failed to fetch user profile.");
   }
+  // saving current user for setting user state object after playlist creation
+  localStorage.setItem('current_user', JSON.stringify(data));
   return data;
-}
-
-function isTokenExpired() {
-  const expirationTime = parseInt(localStorage.getItem("expires_in"), 10);
-  return Date.now() > expirationTime;
 }
 
 async function addTracksToPlaylist(playlistId, accessToken, trackUris) {

@@ -4,7 +4,7 @@ import SearchBar from './components/SearchBar';
 import Tracklist from './components/Tracklist';
 import Playlist from './components/Playlist';
 import NavBar from './components/NavBar';
-import { fetchAccessTokenForSearching, fetchUser, validateAccessToken } from './utils/spotifyApiCalls';
+import { fetchAccessTokenForSearching, fetchUser } from './utils/spotifyApiCalls';
 import { getAccessToken } from './utils/spotifyAuthorization';
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [playlistName, setPlaylistName] = useState('');
   const [currentTrackPlaying, setCurrentTrackPlaying] = useState(null);
-  const [userData, setUserData] = useState('');
+  const [userData, setUserData] = useState(null);
   const audio = useRef(null);
 
   useEffect(() => {
@@ -24,13 +24,12 @@ function App() {
 
   async function initializeApp() {
     await fetchAccessTokenForSearching();
-    const localAccessToken = localStorage.getItem('access_token');
-      if (!localAccessToken) {
-        return;
-      }
-
-    const validatedToken = await validateAccessToken(localAccessToken);
-    await getUserData(validatedToken);
+    const accessToken = localStorage.getItem('access_token');
+    if (accessToken) {
+      await fetchUser(accessToken);
+    }
+    const currentUser = JSON.parse(localStorage.getItem('current_user'));
+    setUserData(currentUser)
   };
 
   async function loginAfterAuthorization() {
@@ -38,11 +37,6 @@ function App() {
       if (code) {
         await getAccessToken(code);
       }
-  }
-
-  async function getUserData(validatedAccessToken) {
-    const user = await fetchUser(validatedAccessToken);
-    setUserData(user);
   }
 
   const handleAdd = (track) => {
@@ -121,7 +115,7 @@ function App() {
     <div className="App">
       <NavBar userData={userData}/>
       <header className="App-header">
-        <h1>Search for an Artist 
+        <h1>Search for an Artist
         to start creating a playlist</h1>
         <SearchBar
         searchQuery={searchQuery}
@@ -149,6 +143,7 @@ function App() {
           setPlaylistName={setPlaylistName}
           handlePlayPreview={handlePlayPreview}
           currentTrackPlaying={currentTrackPlaying}
+          setUserData={setUserData}
           />
         </div>
       </main>

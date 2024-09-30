@@ -37,15 +37,25 @@ async function generateCodeChallenge(verifier) {
       .replace(/=+$/, '');
 }
 
-// Getting Access Tokens
+// Getting Access Token
 
-export async function getAccessToken(code) {
-  const verifier = localStorage.getItem("verifier");
-  if (!verifier) {
-    console.error("Verifier is missing. Redirecting to authorization flow.");
-    redirectToAuthCodeFlow();
-    return null;
+export async function getAccessToken() {
+  //if there already is a AT refresh it
+  let localAccessToken = localStorage.getItem('access_token');
+  if (localAccessToken) {
+    if (isTokenExpired()) {
+      localAccessToken = await getRefreshToken();
+    }
+    return localAccessToken;
   }
+
+  const code = new URLSearchParams(window.location.search).get("code");
+    if (!code) {
+      await redirectToAuthCodeFlow();
+      return false;
+    }
+
+  const verifier = localStorage.getItem("verifier");
 
   const params = new URLSearchParams();
   params.append("client_id", clientId);
@@ -79,7 +89,12 @@ export async function getAccessToken(code) {
   }
 }
 
-export async function getRefreshToken() {
+function isTokenExpired() {
+  const expirationTime = parseInt(localStorage.getItem("expires_in"), 10);
+  return Date.now() > expirationTime;
+}
+
+async function getRefreshToken() {
   try {
     console.log("refreshing")
     const refreshToken = localStorage.getItem("refresh_token");
