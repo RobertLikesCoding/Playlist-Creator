@@ -4,7 +4,7 @@ import SearchBar from './components/SearchBar';
 import Tracklist from './components/Tracklist';
 import Playlist from './components/Playlist';
 import NavBar from './components/NavBar';
-import { fetchAccessTokenForSearching, fetchUser, validateAccessToken } from './utils/spotifyApiCalls';
+import { fetchAccessTokenForSearching, fetchUser } from './utils/spotifyApiCalls';
 import { getAccessToken } from './utils/spotifyAuthorization';
 
 function App() {
@@ -28,13 +28,10 @@ function App() {
 
   async function initializeApp() {
     await fetchAccessTokenForSearching();
-    const validatedToken = await validateAccessToken();
-    if (!validatedToken) {
-        return;
-      }
-
-    // await getUserData(validatedToken);
-
+    // const validatedToken = await getAccessToken();
+    // if (!validatedToken) {
+    //     return;
+    //   }
   };
 
   async function loginAfterAuthorization() {
