@@ -20,14 +20,23 @@ export default function SearchBar({setSearchQuery, searchQuery, setTopTracks}) {
     }
   };
 
+  function handleClick({target}) {
+    target.value = "";
+  }
+
   return (
     <>
       <div className={styles.searchContainer}>
         <div className={styles.search}>
-          <input type="text" placeholder="Search for artist..." value={searchQuery} onChange={handleSearch} />
+          <input type="text" placeholder="Search for artist..." value={searchQuery} onChange={handleSearch} onClick={handleClick}/>
           <i className="fa fa-search"></i>
         </div>
-        <SearchResult id={styles.searchResults} artists={artists} setTopTracks={setTopTracks}/>
+        <SearchResult
+        setArtists={setArtists}
+        artists={artists}
+        setTopTracks={setTopTracks}
+        setSearchQuery={setSearchQuery}
+        />
       </div>
     </>
   );
