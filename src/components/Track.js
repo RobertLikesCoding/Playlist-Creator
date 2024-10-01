@@ -9,21 +9,24 @@ export default function Track({track, addOrRemove, onClick, currentTrackPlaying,
   return (
     <div className={styles.trackCard}>
       <div className={styles.coverImg}>
+        <div className={styles.btnPreview}>
+        { !track.preview_url ? (
+            <i className={`fa-solid fa-link-slash ${styles.btnNoPreview}`}></i>
+          ) : currentTrackPlaying === track.preview_url ? (
+            <i className={`fa-solid fa-stop ${styles.btnStop}`} onClick={() => handlePlayPreview(track.preview_url)}></i>
+          ) : (
+            <i className={`fa-solid fa-play ${styles.btnPlay}`} onClick={() => handlePlayPreview(track.preview_url)}></i>
+          )
+        }
+        </div>
         <img src={coverImage} alt={`cover art of the song ${track.name}.`}/>
       </div>
       <div className={styles.trackInfo}>
         <h3>{track.name}</h3>
-        <p>Artist: {artists}</p>
+        <p>{artists}</p>
         <p>Album: {track.album.name}</p>
       </div>
-      { !track.preview_url ? (
-          <button className={styles.btnNoPreview}>No Preview</button>
-        ) : currentTrackPlaying === track.preview_url ? (
-          <button onClick={() => handlePlayPreview(track.preview_url)} className={styles.btnStop}>Stop</button>
-        ) : (
-          <button onClick={() => handlePlayPreview(track.preview_url)} className={styles.btnPlay}>Play</button>
-        )
-      }
+      <i className={`fa-regular fa-square-plus ${styles.btnTrack}`}></i>
       <button onClick={onClick}>{addOrRemove}</button>
     </div>
   )
