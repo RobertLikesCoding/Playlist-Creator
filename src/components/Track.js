@@ -1,28 +1,42 @@
 import React from 'react';
+import styles from '../styles/Track.module.css';
+
 
 export default function Track({track, addOrRemove, onClick, currentTrackPlaying, handlePlayPreview}) {
   const artists = track.artists.map((artist) => artist.name).join(', ');
   const coverImage = track.album.images[2].url;
 
   return (
-    <div className='trackCard'>
-      <div className="coverImg">
+    <div className={styles.trackCard}>
+      <div className={styles.coverImg}>
+        <div className={styles.btnOverlay}>
+        { !track.preview_url ? (
+            <i className={`fa-solid fa-link-slash ${styles.btnNoPreview}`}></i>
+          ) : currentTrackPlaying === track.preview_url ? (
+            <i className={`fa-regular fa-circle-stop ${styles.btnControlAudio}`} onClick={() => handlePlayPreview(track.preview_url)}></i>
+          ) : (
+            <i className={`fa-regular fa-circle-play ${styles.btnControlAudio}`} onClick={() => handlePlayPreview(track.preview_url)}></i>
+          )
+        }
+        </div>
         <img src={coverImage} alt={`cover art of the song ${track.name}.`}/>
       </div>
-      <div className="trackInfo">
+      <div className={styles.trackInfo}>
         <h3>{track.name}</h3>
-        <p>Artist: {artists}</p>
+        <p>{artists}</p>
         <p>Album: {track.album.name}</p>
       </div>
-      { !track.preview_url ? (
-          <button className="btnNoPreview">No Preview</button>
-        ) : currentTrackPlaying === track.preview_url ? (
-          <button onClick={() => handlePlayPreview(track.preview_url)} className="btnStop">Stop</button>
-        ) : (
-          <button onClick={() => handlePlayPreview(track.preview_url)} className="btnPlay">Play</button>
-        )
-      }
-      <button onClick={onClick}>{addOrRemove}</button>
+
+      { addOrRemove === "add" ? (
+        <div className={styles.btn}>
+          <i className={`fa-sharp fa-solid fa-plus ${styles.btnAdd}`} onClick={onClick}></i>
+        </div>
+      ) : (
+        <div className={styles.btn}>
+          <i className={`fa-solid fa-trash-can ${styles.btnRemove}`} onClick={onClick}></i>
+        </div>
+      )}
+      {/* <button onClick={onClick}>{addOrRemove}</button> */}
     </div>
   )
 };

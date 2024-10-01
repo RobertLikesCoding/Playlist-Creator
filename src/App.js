@@ -49,8 +49,10 @@ function App() {
       let accessToken = localStorage.getItem('access_token');
 
       if (accessToken) {
-        const newAT = await checkTokenExpiry();
-        console.log("newAT:",newAT);
+        const newAccessToken = await checkTokenExpiry();
+        if (newAccessToken) {
+          await fetchUser(newAccessToken);
+        }
         await fetchUser(accessToken);
       }
       const currentUser = JSON.parse(localStorage.getItem('current_user'));
@@ -90,15 +92,6 @@ function App() {
     }
   }
 
-  // function stopAllAudio() {
-  //   const audioElements = document.querySelectorAll('audio');
-
-  //   audioElements.forEach((preview) => {
-  //     preview.pause();
-  //     preview.currentTime = 0;
-  //   })
-  // }
-
   function saveSession(playlistTracks, topTracks) {
     const session = {
       "searchQuery": searchQuery,
@@ -129,13 +122,13 @@ function App() {
       <header className="App-header">
         <h1>Search for an Artist
         to start creating a playlist</h1>
-        <SearchBar
+        <SearchBar class="SearchBarComponent"
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         setTopTracks={setTopTracks}
         />
       </header>
-      <main>
+      <main className="main" >
         <div className='container'>
           <Tracklist
             topTracks={topTracks}

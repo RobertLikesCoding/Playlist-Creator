@@ -2,44 +2,57 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem 2rem;
-  border-bottom: 1px solid var(--highlight-clr);
+  padding: 1rem 2rem;
 }
 
 #logo {
-  font-size: 2.5rem;
+  font-size: calc(15px + 2.5vmin);
   font-weight: bold;
   font-family: 'PaytoneOne', sans-serif;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+
+  i {
+    padding-top: 0.5rem;
+  }
 }
 
 .btnLogin {
-  padding: 0.25rem 0.25rem;
+  padding: 0.25rem 0.5rem;
   border: none;
   border-radius: 40px;
+  box-sizing: border-box;
   background-color: var(--highlight-clr);
   color: var(--primary-clr);
   font-size: 1.25rem;
   cursor: pointer;
   display: flex;
   align-items: center;
-  min-height: 3rem;
-  max-height: 3rem;
+  justify-content: space-between;
+  height: 56px;
 
   img {
     border-radius: 50%;
     border: 2px solid #0D2D26;
     object-fit: contain;
-    height: 3rem;
+    height: 50px;
+    box-sizing: border-box;
   }
 
   span {
-    padding: 0 1rem 0 1rem;
+    margin: 0 0.5rem;
   }
 
   #login {
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  i {
+    font-size: 50px;
+
   }
 
 }

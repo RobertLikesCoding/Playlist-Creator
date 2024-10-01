@@ -1,7 +1,8 @@
 import React from 'react';
 import Track from './Track';
-import { redirectToAuthCodeFlow } from '../utils/spotifyAuthorization.js'
-import { createPlaylist } from '../utils/spotifyApiCalls.js'
+import { redirectToAuthCodeFlow } from '../utils/spotifyAuthorization.js';
+import { createPlaylist } from '../utils/spotifyApiCalls.js';
+import styles from '../styles/Tracklists.module.css';
 
 export default function Playlist({
   playlistTracks,
@@ -57,25 +58,27 @@ export default function Playlist({
   }
 
   return (
-    <div className='playlist'>
+    <div>
       <h2>Playlist</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor='playlistName'>Name your playlist: </label>
-        <input id="playlistName" name='playlistName' type='text' value={playlistName} onChange={handleChange}/>
+      <div className={styles.tracksContainer}>
+        <ul className={styles.trackList}>
+          {playlistTracks.map((track) => {
+            return <Track
+            track={track}
+            key={track.id}
+            addOrRemove='remove'
+            onClick={(e) => handleRemove(track)}
+            handlePlayPreview={handlePlayPreview}
+            currentTrackPlaying={currentTrackPlaying}
+            />
+          })}
+        </ul>
+      </div>
+      <form className={styles.playlistForm} onSubmit={handleSubmit}>
+        <label htmlFor='playlistName'></label>
+        <input className={styles.PlaylistNameInput} name='playlistName' placeholder="Name your playlist" type='text' value={playlistName} onChange={handleChange}/>
         <button type='submit'>Save to Spotify</button>
       </form>
-      <ul>
-        {playlistTracks.map((track) => {
-          return <Track
-          track={track}
-          key={track.id}
-          addOrRemove='remove'
-          onClick={(e) => handleRemove(track)}
-          handlePlayPreview={handlePlayPreview}
-          currentTrackPlaying={currentTrackPlaying}
-          />
-        })}
-      </ul>
     </div>
   )
 }

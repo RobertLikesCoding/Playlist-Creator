@@ -4,7 +4,6 @@ import styles from '../styles/NavBar.module.css';
 
 export default function NavBar({ userData }) {
   useEffect(() => {
-    // You can add any side effects here if needed
   }, [userData]);
 
   async function handleLogin() {
@@ -15,7 +14,10 @@ export default function NavBar({ userData }) {
 
   return (
     <nav>
-      <span id={styles.logo}>Playlist Creator</span>
+      <span id={styles.logo}>
+        <i class="fa-solid fa-music"></i>
+        Playlist Creator
+      </span>
         { userData ? (
           <div className={styles.btnLogin}>
               <span>Hey there, {userData.display_name}!</span>
@@ -24,6 +26,7 @@ export default function NavBar({ userData }) {
         ) : (
           <div className={styles.btnLogin}>
             <span onClick={handleLogin} id={styles.login}>Login</span>
+            <i className="fa-regular fa-circle-user"></i>
           </div>
         )
       }

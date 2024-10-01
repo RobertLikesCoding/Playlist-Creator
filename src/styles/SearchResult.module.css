@@ -1,0 +1,27 @@
+.dropDown {
+  position: absolute;
+  width: 100%;
+  max-width: 598px;
+  top: 50px;
+  z-index: 9;
+}
+
+.dropDown ul {
+  margin: 1rem 0;
+  padding: 0 1rem;
+  background-color: white;
+
+  li {
+    list-style-type: none;
+    color: var(--primary-clr);
+    cursor: pointer;
+    &:hover {
+      background-color: var(--secondary-clr);
+      color: var(--primary-clr);
+    }
+  }
+}
+
+.dropDown ul:not(:empty) {
+  padding-top: 1rem; /* Add padding-top only if there are list items */
+}
