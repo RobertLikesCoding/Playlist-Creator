@@ -99,7 +99,7 @@ function App() {
       "playlistTracks": JSON.stringify(playlistTracks),
       "topTracks": JSON.stringify(topTracks)
     }
-    
+
     localStorage.setItem("session", JSON.stringify(session));
   }
 
@@ -122,7 +122,7 @@ function App() {
       <header className="App-header">
         <h1>Search for an Artist
         to start creating a playlist</h1>
-        <SearchBar
+        <SearchBar class="SearchBarComponent"
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         setTopTracks={setTopTracks}
