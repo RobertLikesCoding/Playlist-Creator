@@ -7,7 +7,7 @@ export default function Tracklist({topTracks, handleAdd, currentTrackPlaying, ha
     <div>
       <h2>Results</h2>
       <div className={styles.tracksContainer}>
-        <ul>
+        <ul className={styles.trackList}>
           {topTracks.map((track) => {
             return <Track
             track={track}

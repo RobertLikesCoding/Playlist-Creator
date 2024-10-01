@@ -128,7 +128,7 @@ function App() {
         setTopTracks={setTopTracks}
         />
       </header>
-      <main>
+      <main className="main" >
         <div className='container'>
           <Tracklist
             topTracks={topTracks}
