@@ -12,13 +12,24 @@
   width: 100%;
   max-width: 600px;
   z-index: 10;
+
+  i {
+      position: absolute;
+      top: 9px;
+      right: 15px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: black;
+  }
 }
 
-.search input {
+input {
   box-sizing: border-box;
   width: 100%;
-  height: 50px;
-  border-radius: 20px;
+  height: 40px;
+  border-radius: 40px;
   font-size: 1.2rem;
   padding: 0.5rem 1rem;
   border: 1px solid var(--primary-clr);
@@ -26,15 +37,4 @@
   &:focus {
     outline: 2px solid var(--highlight-clr);
   }
-}
-
-.search i {
-    position: absolute;
-    top: 11px;
-    right: 15px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 1.5rem;
-    color: black;
 }

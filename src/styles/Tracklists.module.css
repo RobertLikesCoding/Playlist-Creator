@@ -1,0 +1,42 @@
+.trackList {
+  padding: 0;
+  margin: 0;
+}
+
+.tracksContainer {
+  padding: 2rem 0;
+  display: flex;
+  justify-content: center;
+  height: 400px;
+  width: 500px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-top: 2px dashed var(--secondary-clr);
+  border-bottom: 2px dashed var(--secondary-clr);
+}
+
+.playlistForm {
+  padding: 1rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+
+  input {
+    width: 250px;
+  }
+
+  button {
+    font-family: 'BebasNeue', sans-serif;
+    padding: 0.25rem 1rem;
+    border: none;
+    border-radius: 40px;
+    background-color: var(--highlight-clr);
+    color: var(--primary-clr);
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    height: 50px;
+  }
+}
