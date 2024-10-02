@@ -38,6 +38,10 @@
     display: flex;
     align-items: center;
     height: 50px;
+
+    &:active {
+      transform: scale(0.95);
+    }
   }
 }
 
