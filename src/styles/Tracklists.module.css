@@ -41,6 +41,13 @@
   }
 }
 
+.emptyState {
+  font-family: 'BebasNeue', sans-serif;
+  font-size: 1.5rem;
+  text-align: center;
+  color: white;
+}
+
 @media (max-width: 768px) {
   .tracksContainer {
     width: 356px;

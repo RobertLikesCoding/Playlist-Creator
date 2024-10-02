@@ -2,6 +2,7 @@
   --primary-clr: #0D2D26;
   --secondary-clr: #FFF1BA;
   --highlight-clr: #FFED61;
+  --shadow-dark: 10px 10px 8px #081613;
 }
 
 @font-face {

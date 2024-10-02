@@ -123,16 +123,14 @@ function App() {
   return (
     <div className="App">
       <NavBar userData={userData}/>
-      <header className="App-header">
-        <h1>1. Search for an Artist
-        to start creating a playlist</h1>
-        <SearchBar class="SearchBarComponent"
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        setTopTracks={setTopTracks}
-        />
-      </header>
       <main className="main" >
+        <section className="SearchBar">
+          <SearchBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          setTopTracks={setTopTracks}
+          />
+        </section>
         <div className='container'>
           <Tracklist
             topTracks={topTracks}
