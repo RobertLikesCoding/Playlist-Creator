@@ -16,8 +16,12 @@ export default function SearchResult({artists, setTopTracks, setSearchQuery, set
     return uri.replace(/^spotify:artist:/, '');
   }
 
+  if (artists.length === 0) {
+    return null;
+  }
+
   return (
-    <div className={`${styles.dropDown} ${artists.length === 0 ? 'dNone' : ''}`}>
+    <div className={styles.dropDown}>
       <ul>
         {artists.map((artist) => {
           return <li key={artist.id} onClick={() => handleArtistSelect(artist)}>{artist.name}</li>

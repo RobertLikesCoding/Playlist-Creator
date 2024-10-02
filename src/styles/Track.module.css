@@ -75,7 +75,7 @@
 
 .trackInfo {
   display: flex;
-  max-width: 270px;
+  width: 270px;
   flex-direction: column;
   white-space: nowrap;
   overflow: hidden;

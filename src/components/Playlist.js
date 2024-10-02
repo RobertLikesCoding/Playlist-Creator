@@ -83,6 +83,7 @@ export default function Playlist({
           </ul>
         )}
       </div>
+      <p className={`${styles.emptyState} ${playlistTracks.length === 0 ? styles.invisible : ""}`}>3. Give it a name</p>
       <form className={styles.playlistForm} onSubmit={handleSubmit}>
         <label htmlFor='playlistName'></label>
         <input className={styles.PlaylistNameInput} name='playlistName' placeholder="Name your playlist" type='text' value={playlistName} onChange={handleChange}/>
