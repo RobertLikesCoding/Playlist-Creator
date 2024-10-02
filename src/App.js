@@ -131,7 +131,7 @@ function App() {
           setTopTracks={setTopTracks}
           />
         </section>
-        <div className='container'>
+        <div className="container">
           <Tracklist
             topTracks={topTracks}
             handleAdd={handleAdd}
@@ -144,6 +144,7 @@ function App() {
           handleRemove={handleRemove}
           saveSession={() => saveSession(playlistTracks, topTracks)}
           restoreSession={() => restoreSession()}
+          topTracks={topTracks}
           setTopTracks={setTopTracks}
           setSearchQuery={setSearchQuery}
           playlistName={playlistName}

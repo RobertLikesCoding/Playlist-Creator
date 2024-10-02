@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from '../styles/SearchResult.module.css';
 import { fetchArtistTopTracks } from '../utils/spotifyApiCalls';
+import '../styles/App.css';
 
 export default function SearchResult({artists, setTopTracks, setSearchQuery, setArtists}) {
 
@@ -16,7 +17,7 @@ export default function SearchResult({artists, setTopTracks, setSearchQuery, set
   }
 
   return (
-    <div className={styles.dropDown}>
+    <div className={`${styles.dropDown} ${artists.length === 0 ? 'dNone' : ''}`}>
       <ul>
         {artists.map((artist) => {
           return <li key={artist.id} onClick={() => handleArtistSelect(artist)}>{artist.name}</li>

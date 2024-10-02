@@ -3,6 +3,7 @@ import Track from './Track';
 import { redirectToAuthCodeFlow } from '../utils/spotifyAuthorization.js';
 import { createPlaylist } from '../utils/spotifyApiCalls.js';
 import styles from '../styles/Tracklists.module.css';
+import '../styles/App.css';
 
 export default function Playlist({
   playlistTracks,
@@ -10,9 +11,10 @@ export default function Playlist({
   handleRemove,
   saveSession,
   setSearchQuery,
+  topTracks,
   setTopTracks,
-  setPlaylistName,
   playlistName,
+  setPlaylistName,
   handlePlayPreview,
   currentTrackPlaying,
   setUserData
@@ -61,23 +63,32 @@ export default function Playlist({
     <div>
       <h2>Playlist</h2>
       <div className={styles.tracksContainer}>
-        <ul className={styles.trackList}>
-          {playlistTracks.map((track) => {
-            return <Track
-            track={track}
-            key={track.id}
-            addOrRemove='remove'
-            onClick={(e) => handleRemove(track)}
-            handlePlayPreview={handlePlayPreview}
-            currentTrackPlaying={currentTrackPlaying}
-            />
-          })}
-        </ul>
+        { topTracks.length > 0 && playlistTracks.length === 0 ? (
+          <span className={styles.emptyState}>2. Click
+          <i className="fa-sharp fa-solid fa-plus"></i>
+          to add Tracks
+          </span>
+        ) : (
+          <ul className={styles.trackList}>
+            {playlistTracks.map((track) => {
+              return <Track
+              track={track}
+              key={track.id}
+              addOrRemove='remove'
+              onClick={(e) => handleRemove(track)}
+              handlePlayPreview={handlePlayPreview}
+              currentTrackPlaying={currentTrackPlaying}
+              />
+            })}
+          </ul>
+        )}
       </div>
       <form className={styles.playlistForm} onSubmit={handleSubmit}>
         <label htmlFor='playlistName'></label>
         <input className={styles.PlaylistNameInput} name='playlistName' placeholder="Name your playlist" type='text' value={playlistName} onChange={handleChange}/>
-        <button type='submit'>Save to Spotify</button>
+        <button type='submit' className={playlistName.length === 0 ? "inactive" : ""}>
+          Save to Spotify
+        </button>
       </form>
     </div>
   )
