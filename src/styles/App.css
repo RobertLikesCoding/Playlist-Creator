@@ -9,7 +9,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(10px + 1.5vmin);
   color: white;
   font-family: 'BebasNeue', sans-serif;
 
@@ -26,10 +26,14 @@
   width: 100%;
 }
 
+.dNone {
+  display: none;
+}
+
 .container {
   display: flex;
   justify-content: center;
-  gap: 8rem;
+  gap: 5rem;
   flex-wrap: wrap;
   width: 90%;
 
@@ -38,4 +42,10 @@
     font-size: 2rem;
     text-align: center;
   }
+}
+
+.modal {
+  background-color: var(--primary-clr);
+  font-family: 'BebasNeue', sans-serif;
+  font-size: 1.5rem;
 }

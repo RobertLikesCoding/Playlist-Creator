@@ -124,7 +124,7 @@ function App() {
     <div className="App">
       <NavBar userData={userData}/>
       <header className="App-header">
-        <h1>Search for an Artist
+        <h1>1. Search for an Artist
         to start creating a playlist</h1>
         <SearchBar class="SearchBarComponent"
         searchQuery={searchQuery}
@@ -132,7 +132,7 @@ function App() {
         setTopTracks={setTopTracks}
         />
       </header>
-      <main className="main d-one" >
+      <main className="main" >
         <div className='container'>
           <Tracklist
             topTracks={topTracks}

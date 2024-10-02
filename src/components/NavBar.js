@@ -15,7 +15,7 @@ export default function NavBar({ userData }) {
   return (
     <nav>
       <span id={styles.logo}>
-        <i className="fa-solid fa-music"></i>
+        <i class="fa-brands fa-spotify"></i>
         Playlist Creator
       </span>
         { userData ? (

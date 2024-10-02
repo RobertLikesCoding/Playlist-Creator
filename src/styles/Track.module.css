@@ -3,16 +3,16 @@
   align-items: center;
   border: 2px solid var(--secondary-clr);
   gap: 1rem;
-  width: 450px;
+  min-width: 100%;
   max-height: 110px;
   box-sizing: border-box;
   padding: 0.75rem;
   margin-bottom: 1rem;
+  /* margin: 0 0.5rem; */
   border-radius: 5px;
   font-family: 'BebasNeue', sans-serif;
   font-size: 1.15rem;
   box-shadow: 10px 10px 8px #081613;
-
   opacity: 0;
   transform: translateY(20px);
   animation: slideFadeIn 0.5s ease-out forwards;
@@ -78,9 +78,9 @@
   display: flex;
   max-width: 270px;
   flex-direction: column;
-  justify-content: space-between;
-  white-space: nowrap;  /* Prevent text from breaking into a new line */
-  overflow: hidden;     /* Hide the overflowing text */
+  /* justify-content: space-between; */
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
 
   h3 {
@@ -121,3 +121,8 @@
   font-size: 1.25rem;
 }
 
+@media (max-width: 768px) {
+  .trackInfo {
+    max-width: 160px;
+  }
+}

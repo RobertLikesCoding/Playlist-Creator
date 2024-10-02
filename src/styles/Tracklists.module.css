@@ -16,7 +16,7 @@
 }
 
 .playlistForm {
-  padding: 1rem 0;
+  padding: 2.5rem 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -38,5 +38,15 @@
     display: flex;
     align-items: center;
     height: 50px;
+  }
+}
+
+@media (max-width: 768px) {
+  .tracksContainer {
+    width: 356px;
+  }
+
+  .playlistForm button {
+    font-size: 1.25rem;
   }
 }
