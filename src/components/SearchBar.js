@@ -30,13 +30,13 @@ export default function SearchBar({setSearchQuery, searchQuery, setTopTracks}) {
         <div className={styles.search}>
           <input type="text" placeholder="Search for artist..." value={searchQuery} onChange={handleSearch} onClick={handleClick}/>
           <i className="fa fa-search"></i>
+          <SearchResult
+          setArtists={setArtists}
+          artists={artists}
+          setTopTracks={setTopTracks}
+          setSearchQuery={setSearchQuery}
+          />
         </div>
-        <SearchResult
-        setArtists={setArtists}
-        artists={artists}
-        setTopTracks={setTopTracks}
-        setSearchQuery={setSearchQuery}
-        />
       </div>
     </>
   );

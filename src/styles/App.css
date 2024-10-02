@@ -3,33 +3,27 @@
   color: var(--secondary-clr);
 }
 
-.App-header {
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-  font-family: 'BebasNeue', sans-serif;
-
-  h1 {
-    margin: 1rem 2rem;
-    letter-spacing: 0.02rem;
-    text-align: center;
-  }
-}
-
 .main {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   width: 100%;
+}
+
+.SearchBar {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.dNone {
+  display: none;
 }
 
 .container {
   display: flex;
   justify-content: center;
-  gap: 8rem;
+  gap: 5rem;
   flex-wrap: wrap;
   width: 90%;
 
@@ -38,4 +32,15 @@
     font-size: 2rem;
     text-align: center;
   }
+}
+
+.modal {
+  background-color: var(--primary-clr);
+  font-family: 'BebasNeue', sans-serif;
+  font-size: 1.5rem;
+}
+
+.inactive {
+  opacity: 0.6;
+  pointer-events: none;
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from '../styles/SearchResult.module.css';
 import { fetchArtistTopTracks } from '../utils/spotifyApiCalls';
+import '../styles/App.css';
 
 export default function SearchResult({artists, setTopTracks, setSearchQuery, setArtists}) {
 
@@ -13,6 +14,10 @@ export default function SearchResult({artists, setTopTracks, setSearchQuery, set
 
   function removeUriPrefix(uri) {
     return uri.replace(/^spotify:artist:/, '');
+  }
+
+  if (artists.length === 0) {
+    return null;
   }
 
   return (

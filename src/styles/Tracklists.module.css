@@ -16,7 +16,7 @@
 }
 
 .playlistForm {
-  padding: 1rem 0;
+  padding: 0 0 2.5rem 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -38,5 +38,50 @@
     display: flex;
     align-items: center;
     height: 50px;
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+}
+
+.emptyState {
+  font-family: 'BebasNeue', sans-serif;
+  font-size: 1.5rem;
+  text-align: center;
+  color: white;
+  margin: 1.5rem 0 1rem 0;
+  transition: all 0.5s;
+
+  i {
+    text-align: center;
+    padding: 0 2px;
+    margin: 0 10px;
+    font-size: 1.5rem;
+    border-radius: 50%;
+    color: var(--primary-clr);
+    background-color: var(--secondary-clr);
+  }
+}
+
+.invisible {
+  opacity: 0;
+  transition: all 0s;
+}
+
+@media (max-width: 768px) {
+  .tracksContainer {
+    width: 356px;
+  }
+
+  .playlistForm {
+    button {
+      font-size: 1.25rem;
+      line-height: 1.25rem;
+    }
+
+    input {
+      width: 230px;
+    }
   }
 }

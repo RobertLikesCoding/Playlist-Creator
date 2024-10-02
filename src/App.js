@@ -63,19 +63,23 @@ function App() {
   }
 
   const handleAdd = (track) => {
-    if (playlistTracks.some(t => t.id === track.id)) {
-      alert('Track already added');
-    }
     setPlaylistTracks((prevPlaylistTracks) => {
       if (!prevPlaylistTracks.some((t) => t.id === track.id)) {
+        setTopTracks((prevTopTracks) => {
+          return prevTopTracks.filter((t) => t.id !== track.id)
+        })
         return [track, ...prevPlaylistTracks];
       }
-      return prevPlaylistTracks;
     });
   };
 
   const handleRemove = (track) => {
     setPlaylistTracks((prevPlaylistTracks) => {
+      if (!topTracks.some((t) => t.id === track)) {
+        setTopTracks((prevTopTracks) => {
+          return [track, ...prevTopTracks];
+        })
+      }
       return prevPlaylistTracks.filter((t) => t.id !== track.id);
     });
   };
@@ -119,17 +123,15 @@ function App() {
   return (
     <div className="App">
       <NavBar userData={userData}/>
-      <header className="App-header">
-        <h1>Search for an Artist
-        to start creating a playlist</h1>
-        <SearchBar class="SearchBarComponent"
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        setTopTracks={setTopTracks}
-        />
-      </header>
       <main className="main" >
-        <div className='container'>
+        <section className="SearchBar">
+          <SearchBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          setTopTracks={setTopTracks}
+          />
+        </section>
+        <div className="container">
           <Tracklist
             topTracks={topTracks}
             handleAdd={handleAdd}
@@ -142,6 +144,7 @@ function App() {
           handleRemove={handleRemove}
           saveSession={() => saveSession(playlistTracks, topTracks)}
           restoreSession={() => restoreSession()}
+          topTracks={topTracks}
           setTopTracks={setTopTracks}
           setSearchQuery={setSearchQuery}
           playlistName={playlistName}

@@ -27,7 +27,7 @@ export async function fetchAccessTokenForSearching() {
 export async function searchForArtist(query) {
   try {
     const accessToken = localStorage.getItem('search_token');
-    const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=artist&limit=5`, {
+    const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=artist&limit=10`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`

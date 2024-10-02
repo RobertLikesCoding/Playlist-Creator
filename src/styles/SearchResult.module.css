@@ -1,9 +1,16 @@
 .dropDown {
   position: absolute;
+  top: 40%;
+  left: 0;
   width: 100%;
-  max-width: 598px;
-  top: 50px;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #ccc;
   z-index: 9;
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .dropDown ul {
@@ -15,13 +22,21 @@
     list-style-type: none;
     color: var(--primary-clr);
     cursor: pointer;
+    line-height: 1rem;
+    padding: 0.5rem 0 0.25rem 0;
+    font-size: 1.25rem;
+
     &:hover {
       background-color: var(--secondary-clr);
       color: var(--primary-clr);
+    }
+
+    &:first-child {
+      border-top: 2px solid var(--primary-clr);
     }
   }
 }
 
 .dropDown ul:not(:empty) {
-  padding-top: 1rem; /* Add padding-top only if there are list items */
+  padding: 1.5rem 1rem 1rem 1rem;
 }

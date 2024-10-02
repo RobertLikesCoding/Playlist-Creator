@@ -15,16 +15,16 @@ export default function NavBar({ userData }) {
   return (
     <nav>
       <span id={styles.logo}>
-        <i class="fa-solid fa-music"></i>
+        <i class="fa-brands fa-spotify"></i>
         Playlist Creator
       </span>
         { userData ? (
-          <div className={styles.btnLogin}>
+          <div className={styles.btnNavbar}>
               <span>Hey there, {userData.display_name}!</span>
               <img src={userData.images[0].url} alt={`Your avatar.`} />
           </div>
         ) : (
-          <div className={styles.btnLogin}>
+          <div className={styles.btnNavbar}>
             <span onClick={handleLogin} id={styles.login}>Login</span>
             <i className="fa-regular fa-circle-user"></i>
           </div>
