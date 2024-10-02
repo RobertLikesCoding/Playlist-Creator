@@ -32,6 +32,7 @@
   gap: 8rem;
   flex-wrap: wrap;
   width: 90%;
+  display: none;
 
   h2 {
     font-family: PaytoneOne;
