@@ -63,19 +63,23 @@ function App() {
   }
 
   const handleAdd = (track) => {
-    if (playlistTracks.some(t => t.id === track.id)) {
-      alert('Track already added');
-    }
     setPlaylistTracks((prevPlaylistTracks) => {
       if (!prevPlaylistTracks.some((t) => t.id === track.id)) {
+        setTopTracks((prevTopTracks) => {
+          return prevTopTracks.filter((t) => t.id !== track.id)
+        })
         return [track, ...prevPlaylistTracks];
       }
-      return prevPlaylistTracks;
     });
   };
 
   const handleRemove = (track) => {
     setPlaylistTracks((prevPlaylistTracks) => {
+      if (!topTracks.some((t) => t.id === track)) {
+        setTopTracks((prevTopTracks) => {
+          return [track, ...prevTopTracks];
+        })
+      }
       return prevPlaylistTracks.filter((t) => t.id !== track.id);
     });
   };
@@ -128,7 +132,7 @@ function App() {
         setTopTracks={setTopTracks}
         />
       </header>
-      <main className="main" >
+      <main className="main d-one" >
         <div className='container'>
           <Tracklist
             topTracks={topTracks}
