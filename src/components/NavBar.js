@@ -21,12 +21,12 @@ export default function NavBar({ userData }) {
       </span>
         { userData ? (
           <div className={styles.btnNavbar}>
-              <span>Hey there, {userData.display_name}!</span>
+              <span>Hello, {userData.display_name}!</span>
               <img src={userData.images[0].url} alt={`Your avatar.`} />
           </div>
         ) : (
-          <div className={styles.btnNavbar}>
-            <span onClick={handleLogin} id={styles.login}>Login</span>
+          <div className={styles.btnNavbar} onClick={handleLogin}>
+            <span id={styles.login}>Login</span>
             <i className="fa-regular fa-circle-user"></i>
           </div>
         )

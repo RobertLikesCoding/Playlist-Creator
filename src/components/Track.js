@@ -36,7 +36,6 @@ export default function Track({track, addOrRemove, onClick, currentTrackPlaying,
           <i className={`fa-solid fa-trash-can ${styles.btnRemove}`} onClick={onClick}></i>
         </div>
       )}
-      {/* <button onClick={onClick}>{addOrRemove}</button> */}
     </div>
   )
 };
