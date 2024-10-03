@@ -5,6 +5,7 @@ import SearchBar from './components/SearchBar';
 import Tracklist from './components/Tracklist';
 import Playlist from './components/Playlist';
 import NavBar from './components/NavBar';
+import Notifier from './components/Notifier';
 import { fetchAccessTokenForSearching, fetchUser } from './utils/spotifyApiCalls';
 import { getAccessToken, checkTokenExpiry } from './utils/spotifyAuthorization';
 
@@ -16,6 +17,7 @@ function App() {
   const [currentTrackPlaying, setCurrentTrackPlaying] = useState(null);
   const [userData, setUserData] = useState(null);
   const audio = useRef(null);
+  const session = useRef(null)
 
   useEffect(() => {
     if (currentTrackPlaying === null) {
@@ -117,13 +119,14 @@ function App() {
     setPlaylistTracks(JSON.parse(session.playlistTracks));
     setSearchQuery(session.searchQuery);
     setPlaylistName(session.playlistName);
-    localStorage.removeItem('session')
+    localStorage.removeItem('session');
   };
 
   return (
     <div className="App">
       <NavBar userData={userData}/>
       <main className="main" >
+        <Notifier />
         <section className="SearchBar">
           <SearchBar
           searchQuery={searchQuery}

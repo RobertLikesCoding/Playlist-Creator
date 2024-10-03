@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 
-export default function Notifier() {
+export default function Notifier({ modalStatus }) {
+  if (!modalStatus) {
+    return null;
+  }
 
   return (
     <div className="modal session">
