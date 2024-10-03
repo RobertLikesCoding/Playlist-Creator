@@ -5,6 +5,7 @@ import SearchBar from './components/SearchBar';
 import Tracklist from './components/Tracklist';
 import Playlist from './components/Playlist';
 import NavBar from './components/NavBar';
+import Notifier from './components/Notifier';
 import { fetchAccessTokenForSearching, fetchUser } from './utils/spotifyApiCalls';
 import { getAccessToken, checkTokenExpiry } from './utils/spotifyAuthorization';
 
@@ -15,6 +16,7 @@ function App() {
   const [playlistName, setPlaylistName] = useState('');
   const [currentTrackPlaying, setCurrentTrackPlaying] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [modalContent, setModalContent] = useState(null);
   const audio = useRef(null);
 
   useEffect(() => {
@@ -117,13 +119,15 @@ function App() {
     setPlaylistTracks(JSON.parse(session.playlistTracks));
     setSearchQuery(session.searchQuery);
     setPlaylistName(session.playlistName);
-    localStorage.removeItem('session')
+    setModalContent("Authorization Successfull! You can save now")
+    localStorage.removeItem('session');
   };
 
   return (
     <div className="App">
       <NavBar userData={userData}/>
       <main className="main" >
+        <Notifier modalContent={modalContent} setModalContent={setModalContent}/>
         <section className="SearchBar">
           <SearchBar
           searchQuery={searchQuery}
@@ -151,7 +155,8 @@ function App() {
           setPlaylistName={setPlaylistName}
           handlePlayPreview={handlePlayPreview}
           currentTrackPlaying={currentTrackPlaying}
-          setUserData={setUserData}
+          modalStatus={modalContent}
+          setModalContent={setModalContent}
           />
         </div>
       </main>

@@ -55,9 +55,9 @@
 
   i {
     text-align: center;
-    padding: 0 2px;
+    padding: 2px 3px;
     margin: 0 10px;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     border-radius: 50%;
     color: var(--primary-clr);
     background-color: var(--secondary-clr);

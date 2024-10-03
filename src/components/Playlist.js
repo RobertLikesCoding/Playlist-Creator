@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Track from './Track';
+import Notifier from './Notifier.js';
 import { redirectToAuthCodeFlow } from '../utils/spotifyAuthorization.js';
 import { createPlaylist } from '../utils/spotifyApiCalls.js';
 import styles from '../styles/Tracklists.module.css';
@@ -17,8 +18,10 @@ export default function Playlist({
   setPlaylistName,
   handlePlayPreview,
   currentTrackPlaying,
-  setUserData
+  modalContent,
+  setModalContent
 }) {
+
   function handleChange({target}) {
     setPlaylistName(target.value)
   }
@@ -45,22 +48,28 @@ export default function Playlist({
     }
 
     const isPlaylistCreated  = await createPlaylist(playlistName, trackUris);
-    const currentUser = JSON.parse(localStorage.getItem('current_user'));
-    setUserData(currentUser)
     if (!isPlaylistCreated) {
-      alert("Something went wrong");
+      alert("Something went wrong, please try again.");
       return;
     };
+
+    // might not need these two lines:
+    // const currentUser = JSON.parse(localStorage.getItem('current_user'));
+    // setUserData(currentUser);
+
+    setModalContent(`'${playlistName}' was successfully added to your Playlists!`);
+
     // Reset everything
     setPlaylistTracks([]);
     setTopTracks([]);
     setSearchQuery('');
     setPlaylistName('');
-    alert("Playlist successfully created 🥳");
+
   }
 
   return (
     <div>
+      <Notifier modalContent={modalContent} setModalContent={setModalContent}/>
       <h2>Playlist</h2>
       <div className={styles.tracksContainer}>
         { topTracks.length > 0 && playlistTracks.length === 0 ? (
