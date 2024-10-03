@@ -6,6 +6,7 @@ import Tracklist from './components/Tracklist';
 import Playlist from './components/Playlist';
 import NavBar from './components/NavBar';
 import Notifier from './components/Notifier';
+import Footer from './components/Footer';
 import { fetchAccessTokenForSearching, fetchUser } from './utils/spotifyApiCalls';
 import { getAccessToken, checkTokenExpiry } from './utils/spotifyAuthorization';
 
@@ -160,6 +161,9 @@ function App() {
           />
         </div>
       </main>
+      <footer>
+        <Footer />
+      </footer>
     </div>
   );
 }
