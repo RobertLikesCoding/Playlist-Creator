@@ -1,5 +1,12 @@
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
 .App {
-  height: 100vh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   color: var(--secondary-clr);
 }
 
@@ -8,16 +15,13 @@
   align-items: center;
   flex-direction: column;
   width: 100%;
+  flex-grow: 1;
 }
 
 .SearchBar {
   display: flex;
   width: 100%;
   justify-content: center;
-}
-
-.dNone {
-  display: none;
 }
 
 .container {
@@ -31,7 +35,12 @@
     font-family: PaytoneOne;
     font-size: 2rem;
     text-align: center;
+    margin: 1rem 0;
   }
+}
+
+.dNone {
+  display: none;
 }
 
 .inactive {
@@ -84,6 +93,7 @@ footer {
   text-align: center;
   padding: 1rem 0;
   gap: 1rem;
+  height: auto;
 
   p {
     margin: 0.5rem;
@@ -94,5 +104,11 @@ footer {
     font-family: PaytoneOne;
     font-size: 1rem;
     padding: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    gap: 11rem;
   }
 }

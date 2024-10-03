@@ -45,9 +45,7 @@ async function generateCodeChallenge(verifier) {
 export async function getAccessToken(code) {
   //if there already is a AT refresh it
   let localAccessToken = localStorage.getItem('access_token');
-  console.log(localAccessToken)
   if (localAccessToken) {
-    console.log("get AT local blabla")
     if (isTokenExpired()) {
       localAccessToken = await getRefreshToken();
     }
