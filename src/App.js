@@ -157,6 +157,7 @@ function App() {
           currentTrackPlaying={currentTrackPlaying}
           modalStatus={modalContent}
           setModalContent={setModalContent}
+          setUserData={setUserData}
           />
         </div>
       </main>

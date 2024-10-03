@@ -19,7 +19,8 @@ export default function Playlist({
   handlePlayPreview,
   currentTrackPlaying,
   modalContent,
-  setModalContent
+  setModalContent,
+  setUserData
 }) {
 
   function handleChange({target}) {
@@ -54,8 +55,8 @@ export default function Playlist({
     };
 
     // might not need these two lines:
-    // const currentUser = JSON.parse(localStorage.getItem('current_user'));
-    // setUserData(currentUser);
+    const currentUser = JSON.parse(localStorage.getItem('current_user'));
+    setUserData(currentUser);
 
     setModalContent(`'${playlistName}' was successfully added to your Playlists!`);
 

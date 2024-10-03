@@ -7,6 +7,7 @@ export default function NavBar({ userData }) {
   }, [userData]);
 
   async function handleLogin() {
+    localStorage.clear();
     await redirectToAuthCodeFlow();
     return;
   }
