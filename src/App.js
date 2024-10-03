@@ -16,8 +16,8 @@ function App() {
   const [playlistName, setPlaylistName] = useState('');
   const [currentTrackPlaying, setCurrentTrackPlaying] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [modalContent, setModalContent] = useState(null);
   const audio = useRef(null);
-  const session = useRef(null)
 
   useEffect(() => {
     if (currentTrackPlaying === null) {
@@ -119,6 +119,7 @@ function App() {
     setPlaylistTracks(JSON.parse(session.playlistTracks));
     setSearchQuery(session.searchQuery);
     setPlaylistName(session.playlistName);
+    setModalContent("Authorization Successfull! You can save now")
     localStorage.removeItem('session');
   };
 
@@ -126,7 +127,7 @@ function App() {
     <div className="App">
       <NavBar userData={userData}/>
       <main className="main" >
-        <Notifier />
+        <Notifier modalContent={modalContent} setModalContent={setModalContent}/>
         <section className="SearchBar">
           <SearchBar
           searchQuery={searchQuery}
@@ -154,7 +155,6 @@ function App() {
           setPlaylistName={setPlaylistName}
           handlePlayPreview={handlePlayPreview}
           currentTrackPlaying={currentTrackPlaying}
-          setUserData={setUserData}
           />
         </div>
       </main>

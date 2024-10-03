@@ -17,8 +17,7 @@ export default function Playlist({
   playlistName,
   setPlaylistName,
   handlePlayPreview,
-  currentTrackPlaying,
-  setUserData
+  currentTrackPlaying
 }) {
   const [modalStatus, setModalStatus] = useState(null);
 
@@ -52,9 +51,13 @@ export default function Playlist({
       alert("Something went wrong, please try again.");
       return;
     };
-    const currentUser = JSON.parse(localStorage.getItem('current_user'));
-    setUserData(currentUser);
-    setModalStatus(true);
+
+    // might not need these two lines:
+    // const currentUser = JSON.parse(localStorage.getItem('current_user'));
+    // setUserData(currentUser);
+
+
+
     // Reset everything
     setPlaylistTracks([]);
     setTopTracks([]);
@@ -65,7 +68,7 @@ export default function Playlist({
 
   return (
     <div>
-      <Notifier modalStatus={modalStatus}/>
+      <Notifier modalStatus={modalStatus} setModalStatus={setModalStatus}/>
       <h2>Playlist</h2>
       <div className={styles.tracksContainer}>
         { topTracks.length > 0 && playlistTracks.length === 0 ? (
