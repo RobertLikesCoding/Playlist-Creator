@@ -155,6 +155,8 @@ function App() {
           setPlaylistName={setPlaylistName}
           handlePlayPreview={handlePlayPreview}
           currentTrackPlaying={currentTrackPlaying}
+          modalStatus={modalContent}
+          setModalContent={setModalContent}
           />
         </div>
       </main>

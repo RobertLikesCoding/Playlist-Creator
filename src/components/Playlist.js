@@ -17,9 +17,10 @@ export default function Playlist({
   playlistName,
   setPlaylistName,
   handlePlayPreview,
-  currentTrackPlaying
+  currentTrackPlaying,
+  modalContent,
+  setModalContent
 }) {
-  const [modalStatus, setModalStatus] = useState(null);
 
   function handleChange({target}) {
     setPlaylistName(target.value)
@@ -56,7 +57,7 @@ export default function Playlist({
     // const currentUser = JSON.parse(localStorage.getItem('current_user'));
     // setUserData(currentUser);
 
-
+    setModalContent(`'${playlistName}' was successfully added to your Playlists!`);
 
     // Reset everything
     setPlaylistTracks([]);
@@ -68,7 +69,7 @@ export default function Playlist({
 
   return (
     <div>
-      <Notifier modalStatus={modalStatus} setModalStatus={setModalStatus}/>
+      <Notifier modalContent={modalContent} setModalContent={setModalContent}/>
       <h2>Playlist</h2>
       <div className={styles.tracksContainer}>
         { topTracks.length > 0 && playlistTracks.length === 0 ? (
