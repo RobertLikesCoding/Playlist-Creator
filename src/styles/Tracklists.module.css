@@ -7,7 +7,7 @@
   padding: 2rem 0;
   display: flex;
   justify-content: center;
-  height: 400px;
+  height: 380px;
   width: 500px;
   overflow-x: hidden;
   overflow-y: auto;
@@ -16,7 +16,7 @@
 }
 
 .playlistForm {
-  padding: 0 0 2.5rem 0;
+  padding: 0 0 1rem 0;
   display: flex;
   justify-content: center;
   align-items: center;

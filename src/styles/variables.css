@@ -1,8 +1,8 @@
 :root {
-  --primary-clr: #0D2D26;
+  --primary-clr: #0d3831;
   --secondary-clr: #FFF1BA;
-  --highlight-clr: #FFED61;
-  --shadow-dark: 10px 10px 8px #081613;
+  --highlight-clr: #FFDF5E;
+  --shadow-dark: 8px 8px 15px #081613;
 }
 
 @font-face {

@@ -79,3 +79,20 @@
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 11;
 }
+
+footer {
+  text-align: center;
+  padding: 1rem 0;
+  gap: 1rem;
+
+  p {
+    margin: 0.5rem;
+  }
+
+  a {
+    color: var(--secondary-clr);
+    font-family: PaytoneOne;
+    font-size: 1rem;
+    padding: 0;
+  }
+}
