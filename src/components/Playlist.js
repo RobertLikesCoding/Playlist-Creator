@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Track from './Track';
 import Notifier from './Notifier.js';
-import { redirectToAuthCodeFlow } from '../utils/spotifyAuthorization.js';
 import { createPlaylist } from '../utils/spotifyApiCalls.js';
 import styles from '../styles/Tracklists.module.css';
 import '../styles/App.css';
@@ -10,7 +9,6 @@ export default function Playlist({
   playlistTracks,
   setPlaylistTracks,
   handleRemove,
-  saveSession,
   setSearchQuery,
   topTracks,
   setTopTracks,
@@ -20,7 +18,6 @@ export default function Playlist({
   currentTrackPlaying,
   modalContent,
   setModalContent,
-  setUserData
 }) {
 
   function handleChange({target}) {
@@ -29,36 +26,41 @@ export default function Playlist({
 
   async function handleSubmit(event) {
     event.preventDefault();
-    const verifier = localStorage.getItem("verifier");
 
     setPlaylistName(event.target.playlistName.value);
     const trackUris = playlistTracks.map((track) => {
       return track.uri
     });
     if (trackUris.length === 0) {
-      alert("You forgot to add tracks to your playlist. 🤔");
-      return;
-    } else if (!playlistName) {
-      alert("Give your playlist a name!");
-      return;
-    }
-    if (!verifier) {
-      saveSession();
-      await redirectToAuthCodeFlow();
+      const noTracksAdded = (
+        <>
+          <i className="fa-regular fa-face-kiss"></i>
+          <p>"You forgot to add tracks to your playlist."</p>
+        </>
+      )
+      setModalContent([noTracksAdded, true])
       return;
     }
 
     const isPlaylistCreated  = await createPlaylist(playlistName, trackUris);
     if (!isPlaylistCreated) {
-      alert("Something went wrong, please try again.");
+      const noPlaylist = (
+        <>
+          <i className="fa-regular fa-face-sad-cry"></i>
+          <p>"Something went wrong! Please try again."</p>
+        </>
+      )
+      setModalContent([noPlaylist, true])
       return;
     };
 
-    // might not need these two lines:
-    const currentUser = JSON.parse(localStorage.getItem('current_user'));
-    setUserData(currentUser);
-
-    setModalContent(`'${playlistName}' was successfully added to your Playlists!`);
+    const successMessage = (
+      <>
+        <i className="fa-regular fa-circle-check"></i>
+        <p>{`'${playlistName}' was successfully added to your Playlists!`}</p>
+      </>
+    )
+    setModalContent([successMessage, true]);
 
     // Reset everything
     setPlaylistTracks([]);
