@@ -20,12 +20,12 @@ export default function NavBar({ userData }) {
         Playlist Creator
       </span>
         { userData ? (
-          <div className={styles.btnNavbar}>
+          <div className={styles.btnLogin}>
               <span>Hello, {userData.display_name}!</span>
               <img src={userData.images[0].url} alt={`Your avatar.`} />
           </div>
         ) : (
-          <div className={styles.btnNavbar} onClick={handleLogin}>
+          <div className={styles.btnLogin} onClick={handleLogin}>
             <span id={styles.login}>Login</span>
             <i className="fa-regular fa-circle-user"></i>
           </div>

@@ -4,9 +4,9 @@ body, html {
 }
 
 .App {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
   color: var(--secondary-clr);
 }
 
@@ -16,6 +16,7 @@ body, html {
   flex-direction: column;
   width: 100%;
   flex-grow: 1;
+  overflow: auto;
 }
 
 .SearchBar {
@@ -105,6 +106,12 @@ footer {
     font-size: 1rem;
     padding: 0;
   }
+}
+
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 @media (max-width: 768px) {

@@ -95,7 +95,7 @@ export default function Playlist({
       </div>
       <p className={`${styles.emptyState} ${playlistTracks.length === 0 ? styles.invisible : ""}`}>3. Give it a name</p>
       <form className={styles.playlistForm} onSubmit={handleSubmit}>
-        <label htmlFor='playlistName'></label>
+        <label htmlFor='playlistName' className="dNone"></label>
         <input className={styles.PlaylistNameInput} name='playlistName' placeholder="Name your playlist" type='text' value={playlistName} onChange={handleChange}/>
         <button type='submit' className={playlistName.length === 0 ? "inactive" : ""}>
           Save to Spotify

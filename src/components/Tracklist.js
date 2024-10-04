@@ -1,10 +1,11 @@
 import React from 'react';
 import Track from './Track';
 import styles from '../styles/Tracklists.module.css';
+import '../styles/App.css';
 
 export default function Tracklist({topTracks, handleAdd, currentTrackPlaying, handlePlayPreview}) {
   return (
-    <div>
+    <div className="flexColumn">
       <h2>Tracks</h2>
       <div className={styles.tracksContainer}>
         { topTracks.length !== 0 ? (
