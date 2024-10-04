@@ -31,7 +31,6 @@ nav {
   align-items: center;
   justify-content: space-between;
   height: 56px;
-  z-index: 15;
 
   img {
     border-radius: 50%;

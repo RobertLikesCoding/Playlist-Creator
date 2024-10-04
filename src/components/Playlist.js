@@ -58,7 +58,13 @@ export default function Playlist({
     const currentUser = JSON.parse(localStorage.getItem('current_user'));
     setUserData(currentUser);
 
-    setModalContent(`'${playlistName}' was successfully added to your Playlists!`);
+    const successMessage = (
+      <>
+        <i class="fa-regular fa-circle-check"></i>
+        <p>{`'${playlistName}' was successfully added to your Playlists!`}</p>
+      </>
+    )
+    setModalContent([successMessage, true]);
 
     // Reset everything
     setPlaylistTracks([]);
