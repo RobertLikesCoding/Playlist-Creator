@@ -67,7 +67,7 @@ body, html {
   background-color: var(--primary-clr);
   padding: 1rem;
   border-radius: 10px;
-  max-width: 500px;
+  max-width: 400px;
   min-width: 250px;
   text-align: center;
   border: 2px solid var(--secondary-clr);
@@ -90,6 +90,7 @@ body, html {
   p {
     font-family: BebasNeue;
     font-size: 1.5rem;
+    padding: 1rem 0;
   }
 
   i {

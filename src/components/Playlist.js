@@ -36,27 +36,36 @@ export default function Playlist({
       return track.uri
     });
     if (trackUris.length === 0) {
-      alert("You forgot to add tracks to your playlist. 🤔");
-      return;
-    } else if (!playlistName) {
-      alert("Give your playlist a name!");
-      return;
-    }
-    if (!verifier) {
-      saveSession();
-      await redirectToAuthCodeFlow();
+      const noTracksAdded = (
+        <>
+          <i class="fa-regular fa-face-kiss"></i>
+          <p>"You forgot to add tracks to your playlist."</p>
+        </>
+      )
+      setModalContent([noTracksAdded, true])
       return;
     }
+    // if (!verifier) {
+    //   saveSession();
+    //   await redirectToAuthCodeFlow();
+    //   return;
+    // }
 
     const isPlaylistCreated  = await createPlaylist(playlistName, trackUris);
     if (!isPlaylistCreated) {
-      alert("Something went wrong, please try again.");
+      const noPlaylist = (
+        <>
+          <i class="fa-regular fa-face-sad-cry"></i>
+          <p>"Something went wrong! Please try again."</p>
+        </>
+      )
+      setModalContent([noPlaylist, true])
       return;
     };
 
     // might not need these two lines:
-    const currentUser = JSON.parse(localStorage.getItem('current_user'));
-    setUserData(currentUser);
+    // const currentUser = JSON.parse(localStorage.getItem('current_user'));
+    // setUserData(currentUser);
 
     const successMessage = (
       <>
