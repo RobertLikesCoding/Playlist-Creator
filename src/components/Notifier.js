@@ -17,7 +17,9 @@ export default function Notifier({ modalContent, setModalContent }) {
         <div className="modalHeader">
           <i className="fa-solid fa-xmark" onClick={handleClose}></i>
         </div>
-        <p>{modalContent}</p>
+        <div className="modalBody">
+          {modalContent}
+        </div>
       </div>
     </>
   );

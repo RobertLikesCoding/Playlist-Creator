@@ -1,9 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { redirectToAuthCodeFlow } from '../utils/spotifyAuthorization';
 import styles from '../styles/NavBar.module.css';
+import Notifier from '../components/Notifier';
 
 export default function NavBar({ userData }) {
+  const [modalContent, setModalContent] = useState("");
+
   useEffect(() => {
+    if (!userData) {
+      const loginModal = (
+        <>
+          <p>To use this app, you need to login to Spotify.</p>
+          <div className={styles.btnLogin} onClick={handleLogin}>
+            <span id={styles.login}>Login to Spotify</span>
+            <i class="fa-brands fa-spotify"></i>
+          </div>
+        </>
+      );
+      setModalContent(loginModal);
+    } else {
+      setModalContent("");
+    }
   }, [userData]);
 
   async function handleLogin() {
@@ -12,10 +29,8 @@ export default function NavBar({ userData }) {
     return;
   }
 
-
   return (
     <nav>
-      { !userData ? <div className="overlay"></div> : null }
       <span id={styles.logo}>
         <i className="fa-brands fa-spotify"></i>
         Playlist Creator
@@ -26,10 +41,7 @@ export default function NavBar({ userData }) {
               <img src={userData.images[0].url} alt={`Your avatar.`} />
           </div>
         ) : (
-          <div className={styles.btnLogin} onClick={handleLogin}>
-            <span id={styles.login}>Login to spotify</span>
-            <i className="fa-regular fa-circle-user"></i>
-          </div>
+          <Notifier modalContent={modalContent} />
         )
       }
     </nav>
