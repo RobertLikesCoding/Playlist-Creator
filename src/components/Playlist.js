@@ -29,7 +29,7 @@ export default function Playlist({
 
   async function handleSubmit(event) {
     event.preventDefault();
-    const verifier = localStorage.getItem("verifier");
+    // const verifier = localStorage.getItem("verifier");
 
     setPlaylistName(event.target.playlistName.value);
     const trackUris = playlistTracks.map((track) => {
@@ -38,7 +38,7 @@ export default function Playlist({
     if (trackUris.length === 0) {
       const noTracksAdded = (
         <>
-          <i class="fa-regular fa-face-kiss"></i>
+          <i className="fa-regular fa-face-kiss"></i>
           <p>"You forgot to add tracks to your playlist."</p>
         </>
       )
@@ -55,7 +55,7 @@ export default function Playlist({
     if (!isPlaylistCreated) {
       const noPlaylist = (
         <>
-          <i class="fa-regular fa-face-sad-cry"></i>
+          <i className="fa-regular fa-face-sad-cry"></i>
           <p>"Something went wrong! Please try again."</p>
         </>
       )
@@ -69,7 +69,7 @@ export default function Playlist({
 
     const successMessage = (
       <>
-        <i class="fa-regular fa-circle-check"></i>
+        <i className="fa-regular fa-circle-check"></i>
         <p>{`'${playlistName}' was successfully added to your Playlists!`}</p>
       </>
     )

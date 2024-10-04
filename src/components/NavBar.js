@@ -10,7 +10,7 @@ export default function NavBar({ userData }) {
     if (!userData) {
       const loginModal = (
         <>
-          <i class="fa-solid fa-hand-peace"></i>
+          <i className="fa-solid fa-hand-peace"></i>
           <p>To use this app, please login to Spotify. <br></br>Thank you!</p>
           <div className={styles.btnLogin} onClick={handleLogin}>
             <span id={styles.login}>Login to Spotify</span>
