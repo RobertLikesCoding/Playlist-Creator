@@ -7,7 +7,7 @@ import Playlist from './components/Playlist';
 import NavBar from './components/NavBar';
 import Notifier from './components/Notifier';
 import Footer from './components/Footer';
-import { fetchAccessTokenForSearching, fetchUser } from './utils/spotifyApiCalls';
+import { fetchUser } from './utils/spotifyApiCalls';
 import { getAccessToken, checkTokenExpiry } from './utils/spotifyAuthorization';
 
 function App() {
@@ -31,7 +31,6 @@ function App() {
 
   useEffect(() => {
     const initialize = async () => {
-      // restoreSession();
       await loginAfterAuthorization();
       await initializeApp();
     };
@@ -47,7 +46,6 @@ function App() {
 
   async function initializeApp() {
     try {
-      // await fetchAccessTokenForSearching();
       let accessToken = localStorage.getItem('access_token');
 
       if (accessToken) {
@@ -100,31 +98,6 @@ function App() {
     }
   }
 
-  function saveSession(playlistTracks, topTracks) {
-    const session = {
-      "searchQuery": searchQuery,
-      "playlistName": playlistName,
-      "playlistTracks": JSON.stringify(playlistTracks),
-      "topTracks": JSON.stringify(topTracks)
-    }
-
-    localStorage.setItem("session", JSON.stringify(session));
-  }
-
-  function restoreSession() {
-    const session = JSON.parse(localStorage.getItem("session"));
-    if (!session) {
-      return null;
-    }
-
-    setTopTracks(JSON.parse(session.topTracks));
-    setPlaylistTracks(JSON.parse(session.playlistTracks));
-    setSearchQuery(session.searchQuery);
-    setPlaylistName(session.playlistName);
-    setModalContent("Authorization Successfull! You can save now")
-    localStorage.removeItem('session');
-  };
-
   return (
     <div className="App">
       <NavBar userData={userData}/>
@@ -148,8 +121,6 @@ function App() {
           playlistTracks={playlistTracks}
           setPlaylistTracks={setPlaylistTracks}
           handleRemove={handleRemove}
-          saveSession={() => saveSession(playlistTracks, topTracks)}
-          restoreSession={() => restoreSession()}
           topTracks={topTracks}
           setTopTracks={setTopTracks}
           setSearchQuery={setSearchQuery}

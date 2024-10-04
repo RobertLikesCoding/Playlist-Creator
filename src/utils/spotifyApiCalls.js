@@ -1,5 +1,4 @@
-import { getAccessToken, checkTokenExpiry } from "./spotifyAuthorization";
-
+import { getAccessToken } from "./spotifyAuthorization";
 
 export async function searchForArtist(query) {
   try {
