@@ -15,18 +15,19 @@ export default function NavBar({ userData }) {
 
   return (
     <nav>
+      { !userData ? <div className="overlay"></div> : null }
       <span id={styles.logo}>
         <i className="fa-brands fa-spotify"></i>
         Playlist Creator
       </span>
         { userData ? (
-          <div className={styles.btnLogin}>
+          <div className={styles.avatar}>
               <span>Hello, {userData.display_name}!</span>
               <img src={userData.images[0].url} alt={`Your avatar.`} />
           </div>
         ) : (
           <div className={styles.btnLogin} onClick={handleLogin}>
-            <span id={styles.login}>Login</span>
+            <span id={styles.login}>Login to spotify</span>
             <i className="fa-regular fa-circle-user"></i>
           </div>
         )

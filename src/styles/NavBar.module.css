@@ -18,7 +18,7 @@ nav {
   }
 }
 
-.btnLogin {
+.avatar {
   font-family: 'BebasNeue', sans-serif;
   padding: 0.25rem 0.25rem;
   border: none;
@@ -31,6 +31,7 @@ nav {
   align-items: center;
   justify-content: space-between;
   height: 56px;
+  z-index: 15;
 
   img {
     border-radius: 50%;
@@ -56,7 +57,41 @@ nav {
       text-decoration: underline;
     }
   }
+}
 
+.btnLogin {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  font-family: 'BebasNeue', sans-serif;
+  background-color: var(--highlight-clr);
+  color: var(--primary-clr);
+  font-size: 1.5rem;
+  height: 56px;
+  padding: 0.25rem 0.25rem;
+  border: none;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  z-index: 15;
+
+  span {
+    margin: 0 0.5rem;
+    padding-top: 0.2rem;
+  }
+
+  i {
+    font-size: 50px;
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    span {
+      text-decoration: underline;
+    }
+  }
 }
 
 @media (max-width: 768px) {

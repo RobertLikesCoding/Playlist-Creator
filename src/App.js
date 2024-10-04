@@ -31,7 +31,7 @@ function App() {
 
   useEffect(() => {
     const initialize = async () => {
-      restoreSession();
+      // restoreSession();
       await loginAfterAuthorization();
       await initializeApp();
     };
@@ -48,7 +48,7 @@ function App() {
 
   async function initializeApp() {
     try {
-      await fetchAccessTokenForSearching();
+      // await fetchAccessTokenForSearching();
       let accessToken = localStorage.getItem('access_token');
 
       if (accessToken) {
@@ -59,7 +59,9 @@ function App() {
         await fetchUser(accessToken);
       }
       const currentUser = JSON.parse(localStorage.getItem('current_user'));
-      setUserData(currentUser);
+      if (currentUser) {
+        setUserData(currentUser);
+      }
     } catch (error) {
       console.error("Error initializing app:", error);
     }
