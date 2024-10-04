@@ -1,6 +1,6 @@
 const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
-// const redirectUrl = "https://rlc-playlist-creator.netlify.app/";
-const redirectUrl = "http://localhost:3000";
+const redirectUrl = "https://rlc-playlist-creator.netlify.app/";
+// const redirectUrl = "http://localhost:3000";
 
 
 // Authorization
