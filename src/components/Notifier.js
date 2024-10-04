@@ -2,7 +2,7 @@ import React from 'react';
 import '../styles/App.css';
 
 export default function Notifier({ modalContent, setModalContent }) {
-  if (!modalContent) {
+  if (!modalContent || modalContent.length === 0) {
     return null;
   }
 
@@ -15,10 +15,12 @@ export default function Notifier({ modalContent, setModalContent }) {
       <div className="overlay"></div>
       <div className="modal">
         <div className="modalHeader">
-          <i className="fa-solid fa-xmark" onClick={handleClose}></i>
+          {modalContent[1] && (
+            <i className="fa-solid fa-xmark" onClick={handleClose}></i>
+          )}
         </div>
         <div className="modalBody">
-          {modalContent}
+          {modalContent[0]}
         </div>
       </div>
     </>

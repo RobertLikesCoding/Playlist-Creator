@@ -4,7 +4,7 @@ import styles from '../styles/NavBar.module.css';
 import Notifier from '../components/Notifier';
 
 export default function NavBar({ userData }) {
-  const [modalContent, setModalContent] = useState("");
+  const [modalContent, setModalContent] = useState([]);
 
   useEffect(() => {
     if (!userData) {
@@ -13,13 +13,13 @@ export default function NavBar({ userData }) {
           <p>To use this app, you need to login to Spotify.</p>
           <div className={styles.btnLogin} onClick={handleLogin}>
             <span id={styles.login}>Login to Spotify</span>
-            <i class="fa-brands fa-spotify"></i>
+            <i className="fa-brands fa-spotify"></i>
           </div>
         </>
       );
-      setModalContent(loginModal);
+      setModalContent([loginModal, false]);
     } else {
-      setModalContent("");
+      setModalContent([]);
     }
   }, [userData]);
 
