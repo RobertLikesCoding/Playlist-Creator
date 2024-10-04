@@ -15,21 +15,21 @@
   box-shadow: var(--shadow-dark);
   opacity: 0;
   transform: translateY(20px);
-  animation: slideFadeIn 0.3s ease-in forwards;
+  animation: slideFadeIn 0.4s ease-in forwards;
 
   .btn {
     margin-left: auto;
   }
 
   &:hover {
-    background-color: #103a31;
+    background-color: #135247;
   }
 }
 
 @keyframes slideFadeIn {
   0% {
     opacity: 0;
-    transform: translateY(500px);
+    transform: translateY(20px);
   }
   100% {
     opacity: 1;

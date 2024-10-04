@@ -1,6 +1,6 @@
 const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
-const redirectUrl = "https://rlc-playlist-creator.netlify.app/";
-// const redirectUrl = "http://localhost:3000";
+// const redirectUrl = "https://rlc-playlist-creator.netlify.app/";
+const redirectUrl = "http://localhost:3000";
 
 
 // Authorization
@@ -45,9 +45,7 @@ async function generateCodeChallenge(verifier) {
 export async function getAccessToken(code) {
   //if there already is a AT refresh it
   let localAccessToken = localStorage.getItem('access_token');
-  console.log(localAccessToken)
   if (localAccessToken) {
-    console.log("get AT local blabla")
     if (isTokenExpired()) {
       localAccessToken = await getRefreshToken();
     }

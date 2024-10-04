@@ -18,9 +18,9 @@ nav {
   }
 }
 
-.btnNavbar {
+.btnLogin {
   font-family: 'BebasNeue', sans-serif;
-  padding: 0.25rem 0.5rem;
+  padding: 0.25rem 0.25rem;
   border: none;
   border-radius: 40px;
   box-sizing: border-box;
@@ -42,18 +42,19 @@ nav {
 
   span {
     margin: 0 0.5rem;
-  }
-
-  #login {
-    &:hover {
-      text-decoration: underline;
-      cursor: pointer;
-    }
+    padding-top: 0.2rem;
   }
 
   i {
     font-size: 50px;
+  }
 
+  &:hover {
+    cursor: pointer;
+
+    span {
+      text-decoration: underline;
+    }
   }
 
 }
@@ -72,5 +73,9 @@ nav {
     font-size: 1rem;
     text-align: right;
     max-width: 170px;
+  }
+
+  span {
+    display: none;
   }
 }
