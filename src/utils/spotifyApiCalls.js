@@ -60,8 +60,3 @@ export async function fetchArtistTopTracks(name) {
     console.error('Error:', error);
   }
 }
-
-// function isTokenExpired() {
-//   const expirationTime = parseInt(localStorage.getItem("expires_in"), 10);
-//   return Date.now() < expirationTime;
-// }
