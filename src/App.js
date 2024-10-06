@@ -15,7 +15,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [playlistName, setPlaylistName] = useState('');
   const [currentTrackPlaying, setCurrentTrackPlaying] = useState(null);
-  const [userData, setUserData] = useState(null);
+  const [accessToken, setAccessToken] = useState(null);
   const [modalContent, setModalContent] = useState(null);
   const audio = useRef(null);
 
@@ -30,6 +30,27 @@ function App() {
 
   useEffect(() => {
     const initialize = async () => {
+      if (!accessToken) {
+        const loginModal = (
+          <>
+            <i className="fa-solid fa-hand-peace"></i>
+            <p id="explain">I build this project to try the Spotify API and practice my React skills.
+              There is no real 'log in' feature, because it would require me to ask Spotify to extend my
+              access permission beyond development mode.</p>
+              <p>What you can do:</p>
+              <ul>
+                <li>Search for artists</li>
+                <li>Preview Tracks</li>
+                <li>Add them to the Playlist Box</li>
+                <li>Click Save</li>
+              </ul>
+            <div className="btn" onClick={handleClose}>
+              <span id="login">Lets go!</span>
+            </div>
+          </>
+        );
+        setModalContent([loginModal, false]);
+      }
       await initializeApp();
     };
     initialize();
@@ -37,14 +58,15 @@ function App() {
 
   async function initializeApp() {
     try {
+      setAccessToken("blue");
       await fetchAccessTokenForSearching();
-      let accessToken = localStorage.getItem('access_token');
-      if (accessToken) {
-        setUserData(true);
-      }
     } catch (error) {
       console.error("Error initializing app:", error);
     }
+  }
+
+  function handleClose() {
+    setModalContent(null);
   }
 
   const handleAdd = (track) => {
@@ -83,7 +105,7 @@ function App() {
 
   return (
     <div className="App">
-      <NavBar userData={userData}/>
+      <NavBar accessToken={accessToken}/>
       <main className="main" >
         <Notifier modalContent={modalContent} setModalContent={setModalContent}/>
         <section className="SearchBar">
@@ -113,7 +135,6 @@ function App() {
           currentTrackPlaying={currentTrackPlaying}
           modalStatus={modalContent}
           setModalContent={setModalContent}
-          setUserData={setUserData}
           />
         </div>
       </main>

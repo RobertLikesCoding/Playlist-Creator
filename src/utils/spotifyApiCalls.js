@@ -16,7 +16,9 @@ export async function fetchAccessTokenForSearching() {
       throw new Error('Failed to fetch token');
     }
     const data = await response.json();
+    console.log(data);
     localStorage.setItem("access_token",data.access_token)
+    localStorage.setItem("expires_in",data.expires_in)
   } catch (error) {
     console.error('Error:', error);
     }
@@ -24,7 +26,7 @@ export async function fetchAccessTokenForSearching() {
 
 export async function searchForArtist(query) {
   try {
-    const accessToken = localStorage.getItem('search_token');
+    const accessToken = localStorage.getItem('access_token');
     const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=artist&limit=10`, {
       method: 'GET',
       headers: {
@@ -59,3 +61,8 @@ export async function fetchArtistTopTracks(name) {
     console.error('Error:', error);
   }
 }
+
+// function isTokenExpired() {
+//   const expirationTime = parseInt(localStorage.getItem("expires_in"), 10);
+//   return Date.now() < expirationTime;
+// }

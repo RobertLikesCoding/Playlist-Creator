@@ -51,6 +51,41 @@ body, html {
   align-items: center;
 }
 
+/* SHARED COMPONENTS */
+
+.btn {
+  font-family: 'BebasNeue', sans-serif;
+  background-color: var(--highlight-clr);
+  color: var(--primary-clr);
+  font-size: 1.5rem;
+  height: 56px;
+  padding: 0.25rem 0.25rem;
+  border: none;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  z-index: 15;
+
+  span {
+    margin: 0 0.5rem;
+    padding-top: 0.2rem;
+  }
+
+  i {
+    font-size: 2.5rem;
+  }
+
+  &:active {
+    background-color: var(--secondary-clr);
+    scale: 0.95;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .SearchBar {
   display: flex;
   width: 100%;
