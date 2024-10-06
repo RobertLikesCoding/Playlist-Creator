@@ -51,6 +51,41 @@ body, html {
   align-items: center;
 }
 
+/* SHARED COMPONENTS */
+
+.btn {
+  font-family: 'BebasNeue', sans-serif;
+  background-color: var(--highlight-clr);
+  color: var(--primary-clr);
+  font-size: 1.5rem;
+  height: 56px;
+  padding: 0.25rem 0.25rem;
+  border: none;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  z-index: 15;
+
+  span {
+    margin: 0 0.5rem;
+    padding-top: 0.2rem;
+  }
+
+  i {
+    font-size: 2.5rem;
+  }
+
+  &:active {
+    background-color: var(--secondary-clr);
+    scale: 0.95;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .SearchBar {
   display: flex;
   width: 100%;
@@ -67,7 +102,7 @@ body, html {
   background-color: var(--primary-clr);
   padding: 1rem;
   border-radius: 10px;
-  max-width: 400px;
+  max-width: 500px;
   min-width: 250px;
   text-align: center;
   border: 2px solid var(--secondary-clr);
@@ -85,12 +120,16 @@ body, html {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1rem;
   padding: 1rem;
+
+  * {
+    margin: 0.5rem;
+  }
 
   p {
     font-family: BebasNeue;
     font-size: 1.5rem;
-    padding: 1rem 0;
   }
 
   i {
@@ -100,6 +139,17 @@ body, html {
       color: var(--secondary-clr);
     }
   }
+
+  ul {
+    margin: 0;
+    text-align: start;
+    font-family: Arial;
+  }
+}
+
+#explain {
+  font-family: Arial;
+  font-size: 1.2rem;
 }
 
 .overlay {

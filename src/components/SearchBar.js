@@ -34,7 +34,6 @@ export default function SearchBar({setSearchQuery, searchQuery, setTopTracks}) {
           setArtists={setArtists}
           artists={artists}
           setTopTracks={setTopTracks}
-          setSearchQuery={setSearchQuery}
           />
         </div>
       </div>

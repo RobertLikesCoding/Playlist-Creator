@@ -24,13 +24,15 @@ nav {
   border: none;
   border-radius: 40px;
   box-sizing: border-box;
-  background-color: var(--highlight-clr);
+  background-color: var(--secondary-clr);
   color: var(--primary-clr);
   font-size: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 56px;
+  padding-left: 1rem;
+  gap: 0.5rem;
 
   img {
     border-radius: 50%;
@@ -38,11 +40,6 @@ nav {
     object-fit: contain;
     height: 50px;
     box-sizing: border-box;
-  }
-
-  span {
-    margin: 0 0.5rem;
-    padding-top: 0.2rem;
   }
 
   i {
@@ -55,43 +52,6 @@ nav {
     span {
       text-decoration: underline;
     }
-  }
-}
-
-.btnLogin {
-  font-family: 'BebasNeue', sans-serif;
-  background-color: var(--highlight-clr);
-  color: var(--primary-clr);
-  font-size: 1.5rem;
-  height: 56px;
-  padding: 0.25rem 0.25rem;
-  border: none;
-  border-radius: 40px;
-  display: flex;
-  align-items: center;
-  box-sizing: border-box;
-  z-index: 15;
-
-  span {
-    margin: 0 0.5rem;
-    padding-top: 0.2rem;
-  }
-
-  i {
-    font-size: 2.5rem;
-  }
-
-  &:hover {
-    cursor: pointer;
-
-    span {
-      text-decoration: underline;
-    }
-  }
-
-  &:active {
-    background-color: var(--secondary-clr);
-    scale: 0.95;
   }
 }
 
@@ -109,5 +69,12 @@ nav {
     font-size: 1rem;
     text-align: right;
     max-width: 170px;
+  }
+
+  .avatar {
+    span {
+      font-size: 1rem;
+      text-align: center;
+    }
   }
 }

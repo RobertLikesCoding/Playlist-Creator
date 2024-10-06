@@ -3,7 +3,7 @@ import styles from '../styles/SearchResult.module.css';
 import { fetchArtistTopTracks } from '../utils/spotifyApiCalls';
 import '../styles/App.css';
 
-export default function SearchResult({artists, setTopTracks, setSearchQuery, setArtists}) {
+export default function SearchResult({artists, setTopTracks, setArtists}) {
 
   async function handleArtistSelect(artist) {
     const artistName = removeUriPrefix(artist.name);

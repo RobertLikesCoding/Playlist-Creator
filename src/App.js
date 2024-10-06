@@ -7,8 +7,7 @@ import Playlist from './components/Playlist';
 import NavBar from './components/NavBar';
 import Notifier from './components/Notifier';
 import Footer from './components/Footer';
-import { fetchUser } from './utils/spotifyApiCalls';
-import { getAccessToken, checkTokenExpiry } from './utils/spotifyAuthorization';
+import { fetchAccessTokenForSearching } from './utils/spotifyApiCalls';
 
 function App() {
   const [topTracks, setTopTracks] = useState([]);
@@ -16,7 +15,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [playlistName, setPlaylistName] = useState('');
   const [currentTrackPlaying, setCurrentTrackPlaying] = useState(null);
-  const [userData, setUserData] = useState(null);
+  const [accessToken, setAccessToken] = useState(null);
   const [modalContent, setModalContent] = useState(null);
   const audio = useRef(null);
 
@@ -31,37 +30,44 @@ function App() {
 
   useEffect(() => {
     const initialize = async () => {
-      await loginAfterAuthorization();
+      const firstVisit = localStorage.getItem('firstVisit');
+      if (firstVisit === true) {
+        const loginModal = (
+          <>
+            <i className="fa-solid fa-hand-peace"></i>
+            <p id="explain">I build this project to try the Spotify API and practice my React skills.
+              There is no real 'log in' feature, because it would require me to ask Spotify to extend my
+              access permission beyond development mode.</p>
+              <p>What you can do:</p>
+              <ul>
+                <li>Search for artists</li>
+                <li>Preview Tracks</li>
+                <li>Add them to the Playlist Box</li>
+                <li>Click Save</li>
+              </ul>
+            <div className="btn" onClick={handleClose}>
+              <span id="login">Lets go!</span>
+            </div>
+          </>
+        );
+        setModalContent([loginModal, false]);
+        localStorage.setItem('firstVisit', false);
+      }
       await initializeApp();
     };
     initialize();
   }, []);
 
-  async function loginAfterAuthorization() {
-    const code = new URLSearchParams(window.location.search).get("code");
-      if (code) {
-        await getAccessToken(code);
-      }
-  }
-
   async function initializeApp() {
     try {
-      let accessToken = localStorage.getItem('access_token');
-
-      if (accessToken) {
-        const newAccessToken = await checkTokenExpiry();
-        if (newAccessToken) {
-          await fetchUser(newAccessToken);
-        }
-        await fetchUser(accessToken);
-      }
-      const currentUser = JSON.parse(localStorage.getItem('current_user'));
-      if (currentUser) {
-        setUserData(currentUser);
-      }
+      await fetchAccessTokenForSearching();
     } catch (error) {
       console.error("Error initializing app:", error);
     }
+  }
+
+  function handleClose() {
+    setModalContent(null);
   }
 
   const handleAdd = (track) => {
@@ -98,9 +104,16 @@ function App() {
     }
   }
 
+  const stopAudio = () => {
+    if (audio.current) {
+      audio.current.pause();
+      audio.current = null;
+    }
+  }
+
   return (
     <div className="App">
-      <NavBar userData={userData}/>
+      <NavBar accessToken={accessToken}/>
       <main className="main" >
         <Notifier modalContent={modalContent} setModalContent={setModalContent}/>
         <section className="SearchBar">
@@ -130,7 +143,8 @@ function App() {
           currentTrackPlaying={currentTrackPlaying}
           modalStatus={modalContent}
           setModalContent={setModalContent}
-          setUserData={setUserData}
+          setCurrentTrackPlaying={setCurrentTrackPlaying}
+          stopAudio={stopAudio}
           />
         </div>
       </main>

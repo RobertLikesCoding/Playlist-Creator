@@ -1,7 +1,6 @@
 import React from 'react';
 import Track from './Track';
 import Notifier from './Notifier.js';
-import { createPlaylist } from '../utils/spotifyApiCalls.js';
 import styles from '../styles/Tracklists.module.css';
 import '../styles/App.css';
 
@@ -18,6 +17,7 @@ export default function Playlist({
   currentTrackPlaying,
   modalContent,
   setModalContent,
+  stopAudio
 }) {
 
   function handleChange({target}) {
@@ -28,10 +28,7 @@ export default function Playlist({
     event.preventDefault();
 
     setPlaylistName(event.target.playlistName.value);
-    const trackUris = playlistTracks.map((track) => {
-      return track.uri
-    });
-    if (trackUris.length === 0) {
+    if (playlistTracks.length === 0) {
       const noTracksAdded = (
         <>
           <i className="fa-regular fa-face-kiss"></i>
@@ -42,32 +39,28 @@ export default function Playlist({
       return;
     }
 
-    const isPlaylistCreated  = await createPlaylist(playlistName, trackUris);
-    if (!isPlaylistCreated) {
-      const noPlaylist = (
-        <>
-          <i className="fa-regular fa-face-sad-cry"></i>
-          <p>"Something went wrong! Please try again."</p>
-        </>
-      )
-      setModalContent([noPlaylist, true])
-      return;
-    };
-
     const successMessage = (
       <>
         <i className="fa-regular fa-circle-check"></i>
         <p>{`'${playlistName}' was successfully added to your Playlists!`}</p>
+        <p>{`It contains ${playlistTracks.length} songs.`}</p>
+        <div className="btn" onClick={handleClose}>
+              <span id="login">Create another one</span>
+            </div>
       </>
     )
-    setModalContent([successMessage, true]);
+    setModalContent([successMessage, false]);
 
     // Reset everything
+    stopAudio();
     setPlaylistTracks([]);
     setTopTracks([]);
     setSearchQuery('');
     setPlaylistName('');
+  }
 
+  function handleClose() {
+    setModalContent(null);
   }
 
   return (
@@ -99,7 +92,7 @@ export default function Playlist({
       <form className={styles.playlistForm} onSubmit={handleSubmit}>
         <label htmlFor='playlistName' className="dNone"></label>
         <input className={styles.PlaylistNameInput} name='playlistName' placeholder="Name your playlist" type='text' value={playlistName} onChange={handleChange}/>
-        <button type='submit' className={playlistName.length === 0 ? "inactive" : ""}>
+        <button type='submit' className={playlistName.length === 0 ? "inactive" : ""} >
           Save to Spotify
         </button>
       </form>
