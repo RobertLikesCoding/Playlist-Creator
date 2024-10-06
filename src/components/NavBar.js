@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { redirectToAuthCodeFlow } from '../utils/spotifyAuthorization';
 import styles from '../styles/NavBar.module.css';
-import Notifier from '../components/Notifier';
 
 export default function NavBar({ userData }) {
   const [modalContent, setModalContent] = useState([]);
@@ -48,15 +46,10 @@ export default function NavBar({ userData }) {
         <i className="fa-brands fa-spotify"></i>
         Playlist Creator
       </span>
-        { userData ? (
           <div className={styles.avatar}>
-              <span>Hello, {userData.display_name}!</span>
-              <img src={userData.images[0].url} alt={`Your avatar.`} />
+            <span>Hello, Robert!</span>
+            <i className="fa-regular fa-circle-user"></i>
           </div>
-        ) : (
-          <Notifier modalContent={modalContent} />
-        )
-      }
     </nav>
   )
 }

@@ -1,7 +1,6 @@
 import React from 'react';
 import Track from './Track';
 import Notifier from './Notifier.js';
-import { createPlaylist } from '../utils/spotifyApiCalls.js';
 import styles from '../styles/Tracklists.module.css';
 import '../styles/App.css';
 
@@ -28,10 +27,7 @@ export default function Playlist({
     event.preventDefault();
 
     setPlaylistName(event.target.playlistName.value);
-    const trackUris = playlistTracks.map((track) => {
-      return track.uri
-    });
-    if (trackUris.length === 0) {
+    if (playlistTracks.length === 0) {
       const noTracksAdded = (
         <>
           <i className="fa-regular fa-face-kiss"></i>
@@ -42,32 +38,20 @@ export default function Playlist({
       return;
     }
 
-    const isPlaylistCreated  = await createPlaylist(playlistName, trackUris);
-    if (!isPlaylistCreated) {
-      const noPlaylist = (
-        <>
-          <i className="fa-regular fa-face-sad-cry"></i>
-          <p>"Something went wrong! Please try again."</p>
-        </>
-      )
-      setModalContent([noPlaylist, true])
-      return;
-    };
-
     const successMessage = (
       <>
         <i className="fa-regular fa-circle-check"></i>
         <p>{`'${playlistName}' was successfully added to your Playlists!`}</p>
+        <p>{`It contains ${playlistTracks.length} songs.`}</p>
       </>
     )
-    setModalContent([successMessage, true]);
+    setModalContent([successMessage, false]);
 
     // Reset everything
     setPlaylistTracks([]);
     setTopTracks([]);
     setSearchQuery('');
     setPlaylistName('');
-
   }
 
   return (

@@ -7,8 +7,7 @@ import Playlist from './components/Playlist';
 import NavBar from './components/NavBar';
 import Notifier from './components/Notifier';
 import Footer from './components/Footer';
-import { fetchUser } from './utils/spotifyApiCalls';
-import { getAccessToken, checkTokenExpiry } from './utils/spotifyAuthorization';
+import { fetchAccessTokenForSearching } from './utils/spotifyApiCalls';
 
 function App() {
   const [topTracks, setTopTracks] = useState([]);
@@ -31,33 +30,17 @@ function App() {
 
   useEffect(() => {
     const initialize = async () => {
-      await loginAfterAuthorization();
       await initializeApp();
     };
     initialize();
   }, []);
 
-  async function loginAfterAuthorization() {
-    const code = new URLSearchParams(window.location.search).get("code");
-      if (code) {
-        await getAccessToken(code);
-      }
-  }
-
   async function initializeApp() {
     try {
+      await fetchAccessTokenForSearching();
       let accessToken = localStorage.getItem('access_token');
-
       if (accessToken) {
-        const newAccessToken = await checkTokenExpiry();
-        if (newAccessToken) {
-          await fetchUser(newAccessToken);
-        }
-        await fetchUser(accessToken);
-      }
-      const currentUser = JSON.parse(localStorage.getItem('current_user'));
-      if (currentUser) {
-        setUserData(currentUser);
+        setUserData(true);
       }
     } catch (error) {
       console.error("Error initializing app:", error);

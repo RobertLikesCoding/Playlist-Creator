@@ -81,14 +81,6 @@ nav {
     font-size: 2.5rem;
   }
 
-  &:hover {
-    cursor: pointer;
-
-    span {
-      text-decoration: underline;
-    }
-  }
-
   &:active {
     background-color: var(--secondary-clr);
     scale: 0.95;
