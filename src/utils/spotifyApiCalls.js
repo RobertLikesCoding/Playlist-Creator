@@ -16,7 +16,6 @@ export async function fetchAccessTokenForSearching() {
       throw new Error('Failed to fetch token');
     }
     const data = await response.json();
-    console.log(data);
     localStorage.setItem("access_token",data.access_token)
     localStorage.setItem("expires_in",data.expires_in)
   } catch (error) {

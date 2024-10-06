@@ -17,6 +17,7 @@ export default function Playlist({
   currentTrackPlaying,
   modalContent,
   setModalContent,
+  stopAudio
 }) {
 
   function handleChange({target}) {
@@ -43,15 +44,23 @@ export default function Playlist({
         <i className="fa-regular fa-circle-check"></i>
         <p>{`'${playlistName}' was successfully added to your Playlists!`}</p>
         <p>{`It contains ${playlistTracks.length} songs.`}</p>
+        <div className="btn" onClick={handleClose}>
+              <span id="login">Create another one</span>
+            </div>
       </>
     )
     setModalContent([successMessage, false]);
 
     // Reset everything
+    stopAudio();
     setPlaylistTracks([]);
     setTopTracks([]);
     setSearchQuery('');
     setPlaylistName('');
+  }
+
+  function handleClose() {
+    setModalContent(null);
   }
 
   return (
@@ -83,7 +92,7 @@ export default function Playlist({
       <form className={styles.playlistForm} onSubmit={handleSubmit}>
         <label htmlFor='playlistName' className="dNone"></label>
         <input className={styles.PlaylistNameInput} name='playlistName' placeholder="Name your playlist" type='text' value={playlistName} onChange={handleChange}/>
-        <button type='submit' className={playlistName.length === 0 ? "inactive" : ""}>
+        <button type='submit' className={playlistName.length === 0 ? "inactive" : ""} >
           Save to Spotify
         </button>
       </form>

@@ -31,6 +31,8 @@ nav {
   align-items: center;
   justify-content: space-between;
   height: 56px;
+  padding-left: 1rem;
+  gap: 0.5rem;
 
   img {
     border-radius: 50%;
@@ -38,11 +40,6 @@ nav {
     object-fit: contain;
     height: 50px;
     box-sizing: border-box;
-  }
-
-  span {
-    margin: 0 0.5rem;
-    padding-top: 0.2rem;
   }
 
   i {
@@ -72,5 +69,12 @@ nav {
     font-size: 1rem;
     text-align: right;
     max-width: 170px;
+  }
+
+  .avatar {
+    span {
+      font-size: 1rem;
+      text-align: center;
+    }
   }
 }

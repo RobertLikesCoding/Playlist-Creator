@@ -30,7 +30,8 @@ function App() {
 
   useEffect(() => {
     const initialize = async () => {
-      if (!accessToken) {
+      const firstVisit = localStorage.getItem('firstVisit');
+      if (firstVisit === true) {
         const loginModal = (
           <>
             <i className="fa-solid fa-hand-peace"></i>
@@ -50,6 +51,7 @@ function App() {
           </>
         );
         setModalContent([loginModal, false]);
+        localStorage.setItem('firstVisit', false);
       }
       await initializeApp();
     };
@@ -58,7 +60,6 @@ function App() {
 
   async function initializeApp() {
     try {
-      setAccessToken("blue");
       await fetchAccessTokenForSearching();
     } catch (error) {
       console.error("Error initializing app:", error);
@@ -103,6 +104,13 @@ function App() {
     }
   }
 
+  const stopAudio = () => {
+    if (audio.current) {
+      audio.current.pause();
+      audio.current = null;
+    }
+  }
+
   return (
     <div className="App">
       <NavBar accessToken={accessToken}/>
@@ -135,6 +143,8 @@ function App() {
           currentTrackPlaying={currentTrackPlaying}
           modalStatus={modalContent}
           setModalContent={setModalContent}
+          setCurrentTrackPlaying={setCurrentTrackPlaying}
+          stopAudio={stopAudio}
           />
         </div>
       </main>
