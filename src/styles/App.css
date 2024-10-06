@@ -104,6 +104,8 @@ body, html {
   border-radius: 10px;
   max-width: 500px;
   min-width: 250px;
+  max-height: 500px;
+  overflow: auto;
   text-align: center;
   border: 2px solid var(--secondary-clr);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -121,10 +123,10 @@ body, html {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
 
   * {
     margin: 0.5rem;
+    font-size: 1.2rem;
   }
 
   p {
@@ -144,6 +146,11 @@ body, html {
     margin: 0;
     text-align: start;
     font-family: Arial;
+  }
+
+  .btn {
+    width: 50%;
+    justify-content: center;
   }
 }
 

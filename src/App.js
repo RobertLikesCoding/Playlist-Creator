@@ -31,7 +31,7 @@ function App() {
   useEffect(() => {
     const initialize = async () => {
       const firstVisit = localStorage.getItem('firstVisit');
-      if (firstVisit === true) {
+      if (!firstVisit) {
         const loginModal = (
           <>
             <i className="fa-solid fa-hand-peace"></i>
