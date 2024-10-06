@@ -11,10 +11,18 @@ export default function NavBar({ userData }) {
       const loginModal = (
         <>
           <i className="fa-solid fa-hand-peace"></i>
-          <p>To use this app, please login to Spotify. <br></br>Thank you!</p>
-          <div className={styles.btnLogin} onClick={handleLogin}>
-            <span id={styles.login}>Login to Spotify</span>
-            <i className="fa-brands fa-spotify"></i>
+          <p id="explain">I build this project to try the Spotify API and practice my React skills.
+            There is no real 'log in' feature, because it would require me to ask Spotify to extend my
+            access permission.</p>
+            <p>What you can do:</p>
+            <ul>
+              <li>Search for artists</li>
+              <li>Preview Tracks</li>
+              <li>Add them to the Playlist Box</li>
+              <li>Click Save</li>
+            </ul>
+          <div className={styles.btnLogin} onClick={handleClose}>
+            <span id={styles.login}>Lets go!</span>
           </div>
         </>
       );
@@ -24,10 +32,14 @@ export default function NavBar({ userData }) {
     }
   }, [userData]);
 
-  async function handleLogin() {
-    localStorage.clear();
-    await redirectToAuthCodeFlow();
-    return;
+  // async function handleLogin() {
+  //   localStorage.clear();
+  //   await redirectToAuthCodeFlow();
+  //   return;
+  // }
+
+  function handleClose() {
+    setModalContent(null);
   }
 
   return (
