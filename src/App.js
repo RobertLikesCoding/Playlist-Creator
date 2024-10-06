@@ -43,7 +43,8 @@ function App() {
                 <li>Search for artists</li>
                 <li>Preview Tracks</li>
                 <li>Add them to the Playlist Box</li>
-                <li>Click Save</li>
+                <li>Click Save (It's not really saving!)</li>
+
               </ul>
             <div className="btn" onClick={handleClose}>
               <span id="login">Lets go!</span>
