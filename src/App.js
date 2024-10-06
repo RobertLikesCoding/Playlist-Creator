@@ -31,7 +31,7 @@ function App() {
   useEffect(() => {
     const initialize = async () => {
       const firstVisit = localStorage.getItem('firstVisit');
-      if (firstVisit === true) {
+      if (!firstVisit) {
         const loginModal = (
           <>
             <i className="fa-solid fa-hand-peace"></i>
@@ -43,7 +43,8 @@ function App() {
                 <li>Search for artists</li>
                 <li>Preview Tracks</li>
                 <li>Add them to the Playlist Box</li>
-                <li>Click Save</li>
+                <li>Click Save (It's not really saving!)</li>
+
               </ul>
             <div className="btn" onClick={handleClose}>
               <span id="login">Lets go!</span>
