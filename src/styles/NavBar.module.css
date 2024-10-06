@@ -24,7 +24,7 @@ nav {
   border: none;
   border-radius: 40px;
   box-sizing: border-box;
-  background-color: var(--highlight-clr);
+  background-color: var(--secondary-clr);
   color: var(--primary-clr);
   font-size: 1.5rem;
   display: flex;

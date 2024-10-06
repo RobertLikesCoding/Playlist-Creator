@@ -9,10 +9,10 @@ export default function NavBar() {
         <i className="fa-brands fa-spotify"></i>
         Playlist Creator
       </span>
-          <div className={styles.avatar}>
-            <span>Hello, Robert!</span>
-            <i className="fa-regular fa-circle-user"></i>
-          </div>
+      <div className={styles.avatar}>
+        <span>Hello, Michael!</span>
+        <img src="https://www.profilebakery.com/wp-content/uploads/2024/05/Profile-picture-created-with-ai.jpeg" alt="portrait of user." />
+      </div>
     </nav>
   )
 }
