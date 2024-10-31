@@ -1,6 +1,20 @@
 # Spotify Playlist Creator
+![image](https://github.com/user-attachments/assets/a21610df-4121-41b9-8fab-0b60d032199e)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Features
+- search for artists to find their top songs
+- preview the songs by clicking the play button (some songs on Spotify don't have a preview file)
+- add and remove songs from the playlist
+- name the playlist
+- save the playlist
+- error messages when not setting a name or when the playlist is empty
+
+## Tech Stack
+- HTML
+- SCSS
+- React
 
 ## Available Scripts
 
