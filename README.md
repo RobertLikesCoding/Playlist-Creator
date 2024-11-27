@@ -1,5 +1,6 @@
 # Spotify Playlist Creator
-![image](https://github.com/user-attachments/assets/a21610df-4121-41b9-8fab-0b60d032199e)
+![image](https://github.com/user-attachments/assets/2f234d1d-c9d3-4def-90e7-6784cc65b87a)
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -19,10 +20,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Available Scripts
 
 ### create a .env
-To use the Spotify API you'll need to create a account at [](https://developer.spotify.com/). Then copy the Client ID from your profile and paste it into the `.env` file in this format: 
-`REACT_APP_SPOTIFY_CLIENT_ID=client-id-here` 
-Then additionally add the client secret: 
-`REACT_APP_SPOTIFY_CLIENT_SECRET=client-secret-here`
+To use the Spotify API you'll need to create a account at [](https://developer.spotify.com/). Then copy the Client ID from your profile and paste it into the `.env` file in this format:\
+`REACT_APP_SPOTIFY_CLIENT_ID=client-id-here`\
+Then additionally add the client secret:\
+`REACT_APP_SPOTIFY_CLIENT_SECRET=client-secret-here`\
 Now you're good to go 👍
 
 In the project directory, you can run:
