@@ -18,6 +18,13 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
+### create a .env
+To use the Spotify API you'll need to create a account at [](https://developer.spotify.com/). Then copy the Client ID from your profile and paste it into the `.env` file in this format: 
+`REACT_APP_SPOTIFY_CLIENT_ID=client-id-here` 
+Then additionally add the client secret: 
+`REACT_APP_SPOTIFY_CLIENT_SECRET=client-secret-here`
+Now you're good to go 👍
+
 In the project directory, you can run:
 
 ### `npm install`
