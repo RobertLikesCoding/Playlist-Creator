@@ -1,14 +1,12 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { isTokenExpired, getRefreshToken, restoreSession } from '../utils/spotifyAuthorization';
-// import renderer from 'react-test-renderer';
 import App from '../App';
 import React from 'react';
 
 describe('When App loads', () => {
-  test('should show Heading', () => {
+  test('should show logo', () => {
     render(<App />);
-    const headerElement = screen.getByText("Create your Playlist");
-    expect(headerElement).toBeInTheDocument();
+    const logoElement = screen.getByText("Playlist Creator");
+    expect(logoElement).toBeInTheDocument();
   });
 
   test('should show Searchbar', () => {

@@ -115,7 +115,7 @@ function App() {
   return (
     <div className="App">
       <NavBar accessToken={accessToken}/>
-      <main className="main" >
+      <div className="main" >
         <Notifier modalContent={modalContent} setModalContent={setModalContent}/>
         <section className="SearchBar">
           <SearchBar
@@ -148,7 +148,7 @@ function App() {
           stopAudio={stopAudio}
           />
         </div>
-      </main>
+      </div>
       <footer>
         <Footer />
       </footer>
