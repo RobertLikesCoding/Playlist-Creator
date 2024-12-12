@@ -3,7 +3,7 @@ import Track from './Track';
 import styles from '../styles/Tracklists.module.css';
 import '../styles/App.css';
 
-export default function Tracklist({topTracks, handleAdd, currentTrackPlaying, handlePlayPreview}) {
+export default function Tracklist({topTracks, handleAdd}) {
   return (
     <div className="flexColumn">
       <h2>Tracks</h2>
@@ -15,9 +15,7 @@ export default function Tracklist({topTracks, handleAdd, currentTrackPlaying, ha
               track={track}
               key={track.id}
               addOrRemove='add'
-              onClick={() => handleAdd(track)}
-              handlePlayPreview={handlePlayPreview}
-              currentTrackPlaying={currentTrackPlaying}
+              handleTrackAction={() => handleAdd(track)}
               />
             })}
           </ul>

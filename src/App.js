@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import './styles/variables.css';
 import './styles/App.css';
 import SearchBar from './components/SearchBar';
@@ -14,19 +14,8 @@ function App() {
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [playlistName, setPlaylistName] = useState('');
-  const [currentTrackPlaying, setCurrentTrackPlaying] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
   const [modalContent, setModalContent] = useState(null);
-  const audio = useRef(null);
-
-  useEffect(() => {
-    if (currentTrackPlaying === null) {
-      audio.current = null;
-    } else {
-      audio.current = new Audio(currentTrackPlaying);
-      audio.current.play();
-    }
-  }, [currentTrackPlaying]);
 
   useEffect(() => {
     const initialize = async () => {
@@ -36,12 +25,12 @@ function App() {
           <>
             <i className="fa-solid fa-hand-peace"></i>
             <p id="explain">I build this project to try the Spotify API and practice my React skills.
-              There is no real 'log in' feature, because it would require me to ask Spotify to extend my
+              There is no real 'log in' feature, because it would require a permission by Spotify to extend my
               access permission beyond development mode.</p>
               <p>What you can do:</p>
               <ul>
                 <li>Search for artists</li>
-                <li>Preview Tracks</li>
+                <li>Look through their Tracks</li>
                 <li>Add them to the Playlist Box</li>
                 <li>Click Save (It's not really saving!)</li>
 
@@ -93,25 +82,6 @@ function App() {
     });
   };
 
-  const handlePlayPreview = (trackPreviewUrl) => {
-    if (audio.current) {
-      audio.current.pause();
-      audio.current = null;
-      setCurrentTrackPlaying(null);
-    }
-
-    if (trackPreviewUrl !== currentTrackPlaying) {
-      setCurrentTrackPlaying(trackPreviewUrl)
-    }
-  }
-
-  const stopAudio = () => {
-    if (audio.current) {
-      audio.current.pause();
-      audio.current = null;
-    }
-  }
-
   return (
     <div className="App">
       <NavBar accessToken={accessToken}/>
@@ -128,8 +98,6 @@ function App() {
           <Tracklist
             topTracks={topTracks}
             handleAdd={handleAdd}
-            currentTrackPlaying={currentTrackPlaying}
-            handlePlayPreview={handlePlayPreview}
             />
           <Playlist
           playlistTracks={playlistTracks}
@@ -140,12 +108,8 @@ function App() {
           setSearchQuery={setSearchQuery}
           playlistName={playlistName}
           setPlaylistName={setPlaylistName}
-          handlePlayPreview={handlePlayPreview}
-          currentTrackPlaying={currentTrackPlaying}
           modalStatus={modalContent}
           setModalContent={setModalContent}
-          setCurrentTrackPlaying={setCurrentTrackPlaying}
-          stopAudio={stopAudio}
           />
         </div>
       </div>
