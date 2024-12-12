@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import './styles/variables.css';
 import './styles/App.css';
 import SearchBar from './components/SearchBar';
@@ -17,16 +17,6 @@ function App() {
   const [currentTrackPlaying, setCurrentTrackPlaying] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
   const [modalContent, setModalContent] = useState(null);
-  const audio = useRef(null);
-
-  useEffect(() => {
-    if (currentTrackPlaying === null) {
-      audio.current = null;
-    } else {
-      audio.current = new Audio(currentTrackPlaying);
-      audio.current.play();
-    }
-  }, [currentTrackPlaying]);
 
   useEffect(() => {
     const initialize = async () => {
@@ -93,25 +83,6 @@ function App() {
     });
   };
 
-  const handlePlayPreview = (trackPreviewUrl) => {
-    if (audio.current) {
-      audio.current.pause();
-      audio.current = null;
-      setCurrentTrackPlaying(null);
-    }
-
-    if (trackPreviewUrl !== currentTrackPlaying) {
-      setCurrentTrackPlaying(trackPreviewUrl)
-    }
-  }
-
-  const stopAudio = () => {
-    if (audio.current) {
-      audio.current.pause();
-      audio.current = null;
-    }
-  }
-
   return (
     <div className="App">
       <NavBar accessToken={accessToken}/>
@@ -128,8 +99,6 @@ function App() {
           <Tracklist
             topTracks={topTracks}
             handleAdd={handleAdd}
-            currentTrackPlaying={currentTrackPlaying}
-            handlePlayPreview={handlePlayPreview}
             />
           <Playlist
           playlistTracks={playlistTracks}
@@ -140,12 +109,9 @@ function App() {
           setSearchQuery={setSearchQuery}
           playlistName={playlistName}
           setPlaylistName={setPlaylistName}
-          handlePlayPreview={handlePlayPreview}
-          currentTrackPlaying={currentTrackPlaying}
           modalStatus={modalContent}
           setModalContent={setModalContent}
           setCurrentTrackPlaying={setCurrentTrackPlaying}
-          stopAudio={stopAudio}
           />
         </div>
       </div>

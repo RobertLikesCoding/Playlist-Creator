@@ -2,23 +2,13 @@ import React from 'react';
 import styles from '../styles/Track.module.css';
 
 
-export default function Track({track, addOrRemove, onClick, currentTrackPlaying, handlePlayPreview}) {
+export default function Track({track, addOrRemove, handleAdd}) {
   const artists = track.artists.map((artist) => artist.name).join(', ');
   const coverImage = track.album.images[2].url;
 
   return (
     <div className={styles.trackCard}>
       <div className={styles.coverImg}>
-        <div className={styles.btnOverlay}>
-        { !track.preview_url ? (
-            <i className={`fa-solid fa-link-slash ${styles.btnNoPreview}`}></i>
-          ) : currentTrackPlaying === track.preview_url ? (
-            <i className={`fa-regular fa-circle-stop ${styles.btnControlAudio}`} onClick={() => handlePlayPreview(track.preview_url)}></i>
-          ) : (
-            <i className={`fa-regular fa-circle-play ${styles.btnControlAudio}`} onClick={() => handlePlayPreview(track.preview_url)}></i>
-          )
-        }
-        </div>
         <img src={coverImage} alt={`cover art of the song ${track.name}.`}/>
       </div>
       <div className={styles.trackInfo}>
@@ -29,11 +19,11 @@ export default function Track({track, addOrRemove, onClick, currentTrackPlaying,
 
       { addOrRemove === "add" ? (
         <div className={styles.btn}>
-          <i className={`fa-sharp fa-solid fa-plus ${styles.btnAdd}`} onClick={onClick}></i>
+          <i className={`fa-sharp fa-solid fa-plus ${styles.btnAdd}`} onClick={handleAdd}></i>
         </div>
       ) : (
         <div className={styles.btn}>
-          <i className={`fa-solid fa-trash-can ${styles.btnRemove}`} onClick={onClick}></i>
+          <i className={`fa-solid fa-trash-can ${styles.btnRemove}`} onClick={handleAdd}></i>
         </div>
       )}
     </div>
