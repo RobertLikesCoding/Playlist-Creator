@@ -77,7 +77,7 @@ export default function Playlist({
                   track={track}
                   key={track.id}
                   addOrRemove="remove"
-                  onClick={(e) => handleRemove(track)}
+                  handleTrackAction={(e) => handleRemove(track)}
                 />
               );
             })}

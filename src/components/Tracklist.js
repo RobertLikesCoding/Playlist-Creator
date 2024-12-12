@@ -15,7 +15,7 @@ export default function Tracklist({topTracks, handleAdd}) {
               track={track}
               key={track.id}
               addOrRemove='add'
-              handleAdd={() => handleAdd(track)}
+              handleTrackAction={() => handleAdd(track)}
               />
             })}
           </ul>

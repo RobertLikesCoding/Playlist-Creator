@@ -2,7 +2,7 @@ import React from 'react';
 import styles from '../styles/Track.module.css';
 
 
-export default function Track({track, addOrRemove, handleAdd}) {
+export default function Track({track, addOrRemove, handleTrackAction}) {
   const artists = track.artists.map((artist) => artist.name).join(', ');
   const coverImage = track.album.images[2].url;
 
@@ -19,11 +19,11 @@ export default function Track({track, addOrRemove, handleAdd}) {
 
       { addOrRemove === "add" ? (
         <div className={styles.btn}>
-          <i className={`fa-sharp fa-solid fa-plus ${styles.btnAdd}`} onClick={handleAdd}></i>
+          <i className={`fa-sharp fa-solid fa-plus ${styles.btnAdd}`} onClick={handleTrackAction}></i>
         </div>
       ) : (
         <div className={styles.btn}>
-          <i className={`fa-solid fa-trash-can ${styles.btnRemove}`} onClick={handleAdd}></i>
+          <i className={`fa-solid fa-trash-can ${styles.btnRemove}`} onClick={handleTrackAction}></i>
         </div>
       )}
     </div>
