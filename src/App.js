@@ -14,7 +14,6 @@ function App() {
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [playlistName, setPlaylistName] = useState('');
-  const [currentTrackPlaying, setCurrentTrackPlaying] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
   const [modalContent, setModalContent] = useState(null);
 
@@ -26,12 +25,12 @@ function App() {
           <>
             <i className="fa-solid fa-hand-peace"></i>
             <p id="explain">I build this project to try the Spotify API and practice my React skills.
-              There is no real 'log in' feature, because it would require me to ask Spotify to extend my
+              There is no real 'log in' feature, because it would require a permission by Spotify to extend my
               access permission beyond development mode.</p>
               <p>What you can do:</p>
               <ul>
                 <li>Search for artists</li>
-                <li>Preview Tracks</li>
+                <li>Look through their Tracks</li>
                 <li>Add them to the Playlist Box</li>
                 <li>Click Save (It's not really saving!)</li>
 
@@ -111,7 +110,6 @@ function App() {
           setPlaylistName={setPlaylistName}
           modalStatus={modalContent}
           setModalContent={setModalContent}
-          setCurrentTrackPlaying={setCurrentTrackPlaying}
           />
         </div>
       </div>
